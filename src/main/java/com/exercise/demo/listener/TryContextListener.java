@@ -1,0 +1,22 @@
+package com.exercise.demo.listener;
+
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import javax.servlet.annotation.WebListener;
+
+/**
+ * Created by lenovo on 2017/8/17.
+ */
+@WebListener
+public class TryContextListener implements ServletContextListener {
+    @Override
+    public void contextInitialized(ServletContextEvent sce) {
+        System.out.println("ContextListener初始化");
+    }
+
+    @Override
+    public void contextDestroyed(ServletContextEvent sce) {
+        System.out.println("ContextListener销毁");
+
+    }
+}
