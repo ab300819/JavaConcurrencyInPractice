@@ -1,6 +1,7 @@
 package com.exercise.demo;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -11,7 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class ExternalController {
 
     @RequestMapping("/")
-    String ServiceController() {
+    @ResponseBody
+    public String ServiceController() {
 
 
         return "Hello World!";
