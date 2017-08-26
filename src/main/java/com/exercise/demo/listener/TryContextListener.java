@@ -1,5 +1,8 @@
 package com.exercise.demo.listener;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
@@ -9,6 +12,9 @@ import javax.servlet.annotation.WebListener;
  */
 @WebListener
 public class TryContextListener implements ServletContextListener {
+
+    private static Logger logger = LoggerFactory.getLogger(TryContextListener.class);
+
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         System.out.println("ContextListener初始化");
@@ -16,7 +22,7 @@ public class TryContextListener implements ServletContextListener {
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-        System.out.println("ContextListener销毁");
+        logger.debug("ContextListener销毁");
 
     }
 }
