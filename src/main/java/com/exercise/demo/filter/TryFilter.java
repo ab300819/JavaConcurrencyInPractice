@@ -10,7 +10,7 @@ import java.io.IOException;
 /**
  * Created by lenovo on 2017/8/17.
  */
-@WebFilter(filterName = "TryFilter", urlPatterns = "/*")
+//@WebFilter(filterName = "TryFilter", urlPatterns = "/*")
 public class TryFilter implements Filter {
 
     private static Logger logger = LoggerFactory.getLogger(TryFilter.class);
