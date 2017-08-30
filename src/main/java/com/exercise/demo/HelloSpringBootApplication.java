@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Bean;
  */
 
 @SpringBootApplication
-@ServletComponentScan
+//@ServletComponentScan
 public class HelloSpringBootApplication {
     public static void main(String[] args) {
         SpringApplication.run(HelloSpringBootApplication.class, args);
@@ -24,7 +24,7 @@ public class HelloSpringBootApplication {
         return new EmbeddedServletContainerCustomizer() {
             @Override
             public void customize(ConfigurableEmbeddedServletContainer configurableEmbeddedServletContainer) {
-                configurableEmbeddedServletContainer.setSessionTimeout(1);
+                configurableEmbeddedServletContainer.setSessionTimeout(10);
             }
         };
     }

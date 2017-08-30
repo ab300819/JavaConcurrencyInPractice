@@ -10,7 +10,7 @@ import javax.servlet.annotation.WebListener;
 /**
  * Created by lenovo on 2017/8/17.
  */
-@WebListener
+//@WebListener
 public class TryContextListener implements ServletContextListener {
 
     private static Logger logger = LoggerFactory.getLogger(TryContextListener.class);
