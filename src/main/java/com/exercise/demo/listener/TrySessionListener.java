@@ -7,7 +7,7 @@ import javax.servlet.http.HttpSessionListener;
 /**
  * Created by lenovo on 2017/8/17.
  */
-@WebListener
+//@WebListener
 public class TrySessionListener implements HttpSessionListener {
     @Override
     public void sessionCreated(HttpSessionEvent se) {
