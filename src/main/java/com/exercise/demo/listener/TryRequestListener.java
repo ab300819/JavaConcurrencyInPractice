@@ -8,7 +8,7 @@ import javax.servlet.annotation.WebListener;
  * Created by lenovo on 2017/8/18.
  */
 
-@WebListener
+//@WebListener
 public class TryRequestListener implements ServletRequestListener {
     @Override
     public void requestDestroyed(ServletRequestEvent sre) {

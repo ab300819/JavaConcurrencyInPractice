@@ -8,7 +8,7 @@ import javax.servlet.http.HttpSessionBindingEvent;
  * Created by lenovo on 2017/8/18.
  */
 
-@WebListener
+//@WebListener
 public class TrySessionAttributeListener implements HttpSessionAttributeListener {
     @Override
     public void attributeAdded(HttpSessionBindingEvent se) {
