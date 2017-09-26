@@ -62,7 +62,7 @@
         <level value="ERROR"/>
     </logger>
 
-    <logger name="cn.redcdn.mds">
+    <!-- <logger name="cn.redcdn.mds">
         <level value="DEBUG"/>
     </logger>
 
@@ -76,7 +76,7 @@
 
     <logger name="java.sql">
         <level value="ERROR"/>
-    </logger>
+    </logger> -->
 
     <!-- 日志级别 -->
     <root>
