@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * Created by lenovo on 2017/8/17.
  */
 
-@Controller
+//@Controller
 public class ExternalController {
 
     private static Logger logger = LoggerFactory.getLogger(ExternalController.class);
