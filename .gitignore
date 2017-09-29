@@ -25,6 +25,9 @@ hs_err_pid*
 
 .idea/
 target/
+HelloSpring.iml
+HelloSpring.ipr
+HelloSpring.iws
 
 HelloSpring.iws
 HelloSpring.ipr
