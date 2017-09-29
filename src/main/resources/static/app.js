@@ -1,4 +1,5 @@
 var stompClient = null;
+var webSocket = null;
 
 function setConnected(connected) {
     $("#connect").prop("disabled", connected);
@@ -13,27 +14,37 @@ function setConnected(connected) {
 }
 
 function connect() {
-    var socket = new SockJS('/gs-guide-websocket');
-    stompClient = Stomp.over(socket);
-    stompClient.connect({}, function (frame) {
-        setConnected(true);
-        console.log('Connected: ' + frame);
-        stompClient.subscribe('/topic/greetings', function (greeting) {
-            showGreeting(JSON.parse(greeting.body).content);
-        });
-    });
+    // var socket = new SockJS('/gs-guide-websocket');
+    // stompClient = Stomp.over(socket);
+    // stompClient.connect({}, function (frame) {
+    //     setConnected(true);
+    //     console.log('Connected: ' + frame);
+    //     stompClient.subscribe('/topic/greetings', function (greeting) {
+    //         showGreeting(JSON.parse(greeting.body).content);
+    //     });
+    // });
+    webSocket = new WebSocket('ws://localhost:8181//test');
+    webSocket.onmessage = function (data) {
+        showGreeting(data.data);
+    };
+    setConnected(true);
+
 }
 
 function disconnect() {
-    if (stompClient !== null) {
-        stompClient.disconnect();
+    // if (stompClient !== null) {
+    //     stompClient.disconnect();
+    // }
+    if (webSocket!==null){
+        webSocket.clone();
     }
     setConnected(false);
     console.log("Disconnected");
 }
 
 function sendName() {
-    stompClient.send("/app/hello", {}, JSON.stringify({'name': $("#name").val()}));
+    // stompClient.send("/app/hello", {}, JSON.stringify({'name': $("#name").val()}));
+    webSocket.send($("#name").val());
 }
 
 function showGreeting(message) {
@@ -44,8 +55,14 @@ $(function () {
     $("form").on('submit', function (e) {
         e.preventDefault();
     });
-    $( "#connect" ).click(function() { connect(); });
-    $( "#disconnect" ).click(function() { disconnect(); });
-    $( "#send" ).click(function() { sendName(); });
+    $("#connect").click(function () {
+        connect();
+    });
+    $("#disconnect").click(function () {
+        disconnect();
+    });
+    $("#send").click(function () {
+        sendName();
+    });
 });
 
