@@ -32,7 +32,7 @@ public class Runner implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         System.out.println("Sending message ...");
-        rabbitTemplate.convertAndSend();
+        rabbitTemplate.convertAndSend(HelloSpringBootApplication.queueName, "Hello from RabbitMQ!");
         receiver.getLatch().await(10000, TimeUnit.MILLISECONDS);
         context.close();
 
