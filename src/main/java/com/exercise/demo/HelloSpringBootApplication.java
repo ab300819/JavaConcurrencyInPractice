@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Bean;
  */
 
 @SpringBootApplication
-//@ServletComponentScan
 public class HelloSpringBootApplication {
     public static void main(String[] args) {
         SpringApplication.run(HelloSpringBootApplication.class, args);
