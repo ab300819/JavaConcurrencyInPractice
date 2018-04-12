@@ -6,21 +6,20 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * Created by lenovo on 2017/8/17.
  */
 
-//@Controller
+@Controller
 public class ExternalController {
 
     private static Logger logger = LoggerFactory.getLogger(ExternalController.class);
 
-//    @MessageMapping("/hello")
-//    @SendTo("/topic/greetings")
     @RequestMapping("/ws")
-    public Greeting serviceController(HelloMessage helloMessage) throws InterruptedException {
-//        Thread.sleep(1000);
+    @ResponseBody
+    public Greeting serviceController(HelloMessage helloMessage) {
 
         return new Greeting("hello, " + helloMessage.getName() + "!");
     }
