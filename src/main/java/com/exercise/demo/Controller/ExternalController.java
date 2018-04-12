@@ -1,9 +1,10 @@
-package com.exercise.demo;
+package com.exercise.demo.Controller;
 
+import com.exercise.demo.app.dao.CountryDao;
+import com.exercise.demo.app.dto.CountryDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -17,10 +18,15 @@ public class ExternalController {
 
     private static Logger logger = LoggerFactory.getLogger(ExternalController.class);
 
+    @Autowired
+    CountryDao countryDao;
+
     @RequestMapping("/ws")
     @ResponseBody
-    public Greeting serviceController(HelloMessage helloMessage) {
+    public CountryDto serviceController() {
 
-        return new Greeting("hello, " + helloMessage.getName() + "!");
+        CountryDto result = countryDao.selectCountry(1L);
+
+        return result;
     }
 }

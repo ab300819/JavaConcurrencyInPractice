@@ -1,4 +1,4 @@
-package com.exercise.demo;
+package com.exercise.demo.websocket;
 
 import com.exercise.demo.websocket.MyHandler;
 import org.springframework.context.annotation.Bean;
@@ -13,8 +13,8 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 /**
  * Created by lenovo on 2017/8/29.
  */
-@Configuration
-@EnableWebSocket
+//@Configuration
+//@EnableWebSocket
 public class WebSocketConfig implements WebSocketConfigurer {
 
     @Override
