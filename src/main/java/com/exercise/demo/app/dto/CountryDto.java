@@ -1,5 +1,8 @@
 package com.exercise.demo.app.dto;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 /**
  * Project: ExerciseTimer
  * Package: com.exercise.database
@@ -36,5 +39,13 @@ public class CountryDto {
 
     public void setCountryCode(String countryCode) {
         this.countryCode = countryCode;
+    }
+
+    @Override
+    public String toString() {
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode json = objectMapper.valueToTree(this);
+        return json.toString();
     }
 }

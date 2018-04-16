@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Created by lenovo on 2017/8/22.
  */
-//@Component
+@Component
 public class TryInterceptor implements HandlerInterceptor {
 
     private static Logger logger = LoggerFactory.getLogger(TryInterceptor.class);

@@ -2,6 +2,7 @@ package com.exercise.demo.Controller;
 
 import com.exercise.demo.app.dao.CountryDao;
 import com.exercise.demo.app.dto.CountryDto;
+import com.exercise.demo.app.service.TestAspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +22,16 @@ public class ExternalController {
     @Autowired
     CountryDao countryDao;
 
+    @Autowired
+    TestAspect testAspect;
+
     @RequestMapping("/ws")
     @ResponseBody
     public CountryDto serviceController() {
 
+        testAspect.perform();
         CountryDto result = countryDao.selectCountry(1L);
-
+        logger.debug(result.toString());
         return result;
     }
 }
