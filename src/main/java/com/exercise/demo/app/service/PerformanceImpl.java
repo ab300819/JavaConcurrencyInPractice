@@ -6,9 +6,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
-public class TestAspect implements Performance {
+public class PerformanceImpl implements Performance {
 
-    private static Logger logger = LoggerFactory.getLogger(TestAspect.class);
+    private static Logger logger = LoggerFactory.getLogger(PerformanceImpl.class);
 
     @Override
     public void perform() {
