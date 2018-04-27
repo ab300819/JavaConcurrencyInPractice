@@ -1,4 +1,4 @@
-package com.exercise.demo.app.dto;
+package com.exercise.demo.mybatis.dto;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -1,7 +1,8 @@
-package com.exercise.demo.aspect;
+package com.exercise.demo.aspect.config;
 
 
-import com.exercise.demo.app.service.Food;
+import com.exercise.demo.aspect.component.Food;
+import com.exercise.demo.aspect.component.FoodImpl;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.slf4j.Logger;
@@ -10,21 +11,21 @@ import org.springframework.stereotype.Component;
 
 @Aspect
 @Component
-public class TestAspect {
+public class AspectConfig {
 
-    private static Logger logger = LoggerFactory.getLogger(TestAspect.class);
+    private static Logger logger = LoggerFactory.getLogger(AspectConfig.class);
 
-    @Before("execution(* com.exercise.demo.app.service.Animal.walk())")
+    @Before("execution(* com.exercise.demo.aspect.component.Animal.walk())")
     public void silenceCellPhone() {
         logger.debug("Silencing cell phone");
     }
 
-    @Before("execution(* com.exercise.demo.app.service.Animal.walk())")
+    @Before("execution(* com.exercise.demo.aspect.component.Animal.walk())")
     public void takeSeats() {
         logger.debug("Take seats");
     }
 
-    @Pointcut("execution(* com.exercise.demo.app.service.Performance.perform(..))")
+    @Pointcut("execution(* com.exercise.demo.aspect.component.Performance.perform(..))")
     public void performance() {
         logger.debug("定义总切点");
     }
@@ -39,7 +40,7 @@ public class TestAspect {
     public void watchPerformance(ProceedingJoinPoint jp) throws Throwable {
 
         logger.debug("Silencing cell phones");
-        System.out.println("Taking seats");
+        logger.debug("Taking seats");
         jp.proceed();
         logger.debug("CLAP CLAP CLAP!!!");
     }
@@ -48,8 +49,8 @@ public class TestAspect {
      * 引入新功能
      */
     @DeclareParents(
-            value = "com.exercise.demo.app.service.Person+",
-            defaultImpl = com.exercise.demo.app.service.FoodImpl.class)
+            value = "com.exercise.demo.aspect.component.Person+",
+            defaultImpl = FoodImpl.class)
     public static Food food;
 
 }

@@ -1,6 +1,6 @@
-package com.exercise.demo.app.dao;
+package com.exercise.demo.mybatis.dao;
 
-import com.exercise.demo.app.dto.CountryDto;
+import com.exercise.demo.mybatis.dto.CountryDto;
 import org.apache.ibatis.annotations.Param;
 
 

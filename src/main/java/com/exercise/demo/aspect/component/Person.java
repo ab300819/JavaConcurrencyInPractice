@@ -1,4 +1,4 @@
-package com.exercise.demo.app.service;
+package com.exercise.demo.aspect.component;
 
 public interface Person {
 

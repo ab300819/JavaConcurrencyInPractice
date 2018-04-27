@@ -2,8 +2,8 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.exercise.demo.app.dao.CountryDao">
-    <select id="selectCountry" resultType="com.exercise.demo.app.dto.CountryDto">
+<mapper namespace="com.exercise.demo.mybatis.dao.CountryDao">
+    <select id="selectCountry" resultType="com.exercise.demo.mybatis.dto.CountryDto">
         SELECT *
         FROM country
         where id = #{id}

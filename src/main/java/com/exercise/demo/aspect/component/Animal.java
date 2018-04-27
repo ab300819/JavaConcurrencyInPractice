@@ -1,8 +1,8 @@
-package com.exercise.demo.app.service;
+package com.exercise.demo.aspect.component;
 
 /**
  * Project: HelloSpring
- * Package: com.exercise.demo.app.service
+ * Package: com.exercise.demo.mybatis.service
  * Author: mason
  * Time: 12:59
  * Date: 2018-04-27

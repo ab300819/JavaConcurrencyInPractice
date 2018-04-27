@@ -1,4 +1,4 @@
-package com.exercise.demo.app.service;
+package com.exercise.demo.aspect.component;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +11,8 @@ public class PerformanceImpl implements Performance {
 
     @Override
     public void perform() {
+
         logger.debug("开始表演！");
+
     }
 }
