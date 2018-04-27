@@ -1,10 +1,11 @@
-package com.exercise.demo.Controller;
+package com.exercise.demo.controller;
 
 import com.exercise.demo.app.dao.CountryDao;
 import com.exercise.demo.app.dto.CountryDto;
+import com.exercise.demo.app.service.Animal;
 import com.exercise.demo.app.service.Food;
 import com.exercise.demo.app.service.Person;
-import com.exercise.demo.aspect.Performance;
+import com.exercise.demo.app.service.Performance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,18 +26,22 @@ public class ExternalController {
     CountryDao countryDao;
 
     @Autowired
-    Performance performanceImpl;
+    Animal animal;
 
     @Autowired
-    Person personImpl;
+    Performance performance;
+
+    @Autowired
+    Person person;
 
     @RequestMapping("/ws")
     @ResponseBody
     public CountryDto serviceController() {
 
-        performanceImpl.perform();
-        personImpl.speak();
-        ((Food) personImpl).eat();
+        animal.walk();
+        performance.perform();
+        person.speak();
+        ((Food) person).eat();
         CountryDto result = countryDao.selectCountry(1L);
         logger.debug(result.toString());
         return result;
