@@ -3,10 +3,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.exercise.demo</groupId>
-    <artifactId>HelloSpring</artifactId>
+    <artifactId>HelloSpringBoot</artifactId>
     <packaging>jar</packaging>
     <version>0.0.1</version>
-    <name>HelloSpring</name>
+    <name>HelloSpringBoot</name>
+    <properties>
+        <spring_boot_version>1.5.12.RELEASE</spring_boot_version>
+    </properties>
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -24,17 +27,17 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-amqp</artifactId>
-            <version>1.5.12.RELEASE</version>
+            <version>${spring_boot_version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
-            <version>1.5.12.RELEASE</version>
+            <version>${spring_boot_version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
-            <version>1.5.12.RELEASE</version>
+            <version>${spring_boot_version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -62,15 +65,19 @@
         </dependency>
     </dependencies>
 
-    <properties>
-        <java.version>1.8</java.version>
-    </properties>
-
     <build>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
             </plugin>
         </plugins>
     </build>
