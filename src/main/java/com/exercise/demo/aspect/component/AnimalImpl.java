@@ -18,7 +18,9 @@ public class AnimalImpl implements Animal {
     private static Logger logger = LoggerFactory.getLogger(AnimalImpl.class);
 
     @Override
-    public void walk() {
+    public void walk(int test) {
+
+        logger.debug("在 walk 中是" + test);
 
         logger.debug("动物在走路！！！");
 

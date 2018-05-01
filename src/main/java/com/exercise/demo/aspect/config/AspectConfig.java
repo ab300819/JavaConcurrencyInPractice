@@ -15,8 +15,9 @@ public class AspectConfig {
 
     private static Logger logger = LoggerFactory.getLogger(AspectConfig.class);
 
-    @Before("execution(* com.exercise.demo.aspect.component.Animal.walk())")
-    public void silenceCellPhone() {
+    @Before("execution(* com.exercise.demo.aspect.component.Animal.walk(int ))&&args(test)")
+    public void silenceCellPhone(int test) {
+        logger.debug("test 开始是" + test);
         logger.debug("Silencing cell phone");
     }
 

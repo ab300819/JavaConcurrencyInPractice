@@ -9,5 +9,5 @@ package com.exercise.demo.aspect.component;
  * Created with IntelliJ IDEA
  */
 public interface Animal {
-    void walk();
+    void walk(int test);
 }
