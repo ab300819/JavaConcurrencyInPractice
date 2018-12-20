@@ -24,7 +24,13 @@
 hs_err_pid*
 
 .idea/
+.gradle/
+.ideaDataSources/
+build/
+gradle/
 target/
+out/
+
 *.iml
 *.ipr
 *.iws
