@@ -27,6 +27,7 @@ dependencies {
     compile group: 'mysql', name: 'mysql-connector-java', version: '6.0.6'
     compile group: 'commons-io', name: 'commons-io', version: '2.6'
     compile group: 'com.google.guava', name: 'guava', version: '27.0.1-jre'
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.4'
     testCompile(group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '1.5.12.RELEASE') {
         exclude(module: 'commons-logging')
     }

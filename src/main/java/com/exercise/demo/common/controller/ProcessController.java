@@ -1,5 +1,7 @@
-package com.exercise.demo.controller;
+package com.exercise.demo.common.controller;
 
+import com.exercise.demo.annotation.TestArg;
+import com.exercise.demo.common.dto.Parameter;
 import com.exercise.demo.mybatis.dao.CountryDao;
 import com.exercise.demo.mybatis.dto.CountryDto;
 import com.exercise.demo.aspect.component.Animal;
@@ -9,19 +11,16 @@ import com.exercise.demo.aspect.component.Performance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Created by lenovo on 2017/8/17.
  */
 
 @RestController
-public class ExternalController {
+public class ProcessController {
 
-    private static Logger logger = LoggerFactory.getLogger(ExternalController.class);
+    private static Logger logger = LoggerFactory.getLogger(ProcessController.class);
 
     @Autowired
     CountryDao countryDao;
@@ -35,9 +34,8 @@ public class ExternalController {
     @Autowired
     Person person;
 
-    @GetMapping("/ws")
-    @ResponseBody
-    public CountryDto serviceController() {
+    @PostMapping("/ws")
+    public Parameter serviceController(@TestArg(success = false,num = 10,message = "Fuck you!") Parameter parameter) {
 
         animal.walk(1);
         performance.perform();
@@ -45,6 +43,8 @@ public class ExternalController {
         ((Food) person).eat();
         CountryDto result = countryDao.selectCountry(1L);
         logger.debug(result.toString());
-        return result;
+        logger.debug("{}", parameter);
+
+        return parameter;
     }
 }

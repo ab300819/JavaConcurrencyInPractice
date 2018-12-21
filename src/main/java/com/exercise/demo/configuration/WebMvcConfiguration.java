@@ -1,0 +1,26 @@
+package com.exercise.demo.configuration;
+
+import com.exercise.demo.parameter.ArgumentParameterResolve;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+
+import java.util.List;
+
+@Configuration
+public class WebMvcConfiguration extends WebMvcConfigurerAdapter {
+
+    private ArgumentParameterResolve argumentParameterResolve;
+
+    @Autowired
+    public WebMvcConfiguration(ArgumentParameterResolve argumentParameterResolve) {
+        this.argumentParameterResolve = argumentParameterResolve;
+    }
+
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+        super.addArgumentResolvers(argumentResolvers);
+        argumentResolvers.add(argumentParameterResolve);
+    }
+}

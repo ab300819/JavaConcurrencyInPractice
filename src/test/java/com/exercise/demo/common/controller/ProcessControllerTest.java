@@ -1,4 +1,4 @@
-package com.exercise.demo.controller;
+package com.exercise.demo.common.controller;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -11,7 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class ExternalControllerTest {
+public class ProcessControllerTest {
 
     @LocalServerPort
     private int port;

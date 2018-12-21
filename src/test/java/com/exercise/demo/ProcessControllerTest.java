@@ -15,7 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-public class ExternalControllerTest {
+public class ProcessControllerTest {
 
     @Autowired
     MockMvc mockMvc;
