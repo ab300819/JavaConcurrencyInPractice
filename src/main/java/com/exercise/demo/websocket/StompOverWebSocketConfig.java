@@ -20,6 +20,7 @@ public class StompOverWebSocketConfig implements WebSocketMessageBrokerConfigure
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
+        // 注册STOMP协议节点
         registry.addEndpoint("/stomp-over-websocket");
     }
 }

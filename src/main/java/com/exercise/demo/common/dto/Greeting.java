@@ -1,12 +1,18 @@
 package com.exercise.demo.common.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-
-@Data
-@AllArgsConstructor
 public class Greeting {
 
     private String content;
+
+    public Greeting() {
+    }
+
+    public Greeting(String content) {
+        this.content = content;
+    }
+
+    public String getContent() {
+        return content;
+    }
 
 }

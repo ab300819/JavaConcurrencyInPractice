@@ -10,7 +10,7 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.Date;
 
-@Component
+//@Component
 public class Schedule {
 
     private static Logger logger = LoggerFactory.getLogger(ProcessController.class);

@@ -11,7 +11,8 @@ import org.springframework.web.util.HtmlUtils;
 public class StompOverWebSocketController {
 
     @MessageMapping("/hello")
-    @SendTo("/greetings")
+    // STOMP 协议中注解
+    @SendTo("/topic/greetings")
     public Greeting getAndSend(HelloMessage message) throws Exception {
         Thread.sleep(1000);
         return new Greeting("Hello, " + HtmlUtils.htmlEscape(message.getName()) + "!");

@@ -10,8 +10,8 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 /**
  * Created by lenovo on 2017/8/29.
  */
-//@Configuration
-//@EnableWebSocket
+@Configuration
+@EnableWebSocket
 public class WebSocketConfig implements WebSocketConfigurer {
 
     @Override
