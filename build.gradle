@@ -39,6 +39,11 @@ dependencies {
     runtime group: 'mysql', name: 'mysql-connector-java', version: '6.0.6'
     compile group: 'commons-io', name: 'commons-io', version: '2.6'
     compile group: 'com.google.guava', name: 'guava', version: '27.0.1-jre'
+    compile("org.webjars:webjars-locator-core")
+    compile("org.webjars:sockjs-client:1.0.2")
+    compile("org.webjars:stomp-websocket:2.3.3")
+    compile("org.webjars:bootstrap:3.3.7")
+    compile("org.webjars:jquery:3.1.0")
     compileOnly('org.projectlombok:lombok:1.18.4')
     testImplementation('org.springframework.boot:spring-boot-starter-test')
 }

@@ -1,14 +1,11 @@
 package com.exercise.demo.websocket;
 
-import com.exercise.demo.websocket.MyHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.messaging.simp.config.MessageBrokerRegistry;
-import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketHandler;
-import org.springframework.web.socket.WebSocketSession;
-import org.springframework.web.socket.config.annotation.*;
-import org.springframework.web.socket.handler.TextWebSocketHandler;
+import org.springframework.web.socket.config.annotation.EnableWebSocket;
+import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
+import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
 /**
  * Created by lenovo on 2017/8/29.
@@ -24,7 +21,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
     }
 
-//    @Bean
+    @Bean
     public WebSocketHandler myHandle() {
 
         return new MyHandler();
