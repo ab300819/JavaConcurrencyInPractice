@@ -9,23 +9,25 @@
 </head>
 <body>
 <div id="main-content" class="container">
-    <button id="connect" class="btn-primary">connected</button>
+    <div style="padding-top: 30px;">
+        <button id="connect" class="btn-primary">connected</button>
+    </div>
 </div>
 <script>
 
     var sock = null;
     $('#connect').click(function () {
         sock = new WebSocket('ws://localhost:8282/test');
-        sock.onopen=function (ev) {
+        sock.onopen = function (ev) {
             console.log('websocket connected!');
             sayHello()
         };
 
-        sock.onmessage=function (ev) {
-          console.log('received Message:',ev.data);
+        sock.onmessage = function (ev) {
+            console.log('received Message:', ev.data);
         };
 
-        sock.onclose=function (ev) {
+        sock.onclose = function (ev) {
             console.log('connect close')
         }
 
