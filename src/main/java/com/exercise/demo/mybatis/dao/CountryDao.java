@@ -13,12 +13,24 @@ import org.apache.ibatis.annotations.SelectProvider;
  * Time: 11:33
  * Date: 2018-03-29
  * Created with IntelliJ IDEA
- * https://zhuanlan.zhihu.com/p/32754570
  */
 @Mapper
 public interface CountryDao {
 
-    @SelectProvider(type = CountryDto.class,method = "selectCountry")
-    CountryDto selectCountry(@Param("id") Long id);
+    String returnSql = "id,country_name,country_code";
 
+    @SelectProvider(type = CountryDaoProvider.class, method = "selectCountry")
+    CountryDto selectCountry(CountryDto countryDto);
+
+    class CountryDaoProvider {
+
+        public String selectCountry(CountryDto countryDto) {
+
+            String sql = "SELECT " + returnSql + " FROM country";
+            if (countryDto.getId() != null) {
+                sql += " WHERE id=#{id}";
+            }
+            return sql;
+        }
+    }
 }

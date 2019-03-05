@@ -37,13 +37,15 @@ public class ProcessController {
     @PostMapping("/ws")
     public CountryDto serviceController(@TestArg(success = false,num = 10,message = "Fuck you!") Parameter parameter) {
 
+        CountryDto countryDto=new CountryDto();
+        countryDto.setId(1L);
         animal.walk(1);
         performance.perform();
         person.speak();
-        ((Food) person).eat();
-        CountryDto result = countryDao.selectCountry(1L);
-        logger.debug(result.toString());
-        logger.debug("{}", parameter);
+//        ((Food) person).eat();
+        CountryDto result = countryDao.selectCountry(countryDto);
+//        logger.debug(result.toString());
+//        logger.debug("{}", parameter);
 
         return result;
     }
