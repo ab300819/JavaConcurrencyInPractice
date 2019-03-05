@@ -35,7 +35,7 @@ public class ProcessController {
     Person person;
 
     @PostMapping("/ws")
-    public Parameter serviceController(@TestArg(success = false,num = 10,message = "Fuck you!") Parameter parameter) {
+    public CountryDto serviceController(@TestArg(success = false,num = 10,message = "Fuck you!") Parameter parameter) {
 
         animal.walk(1);
         performance.perform();
@@ -45,6 +45,6 @@ public class ProcessController {
         logger.debug(result.toString());
         logger.debug("{}", parameter);
 
-        return parameter;
+        return result;
     }
 }
