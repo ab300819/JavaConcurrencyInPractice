@@ -3,6 +3,7 @@ package com.exercise.demo.parameter;
 import com.exercise.demo.annotation.TestArg;
 import com.exercise.demo.common.dto.Parameter;
 import org.springframework.core.MethodParameter;
+import org.springframework.lang.NonNullApi;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -13,7 +14,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 public class ArgumentParameterResolve implements HandlerMethodArgumentResolver {
 
     @Override
-    public boolean supportsParameter(MethodParameter parameter) {
+    public boolean supportsParameter( MethodParameter parameter) {
         return parameter.hasParameterAnnotation(TestArg.class);
     }
 
