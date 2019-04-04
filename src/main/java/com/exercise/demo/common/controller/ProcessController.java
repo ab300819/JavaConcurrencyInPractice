@@ -1,17 +1,17 @@
 package com.exercise.demo.common.controller;
 
 import com.exercise.demo.annotation.TestArg;
+import com.exercise.demo.aspect.component.Animal;
+import com.exercise.demo.aspect.component.Performance;
+import com.exercise.demo.aspect.component.Person;
 import com.exercise.demo.common.dto.Parameter;
 import com.exercise.demo.mybatis.dao.CountryDao;
 import com.exercise.demo.mybatis.dto.CountryDto;
-import com.exercise.demo.aspect.component.Animal;
-import com.exercise.demo.aspect.component.Food;
-import com.exercise.demo.aspect.component.Person;
-import com.exercise.demo.aspect.component.Performance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Created by lenovo on 2017/8/17.
@@ -43,10 +43,9 @@ public class ProcessController {
         performance.perform();
         person.speak();
 //        ((Food) person).eat();
-        CountryDto result = countryDao.selectCountry(countryDto);
-//        logger.debug(result.toString());
+        //        logger.debug(result.toString());
 //        logger.debug("{}", parameter);
 
-        return result;
+        return countryDao.selectCountry(countryDto);
     }
 }
