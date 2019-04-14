@@ -1,6 +1,6 @@
-package com.exercise.demo.configuration;
+package com.exercise.demo.common.configure;
 
-import com.exercise.demo.parameter.ArgumentParameterResolve;
+import com.exercise.demo.parameter.CustomParameterResolve;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -9,13 +9,18 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
 
+/**
+ * 自定义 mvc 配置
+ *
+ * @author mason
+ */
 @Configuration
-public class MyWebMvcConfigurer implements WebMvcConfigurer {
+public class CustomWebMvcConfigurer implements WebMvcConfigurer {
 
-    private ArgumentParameterResolve argumentParameterResolve;
+    private CustomParameterResolve argumentParameterResolve;
 
     @Autowired
-    public MyWebMvcConfigurer(ArgumentParameterResolve argumentParameterResolve) {
+    public CustomWebMvcConfigurer(CustomParameterResolve argumentParameterResolve) {
         this.argumentParameterResolve = argumentParameterResolve;
     }
 

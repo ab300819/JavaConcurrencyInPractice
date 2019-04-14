@@ -1,8 +1,7 @@
-package com.exercise.demo.listener;
+package com.exercise.demo.common.listener;
 
 import javax.servlet.ServletRequestEvent;
 import javax.servlet.ServletRequestListener;
-import javax.servlet.annotation.WebListener;
 
 /**
  * Created by lenovo on 2017/8/18.
