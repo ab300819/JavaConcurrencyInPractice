@@ -1,6 +1,5 @@
-package com.exercise.demo.listener;
+package com.exercise.demo.common.listener;
 
-import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 

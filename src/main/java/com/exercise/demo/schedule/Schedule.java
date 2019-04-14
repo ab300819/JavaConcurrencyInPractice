@@ -1,24 +1,21 @@
 package com.exercise.demo.schedule;
 
-import com.exercise.demo.common.controller.ProcessController;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.Date;
 
-@Component
+@Slf4j
+//@Component
 public class Schedule {
 
-    private static Logger logger = LoggerFactory.getLogger(ProcessController.class);
 
     @Scheduled(cron = "0/5 * * * * ?")
     public void outputEveryFiveSecond() {
 
-        logger.info("计数：{}", nowTime(new Date()));
+        log.info("计数：{}", nowTime(new Date()));
     }
 
     private String nowTime(Date date) {
