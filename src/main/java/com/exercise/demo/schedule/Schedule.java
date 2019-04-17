@@ -26,7 +26,7 @@ public class Schedule {
         String second = localTime.getSecond() < 10 ? "0" + localTime.getSecond() : String.valueOf(localTime.getSecond());
 
         return hour + ":" + minute + ":" + second;
-
     }
 
 }
+
