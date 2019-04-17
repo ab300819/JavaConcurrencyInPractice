@@ -21,8 +21,8 @@
         <javaClientGenerator type="XMLMAPPER" targetPackage="com.exercise.demo.mybatis.dao"
                              targetProject="src/main/java">
         </javaClientGenerator>
-        <table schema="meng_test" tableName="user" domainObjectName="UserDto"
-               mapperName="UserDao"
+        <table schema="meng_test" tableName="im_user" domainObjectName="ImUserDto"
+               mapperName="ImUserDao"
                enableCountByExample="false" enableSelectByExample="false" enableDeleteByExample="false"
                enableUpdateByExample="false"/>
     </context>
