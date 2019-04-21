@@ -27,5 +27,17 @@
                mapperName="ImUserDao"
                enableCountByExample="false" enableSelectByExample="false" enableDeleteByExample="false"
                enableUpdateByExample="false"/>
+        <table schema="meng_test" tableName="im_message" domainObjectName="ImMessageDto"
+               mapperName="ImMessageDao"
+               enableCountByExample="false" enableSelectByExample="false" enableDeleteByExample="false"
+               enableUpdateByExample="false"/>
+        <table schema="meng_test" tableName="im_relationship" domainObjectName="ImRelationshipDto"
+               mapperName="ImRelationshipDao"
+               enableCountByExample="false" enableSelectByExample="false" enableDeleteByExample="false"
+               enableUpdateByExample="false"/>
+        <table schema="meng_test" tableName="im_relationship_type" domainObjectName="ImRelationshipTypeDto"
+               mapperName="ImRelationshipTypeDao"
+               enableCountByExample="false" enableSelectByExample="false" enableDeleteByExample="false"
+               enableUpdateByExample="false"/>
     </context>
 </generatorConfiguration>

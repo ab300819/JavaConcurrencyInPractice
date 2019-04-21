@@ -4,8 +4,8 @@ package com.exercise.demo.mybatis.dto;
  * 用户信息表
  * im_user
  *
+ * @date 2019-04-21 23:56:54
  * @author mason
- * @date 2019-04-18 18:44:52
  */
 public class ImUserDto {
     /**
