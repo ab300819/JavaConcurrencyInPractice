@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author mason
  */
 @RestController
-@RequestMapping()
+@RequestMapping
 public class UserController {
 
     public ReturnResult login(String userName, String password) {
