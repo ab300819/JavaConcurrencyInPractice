@@ -7,6 +7,7 @@ import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
+import org.springframework.web.socket.server.support.DefaultHandshakeHandler;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -29,7 +30,6 @@ public class StompOverWebSocketConfig implements WebSocketMessageBrokerConfigure
         config.enableSimpleBroker("/topic");
         //设置客户端发送给服务器的前缀
         config.setApplicationDestinationPrefixes("/app");
-        config.setApplicationDestinationPrefixes("/");
     }
 
     @Override
