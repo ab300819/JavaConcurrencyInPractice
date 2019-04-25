@@ -8,6 +8,7 @@ import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBr
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 import org.springframework.web.socket.server.support.DefaultHandshakeHandler;
+import org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -30,6 +31,7 @@ public class StompOverWebSocketConfig implements WebSocketMessageBrokerConfigure
         config.enableSimpleBroker("/topic");
         //设置客户端发送给服务器的前缀
         config.setApplicationDestinationPrefixes("/app");
+
     }
 
     @Override
@@ -37,32 +39,8 @@ public class StompOverWebSocketConfig implements WebSocketMessageBrokerConfigure
         // 注册STOMP协议节点
         registry.addEndpoint("/stomp-over-websocket")
                 // 添加握手处理
-                .setHandshakeHandler((request, response, wsHandler, attributes) -> {
+                .addInterceptors(new HttpSessionHandshakeInterceptor(){
 
-                    HttpServletRequest httpServletRequest;
-
-                    if (request instanceof HttpServletRequest) {
-                        log.debug("request is httpServletRequest");
-
-                        httpServletRequest=(HttpServletRequest) request;
-
-                    }else if (request instanceof ServletServerHttpRequest) {
-                        log.debug("request is servletServerHttpRequest");
-
-                        ServletServerHttpRequest servletServerHttpRequest = (ServletServerHttpRequest) request;
-                        httpServletRequest=servletServerHttpRequest.getServletRequest();
-
-                    }else{
-                        log.debug("no request");
-                        return false;
-                    }
-
-                    Cookie[] cookies=httpServletRequest.getCookies();
-
-
-
-
-                    return true;
                 });
     }
 }
