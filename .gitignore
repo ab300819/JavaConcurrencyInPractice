@@ -49,7 +49,7 @@ ehthumbs_vista.db
 # Dump file
 *.stackdump
 
-# Folder configure file
+# Folder config file
 [Dd]esktop.ini
 
 # Recycle Bin used on file shares
@@ -117,3 +117,5 @@ Temporary Items
 hs_err_pid*
 
 target/
+
+/src/main/resources/rebel.xml

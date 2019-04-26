@@ -8,9 +8,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 /**
  * Hello world!
  */
-
-@SpringBootApplication
+@MapperScan(value = "com.exercise.demo.mybatis")
 @EnableScheduling
+@SpringBootApplication
 public class Application {
 
     public static void main(String[] args) {
