@@ -1,4 +1,4 @@
-package com.exercise.demo.common.configure;
+package com.exercise.demo.common.config;
 
 import com.exercise.demo.parameter.CustomParameterResolve;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +15,12 @@ import java.util.List;
  * @author mason
  */
 @Configuration
-public class CustomWebMvcConfigurer implements WebMvcConfigurer {
+public class CustomWebMvcConfig implements WebMvcConfigurer {
 
     private CustomParameterResolve argumentParameterResolve;
 
     @Autowired
-    public CustomWebMvcConfigurer(CustomParameterResolve argumentParameterResolve) {
+    public CustomWebMvcConfig(CustomParameterResolve argumentParameterResolve) {
         this.argumentParameterResolve = argumentParameterResolve;
     }
 
