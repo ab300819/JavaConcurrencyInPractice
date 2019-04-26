@@ -26,7 +26,7 @@ public class RedisConfigTest {
     public void cacheTest(){
         String source1="hello";
         MessageDto source2=new MessageDto();
-        source2.setName("hello world");
+        source2.setContent("hello world");
 
         redisTemplate.opsForValue().set("target1",source1);
         assertThat("hello",equalTo( redisTemplate.opsForValue().get("target1")));

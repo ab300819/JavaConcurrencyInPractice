@@ -24,7 +24,7 @@ public class RedisCacheUtilTest {
     public void testGet() {
         String source1="hello";
         MessageDto source2=new MessageDto();
-        source2.setName("hello world");
+        source2.setContent("hello world");
 
         redisCacheUtil.set("target1",source1);
         assertThat("hello",equalTo( redisCacheUtil.get("target1")));

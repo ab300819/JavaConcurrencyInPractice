@@ -8,7 +8,9 @@ import java.io.Serializable;
 public class MessageDto implements Serializable {
 
     private static final long serialVersionUID = -8143928414777256633L;
-    private String name;
+
+    private String to;
+    private String content;
 
 
 }
