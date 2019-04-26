@@ -1,6 +1,7 @@
 package com.exercise.demo.usercenter.controller;
 
 import com.exercise.demo.common.dto.ReturnResult;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -10,9 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
  * @author mason
  */
 @RestController
-@RequestMapping
+@RequestMapping("/user")
 public class UserController {
 
+    @PostMapping("/login")
     public ReturnResult login(String userName, String password) {
 
         return null;

@@ -1,8 +1,13 @@
 package com.exercise.demo.message.controller;
 
+import com.exercise.demo.common.util.CommonUtil;
+import com.exercise.demo.common.util.RedisCacheUtil;
 import com.exercise.demo.message.dto.MessageDto;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
 
@@ -16,11 +21,16 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class MessageController {
 
+    @Autowired
+    private SimpMessagingTemplate template;
+
+    @Autowired
+    private RedisCacheUtil redisCacheUtil;
+
     @MessageMapping("/send")
-    // STOMP 协议中注解
-    @SendToUser("/topic/replay")
-    public MessageDto getAndSenMessage(MessageDto messageDto) throws Exception {
-        return messageDto;
+//    @SendToUser("/topic/replay")
+    public void getAndSenMessage(MessageDto messageDto) throws Exception {
+        template.convertAndSendToUser(messageDto.getTo(),"/topic/replay",messageDto.getContent()+messageDto.getTo());
     }
 
 }

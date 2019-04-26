@@ -33,7 +33,7 @@
     <insert id="insertSelective" parameterType="com.exercise.demo.mybatis.dto.ImUserDto">
         insert into im_user
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="id != null">
+            <if test="id != null and id!=''">
                 id,
             </if>
             <if test="userId != null">

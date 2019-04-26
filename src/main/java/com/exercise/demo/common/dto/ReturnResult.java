@@ -25,5 +25,11 @@ public class ReturnResult {
      */
     public Object data;
 
+    public static ReturnResult success(){
+        ReturnResult result=new ReturnResult();
+        result.setCode(0);
+        return result;
+    }
+
 
 }

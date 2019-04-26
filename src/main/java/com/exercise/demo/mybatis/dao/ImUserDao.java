@@ -2,6 +2,7 @@ package com.exercise.demo.mybatis.dao;
 
 import com.exercise.demo.mybatis.dto.ImUserDto;
 
+
 public interface ImUserDao {
     int deleteByPrimaryKey(Integer id);
 
