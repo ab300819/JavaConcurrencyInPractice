@@ -11,6 +11,6 @@ public class MessageDto implements Serializable {
 
     private String to;
     private String content;
-
+    private String userName;
 
 }
