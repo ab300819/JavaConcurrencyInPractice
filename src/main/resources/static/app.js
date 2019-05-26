@@ -12,7 +12,7 @@ function setConnected(connected) {
 }
 
 function connect() {
-    var uid=document.getElementById("userid").value;
+    var uid = document.getElementById("user-id").value;
     console.log(uid);
     var host='ws://localhost:8282/stomp-over-websocket?uid='+uid;
     var socket = new WebSocket(host);
@@ -36,7 +36,10 @@ function disconnect() {
 }
 
 function sendName() {
-    stompClient.send("/app/send", {}, JSON.stringify({'content': $("#name").val(),'to':document.getElementById("userid").value}));
+    stompClient.send("/app/target", {}, JSON.stringify({
+        'content': $("#name").val(),
+        'to': document.getElementById("target").value
+    }));
 }
 
 function showGreeting(message) {

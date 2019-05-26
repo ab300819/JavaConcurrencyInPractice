@@ -4,7 +4,6 @@ import com.exercise.demo.common.util.RedisCacheUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.http.server.ServletServerHttpRequest;
@@ -41,7 +40,7 @@ public class StompOverWebSocketConfig implements WebSocketMessageBrokerConfigure
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
         //服务器发送给客户端的前缀
-        config.enableSimpleBroker("/topic","/user");
+        config.enableSimpleBroker("/topic", "/user");
         //设置客户端发送给服务器的前缀
         config.setApplicationDestinationPrefixes("/app");
 
@@ -55,13 +54,16 @@ public class StompOverWebSocketConfig implements WebSocketMessageBrokerConfigure
                 .addInterceptors(new HttpSessionHandshakeInterceptor() {
                     @Override
                     public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler, Map<String, Object> attributes) throws Exception {
+                        log.debug("enter into interceptor");
+
                         if (request instanceof ServletServerHttpRequest) {
+                            log.debug("request is ServletServerHttpRequest");
                             ServletServerHttpRequest servletServerHttpRequest = (ServletServerHttpRequest) request;
                             HttpSession session = servletServerHttpRequest.getServletRequest().getSession();
                             HttpServletRequest httpServletRequest = servletServerHttpRequest.getServletRequest();
                             String uid = httpServletRequest.getParameter("uid");
                             redisCacheUtil.set(uid, session.getId());
-                            log.debug("session id is {}",session.getId());
+                            log.debug("session id is {}", session.getId());
                         }
                         return super.beforeHandshake(request, response, wsHandler, attributes);
                     }
