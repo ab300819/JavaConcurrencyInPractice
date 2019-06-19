@@ -23,6 +23,7 @@ public class Factorizer extends GenericServlet implements Servlet {
     private final Computable<BigInteger, BigInteger[]> cache
             = new Memoizer<BigInteger, BigInteger[]>(c);
 
+    @Override
     public void service(ServletRequest req,
                         ServletResponse resp) {
         try {
