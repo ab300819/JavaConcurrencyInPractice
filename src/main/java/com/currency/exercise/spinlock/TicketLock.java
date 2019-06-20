@@ -25,14 +25,18 @@ public class TicketLock {
     private ThreadLocal<Integer> ticketNumHolder = new ThreadLocal<>();
 
     public void lock() {
-
         int currentTicketNum = ticketNum.incrementAndGet();
 
         ticketNumHolder.set(currentTicketNum);
         while (currentTicketNum != serviceNum.get()) {
 
         }
+    }
 
+    public void unlock() {
+        int currentTicket = ticketNumHolder.get();
+        serviceNum.compareAndSet(currentTicket, currentTicket + 1);
+        ticketNumHolder.remove();
     }
 
 }
