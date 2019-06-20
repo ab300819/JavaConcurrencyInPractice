@@ -1,6 +1,5 @@
 package com.currency.exercise.spinlock;
 
-import java.net.URLDecoder;
 import java.util.concurrent.atomic.AtomicReferenceFieldUpdater;
 
 public class CLHLock {
