@@ -15,17 +15,20 @@ public class MCSLock {
         volatile boolean isLocked = true;
     }
 
-    private static final ThreadLocal<MCSNode> NODE = new ThreadLocal<>();
-
     private volatile MCSNode queue;
 
-    private static final AtomicReferenceFieldUpdater<MCSLock, MCSNode> UPDATER = AtomicReferenceFieldUpdater
-            .newUpdater(MCSLock.class, MCSNode.class, "queue");
+    private final ThreadLocal<MCSNode> currentThreadNode = new ThreadLocal<>();
+
+    private static final AtomicReferenceFieldUpdater<MCSLock, MCSNode> UPDATER =
+            AtomicReferenceFieldUpdater
+                    .newUpdater(MCSLock.class, MCSNode.class, "queue");
 
     public void lock() {
-
-        MCSNode currentNode = new MCSNode();
-        NODE.set(currentNode);
+        MCSNode currentNode = currentThreadNode.get();
+        if (currentNode == null) {
+            currentNode = new MCSNode();
+            currentThreadNode.set(currentNode);
+        }
 
         MCSNode preNode = UPDATER.getAndSet(this, currentNode);
         if (preNode != null) {
@@ -38,20 +41,23 @@ public class MCSLock {
     }
 
     public void unlock() {
-        MCSNode currentNode = NODE.get();
-        if (currentNode.next == null) {
-            if (UPDATER.compareAndSet(this, currentNode, null)) {
-                return;
-            } else {
-                while (currentNode.next == null) {
+        MCSNode currentNode = currentThreadNode.get();
+        currentThreadNode.remove();
 
-                }
+        if (currentNode == null || currentNode.isLocked) {
+            return;
+        }
+
+        if (currentNode.next == null && !UPDATER.compareAndSet(this, currentNode, null)) {
+            while (currentNode.next == null) {
+
             }
-        } else {
+        }
+
+        if (currentNode.next != null) {
             currentNode.next.isLocked = false;
             currentNode.next = null;
         }
-        NODE.remove();
     }
 
 }
