@@ -5,7 +5,7 @@ import java.util.concurrent.Executors;
 
 public class TestLock {
 
-    public static void main(String[] args) {
+    public  static void main(String[] args) {
         final CLHLock lock = new CLHLock();
         ExecutorService executor = Executors.newFixedThreadPool(100);
         for (int i = 0; i < 100; i++) {
