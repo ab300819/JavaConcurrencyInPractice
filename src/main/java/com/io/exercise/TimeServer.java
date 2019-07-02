@@ -10,9 +10,6 @@ import io.netty.util.CharsetUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.InetSocketAddress;
-import java.nio.charset.Charset;
-
 public class TimeServer {
 
     public static void main(String[] args) throws Exception {
@@ -20,43 +17,64 @@ public class TimeServer {
     }
 
     public void start(int port) throws Exception {
-        EventLoopGroup group = new NioEventLoopGroup();
+        EventLoopGroup bossGroup = new NioEventLoopGroup();
+        EventLoopGroup workGroup = new NioEventLoopGroup();
         ServerBootstrap b = new ServerBootstrap();
 
         try {
-            b.group(group)
+            b.group(bossGroup, workGroup)
                     .channel(NioServerSocketChannel.class)
-                    .localAddress(new InetSocketAddress(port))
                     .childHandler(new ChannelInitializer() {
                         @Override
-                        protected void initChannel(Channel ch) throws Exception {
+                        protected void initChannel(Channel ch) {
                             ch.pipeline().addLast(new TimeServerHandler());
                         }
-                    });
-            ChannelFuture f = b.bind().sync();
+                    })
+                    .option(ChannelOption.SO_BACKLOG, 128)
+                    .childOption(ChannelOption.SO_KEEPALIVE, true);
+            ChannelFuture f = b.bind(port).sync();
             f.channel().closeFuture().sync();
         } finally {
-            group.shutdownGracefully();
+            bossGroup.shutdownGracefully();
+            workGroup.shutdownGracefully();
         }
     }
 
     public static class TimeServerHandler extends ChannelInboundHandlerAdapter {
 
+        private static final Logger log = LoggerFactory.getLogger(TimeServerHandler.class);
 
         @Override
-        public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-            ByteBuf in = (ByteBuf) msg;
-            ctx.write(in);
-            System.out.println(in.toString(CharsetUtil.UTF_8));
+        public void channelActive(ChannelHandlerContext ctx) {
+
+            final ByteBuf time = ctx.alloc().buffer(4);
+            time.writeInt((int) (System.currentTimeMillis() / 1000L));
+
+            final ChannelFuture f = ctx.writeAndFlush(time);
+            f.addListener(new ChannelFutureListener() {
+                @Override
+                public void operationComplete(ChannelFuture future) throws Exception {
+                    ctx.close();
+                    log.info("ChannelHandlerContext closed");
+                }
+            });
+
         }
 
         @Override
-        public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
+        public void channelRead(ChannelHandlerContext ctx, Object msg) {
+            log.info("Echo Server echo {}", ((ByteBuf) msg).toString(CharsetUtil.UTF_8));
+            ctx.write(msg);
+            ctx.flush();
+        }
+
+        @Override
+        public void channelReadComplete(ChannelHandlerContext ctx) {
             ctx.writeAndFlush(Unpooled.EMPTY_BUFFER).addListener(ChannelFutureListener.CLOSE);
         }
 
         @Override
-        public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
             ctx.close();
             cause.printStackTrace();
         }
