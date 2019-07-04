@@ -2,25 +2,24 @@ package com.io.exercise;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.util.CharsetUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.nio.charset.Charset;
 import java.util.Date;
 
-/**
- * 时间客户端
- * @author mason
- */
-public class TimeClient {
+public class PackageClient {
 
-    private static final Logger log = LoggerFactory.getLogger(TimeClient.class);
+    private static final Logger log = LoggerFactory.getLogger(PackageClient.class);
 
     public static void main(String[] args) throws Exception {
-        new TimeClient().connect(9090, "localhost");
+        new PackageClient().connect(9090, "localhost");
     }
 
 
@@ -48,19 +47,29 @@ public class TimeClient {
         }
     }
 
-    public static class TimeClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
+    public static class TimeClientHandler extends ChannelInboundHandlerAdapter {
         private static final Logger log = LoggerFactory.getLogger(TimeClientHandler.class);
 
+        private int counter=0;
+        private byte[] req=("QUERY TIME ORDER"+System.getProperty("line.separator")).getBytes();
 
         @Override
-        protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
-            try {
-                long currentMills = msg.readUnsignedInt() * 1000L;
-                log.info("server time {}", new Date(currentMills));
-                ctx.close();
-            } finally {
-                msg.release();
+        public void channelActive(ChannelHandlerContext ctx) throws Exception {
+            ByteBuf message=null;
+            for (int i = 0; i < 100; i++) {
+                message= Unpooled.buffer(req.length);
+                message.writeBytes(req);
+                ctx.writeAndFlush(message);
             }
+        }
+
+        @Override
+        public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+            ByteBuf buf=(ByteBuf)msg;
+            byte[] req=new byte[buf.readableBytes()];
+            buf.readBytes(req);
+            String body=new String(req, CharsetUtil.UTF_8);
+            log.debug("Now is: {};the count is:{}",body,++counter);
         }
 
         @Override
