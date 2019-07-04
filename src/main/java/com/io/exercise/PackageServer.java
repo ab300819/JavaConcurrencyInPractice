@@ -10,14 +10,12 @@ import io.netty.util.CharsetUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * 时间服务端
- * @author mason
- */
-public class TimeServer {
+import java.nio.charset.StandardCharsets;
+
+public class PackageServer {
 
     public static void main(String[] args) throws Exception {
-        new TimeServer().start(9090);
+        new PackageServer().start(9090);
     }
 
     public void start(int port) throws Exception {
@@ -47,29 +45,20 @@ public class TimeServer {
     public static class TimeServerHandler extends ChannelInboundHandlerAdapter {
 
         private static final Logger log = LoggerFactory.getLogger(TimeServerHandler.class);
-
-        @Override
-        public void channelActive(ChannelHandlerContext ctx) {
-
-            final ByteBuf time = ctx.alloc().buffer(4);
-            time.writeInt((int) (System.currentTimeMillis() / 1000L));
-
-            final ChannelFuture f = ctx.writeAndFlush(time);
-            f.addListener(new ChannelFutureListener() {
-                @Override
-                public void operationComplete(ChannelFuture future) throws Exception {
-                    ctx.close();
-                    log.info("ChannelHandlerContext closed");
-                }
-            });
-
-        }
+        private int count = 0;
 
         @Override
         public void channelRead(ChannelHandlerContext ctx, Object msg) {
-            log.info("Echo Server echo {}", ((ByteBuf) msg).toString(CharsetUtil.UTF_8));
-            ctx.write(msg);
-            ctx.flush();
+
+            ByteBuf byteBuf = (ByteBuf) msg;
+            byte[] req = new byte[byteBuf.readableBytes()];
+            byteBuf.readBytes(req);
+
+            String result=new String(req, StandardCharsets.UTF_8).substring(0,req.length-System.getProperty("line.separator").length());
+            log.debug("Receive message:{}",result);
+
+
+
         }
 
         @Override

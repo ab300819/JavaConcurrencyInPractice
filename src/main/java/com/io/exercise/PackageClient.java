@@ -11,16 +11,12 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 
-/**
- * 时间客户端
- * @author mason
- */
-public class TimeClient {
+public class PackageClient {
 
-    private static final Logger log = LoggerFactory.getLogger(TimeClient.class);
+    private static final Logger log = LoggerFactory.getLogger(PackageClient.class);
 
     public static void main(String[] args) throws Exception {
-        new TimeClient().connect(9090, "localhost");
+        new PackageClient().connect(9090, "localhost");
     }
 
 
