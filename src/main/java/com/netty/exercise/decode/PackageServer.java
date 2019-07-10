@@ -1,4 +1,4 @@
-package com.io.exercise;
+package com.netty.exercise.decode;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;

@@ -1,27 +1,26 @@
-package com.io.exercise;
+package com.netty.exercise.decode;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.codec.LineBasedFrameDecoder;
-import io.netty.handler.codec.string.StringDecoder;
-import io.netty.util.CharsetUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.nio.charset.Charset;
 import java.util.Date;
 
-public class PackageClient {
+/**
+ * 时间客户端
+ * @author mason
+ */
+public class TimeClient {
 
-    private static final Logger log = LoggerFactory.getLogger(PackageClient.class);
+    private static final Logger log = LoggerFactory.getLogger(TimeClient.class);
 
     public static void main(String[] args) throws Exception {
-        new PackageClient().connect(9090, "localhost");
+        new TimeClient().connect(9090, "localhost");
     }
 
 
@@ -38,8 +37,6 @@ public class PackageClient {
 
                         @Override
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
-                            socketChannel.pipeline().addLast(new LineBasedFrameDecoder(128));
-                            socketChannel.pipeline().addLast(new StringDecoder());
                             socketChannel.pipeline().addLast(new TimeClientHandler());
                         }
 
@@ -51,27 +48,19 @@ public class PackageClient {
         }
     }
 
-    public static class TimeClientHandler extends ChannelInboundHandlerAdapter {
+    public static class TimeClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
         private static final Logger log = LoggerFactory.getLogger(TimeClientHandler.class);
 
-        private int counter=0;
-        private byte[] req=("QUERY TIME ORDER"+System.getProperty("line.separator")).getBytes();
 
         @Override
-        public void channelActive(ChannelHandlerContext ctx) throws Exception {
-            ByteBuf message=null;
-            for (int i = 0; i < 100; i++) {
-                message= Unpooled.buffer(req.length);
-                message.writeBytes(req);
-                ctx.writeAndFlush(message);
+        protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
+            try {
+                long currentMills = msg.readUnsignedInt() * 1000L;
+                log.info("server time {}", new Date(currentMills));
+                ctx.close();
+            } finally {
+                msg.release();
             }
-        }
-
-        @Override
-        public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-
-            String body=(String) msg;
-            log.debug("Now is: {};the count is:{}",body,++counter);
         }
 
         @Override
