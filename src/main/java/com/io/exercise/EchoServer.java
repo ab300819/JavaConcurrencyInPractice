@@ -28,7 +28,7 @@ public class EchoServer {
             b.group(bossGroup, workGroup)
                     .channel(NioServerSocketChannel.class)
                     .option(ChannelOption.SO_BACKLOG, 128)
-//                    .childOption(ChannelOption.SO_KEEPALIVE, true)
+                    .childOption(ChannelOption.SO_KEEPALIVE, true)
                     .handler(new LoggingHandler(LogLevel.INFO))
                     .childHandler(new ChannelInitializer() {
                         @Override
@@ -57,6 +57,7 @@ public class EchoServer {
 
             String body = (String) msg;
             log.debug("This is {} times receive client:[{}]", ++count, body);
+            body+="$_";
             ByteBuf echo = Unpooled.copiedBuffer(body.getBytes());
             ctx.writeAndFlush(echo);
 

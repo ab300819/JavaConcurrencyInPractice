@@ -6,11 +6,11 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.util.CharsetUtil;
+import io.netty.handler.codec.LineBasedFrameDecoder;
+import io.netty.handler.codec.string.StringDecoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 public class PackageServer {
@@ -27,14 +27,16 @@ public class PackageServer {
         try {
             b.group(bossGroup, workGroup)
                     .channel(NioServerSocketChannel.class)
+                    .option(ChannelOption.SO_BACKLOG, 128)
+                    .childOption(ChannelOption.SO_KEEPALIVE, true)
                     .childHandler(new ChannelInitializer() {
                         @Override
                         protected void initChannel(Channel ch) {
+                            ch.pipeline().addLast(new LineBasedFrameDecoder(128));
+                            ch.pipeline().addLast(new StringDecoder());
                             ch.pipeline().addLast(new TimeServerHandler());
                         }
-                    })
-                    .option(ChannelOption.SO_BACKLOG, 128)
-                    .childOption(ChannelOption.SO_KEEPALIVE, true);
+                    });
             ChannelFuture f = b.bind(port).sync();
             f.channel().closeFuture().sync();
         } finally {
@@ -51,11 +53,8 @@ public class PackageServer {
         @Override
         public void channelRead(ChannelHandlerContext ctx, Object msg) {
 
-            ByteBuf byteBuf = (ByteBuf) msg;
-            byte[] req = new byte[byteBuf.readableBytes()];
-            byteBuf.readBytes(req);
 
-            String result = new String(req, StandardCharsets.UTF_8).substring(0, req.length - System.getProperty("line.separator").length());
+            String result = (String) msg;
             log.debug("Receive message:{}", result);
 
             String currentTime = "QUERY TIME ORDER".equalsIgnoreCase(result) ? new Date().toString() : "BAD ORDER";
