@@ -13,6 +13,11 @@ import io.netty.handler.logging.LoggingHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * 使用 DelimiterBasedFrameDecoder 拆包
+ *
+ * @author mason
+ */
 public class EchoServer {
 
     public static void main(String[] args) throws Exception {
@@ -57,7 +62,7 @@ public class EchoServer {
 
             String body = (String) msg;
             log.debug("This is {} times receive client:[{}]", ++count, body);
-            body+="$_";
+            body += "$_";
             ByteBuf echo = Unpooled.copiedBuffer(body.getBytes());
             ctx.writeAndFlush(echo);
 
