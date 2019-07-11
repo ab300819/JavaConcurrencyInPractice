@@ -1,5 +1,6 @@
-package com.netty.exercise.decode;
+package com.netty.exercise.serial;
 
+import com.netty.exercise.decode.PackageClient;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -9,8 +10,12 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.DelimiterBasedFrameDecoder;
 import io.netty.handler.codec.string.StringDecoder;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EchoClient {
 
@@ -30,13 +35,13 @@ public class EchoClient {
             b.group(group)
                     .channel(NioSocketChannel.class)
                     .option(ChannelOption.TCP_NODELAY, true)
+                    .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 3000)
                     .handler(new ChannelInitializer<SocketChannel>() {
 
                         @Override
                         protected void initChannel(SocketChannel socketChannel) {
-                            ByteBuf delimiter = Unpooled.copiedBuffer("$_".getBytes());
-                            socketChannel.pipeline().addLast(new DelimiterBasedFrameDecoder(1024, delimiter));
-                            socketChannel.pipeline().addLast(new StringDecoder());
+                            socketChannel.pipeline().addLast("msgpack decoder", new MsgpackDecoder());
+                            socketChannel.pipeline().addLast("msgpack encoder", new MsgpackEncoder());
                             socketChannel.pipeline().addLast(new EchoClientHandler());
                         }
 
@@ -51,29 +56,38 @@ public class EchoClient {
     public static class EchoClientHandler extends ChannelInboundHandlerAdapter {
         private static final Logger log = LoggerFactory.getLogger(PackageClient.TimeClientHandler.class);
 
-        private int counter = 0;
-        private byte[] req = ("Hi, Lilinfeng. Welcome to netty.$_").getBytes();
-
         @Override
-        public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
+        public void channelReadComplete(ChannelHandlerContext ctx) {
             ctx.flush();
         }
 
         @Override
         public void channelRead(ChannelHandlerContext ctx, Object msg) {
-            log.debug("This is {} times receive server:{}", ++counter, msg);
+            Test
+            log.debug("Receive from server:{}", msg);
+            ctx.write()
         }
 
         @Override
-        public void channelActive(ChannelHandlerContext ctx) throws Exception {
-            for (int i = 0; i < 100; i++) {
-                ctx.writeAndFlush(Unpooled.copiedBuffer(req));
-            }
+        public void channelActive(ChannelHandlerContext ctx) {
+            List<TestSerial> strings = strList();
+            strings.forEach(ctx::write);
+            ctx.flush();
         }
 
         @Override
-        public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
             ctx.close();
+        }
+
+        List<TestSerial> strList() {
+            List<TestSerial> strList = new ArrayList<>();
+            for (int i = 0; i < 50; i++) {
+                TestSerial testSerial=new TestSerial();
+                testSerial.setAge(i);
+                testSerial.setTest("o=={======>");
+            }
+            return strList;
         }
     }
 

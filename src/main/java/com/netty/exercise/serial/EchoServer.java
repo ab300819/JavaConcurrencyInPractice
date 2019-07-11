@@ -1,5 +1,6 @@
-package com.netty.exercise.decode;
+package com.netty.exercise.serial;
 
+import com.netty.exercise.decode.PackageServer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -10,11 +11,12 @@ import io.netty.handler.codec.DelimiterBasedFrameDecoder;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 使用 DelimiterBasedFrameDecoder 拆包
+ * 使用 MessagePack 编码
  *
  * @author mason
  */
@@ -38,9 +40,8 @@ public class EchoServer {
                     .childHandler(new ChannelInitializer() {
                         @Override
                         protected void initChannel(Channel ch) {
-                            ByteBuf delimiter = Unpooled.copiedBuffer(("$_").getBytes());
-                            ch.pipeline().addLast(new DelimiterBasedFrameDecoder(1024, delimiter));
-                            ch.pipeline().addLast(new StringDecoder());
+                            ch.pipeline().addLast("msgpack decoder", new MsgpackDecoder());
+                            ch.pipeline().addLast("msgpack encoder", new MsgpackEncoder());
                             ch.pipeline().addLast(new EchoServerHandler());
                         }
                     });
@@ -55,16 +56,13 @@ public class EchoServer {
     public static class EchoServerHandler extends ChannelInboundHandlerAdapter {
 
         private static final Logger log = LoggerFactory.getLogger(PackageServer.TimeServerHandler.class);
-        private int count = 0;
 
         @Override
         public void channelRead(ChannelHandlerContext ctx, Object msg) {
 
-            String body = (String) msg;
-            log.debug("This is {} times receive client:[{}]", ++count, body);
-            body += "$_";
-            ByteBuf echo = Unpooled.copiedBuffer(body.getBytes());
-            ctx.writeAndFlush(echo);
+            TestSerial body = (TestSerial) msg;
+            log.debug("Receive client:[{},{}]",body.getAge(), body.getTest());
+
 
         }
 
