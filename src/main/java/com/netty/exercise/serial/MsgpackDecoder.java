@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageDecoder;
 import org.msgpack.MessagePack;
+import org.msgpack.type.Value;
 
 import java.util.List;
 
@@ -15,6 +16,12 @@ public class MsgpackDecoder extends MessageToMessageDecoder<ByteBuf> {
         byte[] array = new byte[length];
         msg.getBytes(msg.readerIndex(), array, 0, length);
         MessagePack messagePack = new MessagePack();
-        out.add(messagePack.read(array));
+
+        Value read = messagePack.read(array);
+        if(read!=null&& !read.isNilValue()){
+        out.add(read);
+        }
+
+        msg.skipBytes(msg.readableBytes());
     }
 }

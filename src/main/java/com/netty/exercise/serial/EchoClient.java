@@ -9,6 +9,8 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.DelimiterBasedFrameDecoder;
+import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
+import io.netty.handler.codec.LengthFieldPrepender;
 import io.netty.handler.codec.string.StringDecoder;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -40,7 +42,9 @@ public class EchoClient {
 
                         @Override
                         protected void initChannel(SocketChannel socketChannel) {
+                            socketChannel.pipeline().addLast(new LengthFieldBasedFrameDecoder(65535,0,2,0,2));
                             socketChannel.pipeline().addLast("msgpack decoder", new MsgpackDecoder());
+                            socketChannel.pipeline().addLast(new LengthFieldPrepender(2));
                             socketChannel.pipeline().addLast("msgpack encoder", new MsgpackEncoder());
                             socketChannel.pipeline().addLast(new EchoClientHandler());
                         }
@@ -63,9 +67,7 @@ public class EchoClient {
 
         @Override
         public void channelRead(ChannelHandlerContext ctx, Object msg) {
-            Test
             log.debug("Receive from server:{}", msg);
-            ctx.write()
         }
 
         @Override
@@ -83,9 +85,10 @@ public class EchoClient {
         List<TestSerial> strList() {
             List<TestSerial> strList = new ArrayList<>();
             for (int i = 0; i < 50; i++) {
-                TestSerial testSerial=new TestSerial();
+                TestSerial testSerial = new TestSerial();
                 testSerial.setAge(i);
                 testSerial.setTest("o=={======>");
+                strList.add(testSerial);
             }
             return strList;
         }

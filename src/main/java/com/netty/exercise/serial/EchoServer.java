@@ -8,12 +8,17 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.DelimiterBasedFrameDecoder;
+import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
+import io.netty.handler.codec.LengthFieldPrepender;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 使用 MessagePack 编码
@@ -40,7 +45,9 @@ public class EchoServer {
                     .childHandler(new ChannelInitializer() {
                         @Override
                         protected void initChannel(Channel ch) {
+                            ch.pipeline().addLast(new LengthFieldBasedFrameDecoder(65535,0,2,0,2));
                             ch.pipeline().addLast("msgpack decoder", new MsgpackDecoder());
+                            ch.pipeline().addLast(new LengthFieldPrepender(2));
                             ch.pipeline().addLast("msgpack encoder", new MsgpackEncoder());
                             ch.pipeline().addLast(new EchoServerHandler());
                         }
@@ -60,9 +67,9 @@ public class EchoServer {
         @Override
         public void channelRead(ChannelHandlerContext ctx, Object msg) {
 
-            TestSerial body = (TestSerial) msg;
-            log.debug("Receive client:[{},{}]",body.getAge(), body.getTest());
-
+            List<Object> test= (List<Object>) msg;
+            log.debug("Receive client:[{}]",msg);
+            ctx.writeAndFlush("has receive");
 
         }
 

@@ -1,5 +1,8 @@
 package com.netty.exercise.serial;
 
+import org.msgpack.annotation.Message;
+
+@Message
 public class TestSerial {
 
     private int age;
