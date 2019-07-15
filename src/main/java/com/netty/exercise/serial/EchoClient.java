@@ -21,7 +21,7 @@ import java.util.List;
 
 public class EchoClient {
 
-    private static final Logger log = LoggerFactory.getLogger(PackageClient.class);
+    private static final Logger log = LoggerFactory.getLogger(EchoClient.class);
 
     public static void main(String[] args) throws Exception {
         new EchoClient().connect(9090, "localhost");
@@ -58,7 +58,7 @@ public class EchoClient {
     }
 
     public static class EchoClientHandler extends ChannelInboundHandlerAdapter {
-        private static final Logger log = LoggerFactory.getLogger(PackageClient.TimeClientHandler.class);
+        private static final Logger log = LoggerFactory.getLogger(EchoClientHandler.class);
 
         @Override
         public void channelReadComplete(ChannelHandlerContext ctx) {

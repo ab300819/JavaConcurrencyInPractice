@@ -62,7 +62,7 @@ public class EchoServer {
 
     public static class EchoServerHandler extends ChannelInboundHandlerAdapter {
 
-        private static final Logger log = LoggerFactory.getLogger(PackageServer.TimeServerHandler.class);
+        private static final Logger log = LoggerFactory.getLogger(EchoServerHandler.class);
 
         @Override
         public void channelRead(ChannelHandlerContext ctx, Object msg) {

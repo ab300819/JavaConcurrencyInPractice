@@ -2,23 +2,26 @@ package com.netty.exercise.serial;
 
 import com.netty.exercise.decode.TimeClient;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.protobuf.ProtobufDecoder;
+import io.netty.handler.codec.protobuf.ProtobufEncoder;
+import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
+import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SubReqClient {
-    private static final Logger log = LoggerFactory.getLogger(TimeClient.class);
+    private static final Logger log = LoggerFactory.getLogger(SubReqClient.class);
 
     public static void main(String[] args) throws Exception {
-        new TimeClient().connect(9090, "localhost");
+        new SubReqClient().connect(9090, "localhost");
     }
-
 
     public void connect(int port, String host) throws Exception {
 
@@ -30,10 +33,13 @@ public class SubReqClient {
                     .channel(NioSocketChannel.class)
                     .option(ChannelOption.TCP_NODELAY, true)
                     .handler(new ChannelInitializer<SocketChannel>() {
-
                         @Override
-                        protected void initChannel(SocketChannel socketChannel) throws Exception {
-                            socketChannel.pipeline().addLast(new TimeClient.TimeClientHandler());
+                        protected void initChannel(SocketChannel sc) {
+                            sc.pipeline().addLast(new ProtobufVarint32FrameDecoder());
+                            sc.pipeline().addLast(new ProtobufDecoder(SubscribeRespProto.SubscribeResp.getDefaultInstance()));
+                            sc.pipeline().addLast(new ProtobufVarint32LengthFieldPrepender());
+                            sc.pipeline().addLast(new ProtobufEncoder());
+                            sc.pipeline().addLast(new SubReqClientHandler());
                         }
 
                     });
@@ -44,23 +50,44 @@ public class SubReqClient {
         }
     }
 
-    public static class TimeClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
-        private static final Logger log = LoggerFactory.getLogger(TimeClient.TimeClientHandler.class);
+    public static class SubReqClientHandler extends ChannelInboundHandlerAdapter {
+        private static final Logger log = LoggerFactory.getLogger(SubReqClientHandler.class);
 
+        private static SubscribeReqProto.SubscribeReq subReq(int i) {
+            SubscribeReqProto.SubscribeReq.Builder builder = SubscribeReqProto.SubscribeReq.newBuilder();
+            builder.setSubReqId(i);
+            builder.setUserName("Mason");
+            builder.setProductName("netty book");
 
-        @Override
-        protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
-            try {
-                long currentMills = msg.readUnsignedInt() * 1000L;
-                log.info("server time {}", new Date(currentMills));
-                ctx.close();
-            } finally {
-                msg.release();
-            }
+            List<String> address = new ArrayList<>();
+            address.add("Nan Jing");
+            address.add("Bei Jing");
+            address.add("Shen Zheng");
+            address.add("Hong Kong");
+            builder.addAllAddress(address);
+            return builder.build();
         }
 
         @Override
-        public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        public void channelActive(ChannelHandlerContext ctx) {
+            for (int i = 0; i < 10; i++) {
+                ctx.write(subReq(i));
+            }
+            ctx.flush();
+        }
+
+        @Override
+        public void channelRead(ChannelHandlerContext ctx, Object msg) {
+            log.debug("Receive server response: [{}]", msg);
+        }
+
+        @Override
+        public void channelReadComplete(ChannelHandlerContext ctx) {
+            ctx.flush();
+        }
+
+        @Override
+        public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
             ctx.close();
         }
     }

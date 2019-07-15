@@ -1,25 +1,22 @@
 package com.netty.exercise.serial;
 
-import com.netty.exercise.decode.TimeServer;
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.protobuf.ProtobufDecoder;
+import io.netty.handler.codec.protobuf.ProtobufEncoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
-import io.netty.util.CharsetUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class SubReqServer {
 
     public static void main(String[] args) throws Exception {
-        new TimeServer().start(9090);
+        new SubReqServer().start(9090);
     }
 
     public void start(int port) throws Exception {
@@ -36,6 +33,7 @@ public class SubReqServer {
                             ch.pipeline().addLast(new ProtobufVarint32FrameDecoder());
                             ch.pipeline().addLast(new ProtobufDecoder(SubscribeReqProto.SubscribeReq.getDefaultInstance()));
                             ch.pipeline().addLast(new ProtobufVarint32LengthFieldPrepender());
+                            ch.pipeline().addLast(new ProtobufEncoder());
                             ch.pipeline().addLast(new SubReqServerHandler());
                         }
                     })
@@ -54,21 +52,27 @@ public class SubReqServer {
 
         private static final Logger log = LoggerFactory.getLogger(SubReqServerHandler.class);
 
-        @Override
-        public void channelRead(ChannelHandlerContext ctx, Object msg) {
-
+        private SubscribeRespProto.SubscribeResp resp(int subReqId) {
+            SubscribeRespProto.SubscribeResp.Builder builder = SubscribeRespProto.SubscribeResp.newBuilder();
+            builder.setSubReqId(subReqId);
+            builder.setRespCode(0);
+            builder.setDesc("Netty book order succeed, 3 days later. sent to the designated address");
+            return builder.build();
         }
 
-
         @Override
-        public void channelReadComplete(ChannelHandlerContext ctx) {
-            ctx.writeAndFlush(Unpooled.EMPTY_BUFFER).addListener(ChannelFutureListener.CLOSE);
+        public void channelRead(ChannelHandlerContext ctx, Object msg) {
+            SubscribeReqProto.SubscribeReq req = (SubscribeReqProto.SubscribeReq) msg;
+            if ("Mason".equalsIgnoreCase(req.getUserName())) {
+                log.debug("Service accept client subscribe req : [{}]", req.toString());
+                ctx.writeAndFlush(resp(req.getSubReqId()));
+            }
         }
 
         @Override
         public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-            ctx.close();
             cause.printStackTrace();
+            ctx.close();
         }
     }
 }
