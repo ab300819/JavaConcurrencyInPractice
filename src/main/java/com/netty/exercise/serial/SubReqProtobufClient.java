@@ -1,6 +1,5 @@
 package com.netty.exercise.serial;
 
-import com.netty.exercise.decode.TimeClient;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -16,11 +15,11 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SubReqClient {
-    private static final Logger log = LoggerFactory.getLogger(SubReqClient.class);
+public class SubReqProtobufClient {
+    private static final Logger log = LoggerFactory.getLogger(SubReqProtobufClient.class);
 
     public static void main(String[] args) throws Exception {
-        new SubReqClient().connect(9090, "localhost");
+        new SubReqProtobufClient().connect(9090, "localhost");
     }
 
     public void connect(int port, String host) throws Exception {

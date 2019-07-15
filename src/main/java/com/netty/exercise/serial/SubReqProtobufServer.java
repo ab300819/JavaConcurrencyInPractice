@@ -13,10 +13,10 @@ import io.netty.handler.logging.LoggingHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SubReqServer {
+public class SubReqProtobufServer {
 
     public static void main(String[] args) throws Exception {
-        new SubReqServer().start(9090);
+        new SubReqProtobufServer().start(9090);
     }
 
     public void start(int port) throws Exception {

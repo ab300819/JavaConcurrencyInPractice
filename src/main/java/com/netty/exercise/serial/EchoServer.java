@@ -1,23 +1,16 @@
 package com.netty.exercise.serial;
 
-import com.netty.exercise.decode.PackageServer;
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.codec.DelimiterBasedFrameDecoder;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.LengthFieldPrepender;
-import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
-import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -45,7 +38,7 @@ public class EchoServer {
                     .childHandler(new ChannelInitializer() {
                         @Override
                         protected void initChannel(Channel ch) {
-                            ch.pipeline().addLast(new LengthFieldBasedFrameDecoder(65535,0,2,0,2));
+                            ch.pipeline().addLast(new LengthFieldBasedFrameDecoder(65535, 0, 2, 0, 2));
                             ch.pipeline().addLast("msgpack decoder", new MsgpackDecoder());
                             ch.pipeline().addLast(new LengthFieldPrepender(2));
                             ch.pipeline().addLast("msgpack encoder", new MsgpackEncoder());
@@ -67,8 +60,8 @@ public class EchoServer {
         @Override
         public void channelRead(ChannelHandlerContext ctx, Object msg) {
 
-            List<Object> test= (List<Object>) msg;
-            log.debug("Receive client:[{}]",msg);
+            List<Object> test = (List<Object>) msg;
+            log.debug("Receive client:[{}]", msg);
             ctx.writeAndFlush("has receive");
 
         }
