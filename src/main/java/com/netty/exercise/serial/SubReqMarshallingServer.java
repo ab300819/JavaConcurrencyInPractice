@@ -31,9 +31,7 @@ public class SubReqMarshallingServer {
                         @Override
                         protected void initChannel(Channel ch) {
                             ch.pipeline().addLast(MarshallingCodeCFactory.buildMarshallingDecoder());
-                            ch.pipeline().addLast(new ProtobufDecoder(SubscribeReqProto.SubscribeReq.getDefaultInstance()));
-                            ch.pipeline().addLast(new ProtobufVarint32LengthFieldPrepender());
-                            ch.pipeline().addLast(new ProtobufEncoder());
+                            ch.pipeline().addLast(MarshallingCodeCFactory.buildMarshallingEncoder());
                             ch.pipeline().addLast(new SubReqServerHandler());
                         }
                     })

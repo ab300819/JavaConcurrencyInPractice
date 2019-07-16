@@ -34,10 +34,8 @@ public class SubReqMarshallingClient {
                     .handler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel sc) {
-                            sc.pipeline().addLast(new ProtobufVarint32FrameDecoder());
-                            sc.pipeline().addLast(new ProtobufDecoder(SubscribeRespProto.SubscribeResp.getDefaultInstance()));
-                            sc.pipeline().addLast(new ProtobufVarint32LengthFieldPrepender());
-                            sc.pipeline().addLast(new ProtobufEncoder());
+                            sc.pipeline().addLast( MarshallingCodeCFactory.buildMarshallingDecoder());
+                            sc.pipeline().addLast( MarshallingCodeCFactory.buildMarshallingEncoder());
                             sc.pipeline().addLast(new SubReqClientHandler());
                         }
 
