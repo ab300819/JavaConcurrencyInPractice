@@ -1,17 +1,21 @@
 package com.netty.exercise.http;
 
 import io.netty.bootstrap.ServerBootstrap;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.codec.http.HttpObjectAggregator;
-import io.netty.handler.codec.http.HttpRequestDecoder;
-import io.netty.handler.codec.http.HttpResponseEncoder;
+import io.netty.handler.codec.http.*;
 import io.netty.handler.stream.ChunkedWriteHandler;
+import io.netty.util.CharsetUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
+import javax.activation.MimetypesFileTypeMap;
+import java.io.File;
+
+import static io.netty.handler.codec.http.HttpHeaderNames.CONTENT_TYPE;
+import static io.netty.handler.codec.http.HttpHeaderNames.LOCATION;
 
 public class HttpFileServer {
 
@@ -60,16 +64,39 @@ public class HttpFileServer {
         @Override
         public void channelRead(ChannelHandlerContext ctx, Object msg) {
 
-            List<Object> test = (List<Object>) msg;
-            log.debug("Receive client:[{}]", msg);
-            ctx.writeAndFlush("has receive");
+            FullHttpRequest request = (FullHttpRequest) msg;
+
+            if (!request.decoderResult().isSuccess()) {
+                sendError(ctx, HttpResponseStatus.BAD_REQUEST);
+                return;
+            }
 
         }
+
 
         @Override
         public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
             ctx.close();
             cause.printStackTrace();
+        }
+
+        private static void sendRedirect(ChannelHandlerContext ctx, String newUri) {
+            FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.FOUND);
+            response.headers().set(LOCATION, newUri);
+            ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
+        }
+
+        private static void sendError(ChannelHandlerContext ctx, HttpResponseStatus status) {
+            FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1,
+                    status,
+                    Unpooled.copiedBuffer("Failure: " + status.toString() + "\r\n", CharsetUtil.UTF_8));
+            response.headers().set(CONTENT_TYPE, "text/plain;charset=UTF-8");
+            ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
+        }
+
+        private static void setContentTypeHeader(HttpResponse response, File file) {
+            MimetypesFileTypeMap mimetypesFileTypeMap = new MimetypesFileTypeMap();
+            response.headers().set(CONTENT_TYPE, mimetypesFileTypeMap.getContentType(file.getPath()));
         }
     }
 
