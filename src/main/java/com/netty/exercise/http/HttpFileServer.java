@@ -44,10 +44,20 @@ public class HttpFileServer {
                         @Override
                         protected void initChannel(Channel ch) {
                             ch.pipeline().addLast(new HttpRequestDecoder());
+                            /**
+                             *  将多个消息转换为单一的 FullHttpRequest 或 FullHttpResponse,
+                             *  原因是 Http 解码器在每个 Http 消息中会生成多个对象。
+                             *  （1） HttpRequest/HttpReponse
+                             *  （2） HttpContent
+                             *  （3） LastHttpContent
+                             */
                             ch.pipeline().addLast(new HttpObjectAggregator(65536));
+                            // 响应编码器，对响应消息进行编码
                             ch.pipeline().addLast(new HttpResponseEncoder());
+                            // 支持异步发送大的码流（尤其是文件传输）
                             ch.pipeline().addLast(new ChunkedWriteHandler());
                             ch.pipeline().addLast(new HttpFileServerHandler(url));
+
                         }
                     });
             ChannelFuture f = b.bind("127.0.0.1", port).sync();
