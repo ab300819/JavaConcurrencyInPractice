@@ -6,18 +6,22 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.util.CharsetUtil;
+import io.netty.handler.codec.DelimiterBasedFrameDecoder;
+import io.netty.handler.codec.string.StringDecoder;
+import io.netty.handler.logging.LogLevel;
+import io.netty.handler.logging.LoggingHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 时间服务端
+ * 使用 DelimiterBasedFrameDecoder 拆包
+ *
  * @author mason
  */
-public class TimeServer {
+public class EchoServer {
 
     public static void main(String[] args) throws Exception {
-        new TimeServer().start(9090);
+        new EchoServer().start(9090);
     }
 
     public void start(int port) throws Exception {
@@ -28,14 +32,18 @@ public class TimeServer {
         try {
             b.group(bossGroup, workGroup)
                     .channel(NioServerSocketChannel.class)
+                    .option(ChannelOption.SO_BACKLOG, 128)
+                    .childOption(ChannelOption.SO_KEEPALIVE, true)
+                    .handler(new LoggingHandler(LogLevel.INFO))
                     .childHandler(new ChannelInitializer() {
                         @Override
                         protected void initChannel(Channel ch) {
-                            ch.pipeline().addLast(new TimeServerHandler());
+                            ByteBuf delimiter = Unpooled.copiedBuffer(("$_").getBytes());
+                            ch.pipeline().addLast(new DelimiterBasedFrameDecoder(1024, delimiter));
+                            ch.pipeline().addLast(new StringDecoder());
+                            ch.pipeline().addLast(new EchoServerHandler());
                         }
-                    })
-                    .option(ChannelOption.SO_BACKLOG, 128)
-                    .childOption(ChannelOption.SO_KEEPALIVE, true);
+                    });
             ChannelFuture f = b.bind(port).sync();
             f.channel().closeFuture().sync();
         } finally {
@@ -44,34 +52,20 @@ public class TimeServer {
         }
     }
 
-    public static class TimeServerHandler extends ChannelInboundHandlerAdapter {
+    public static class EchoServerHandler extends ChannelInboundHandlerAdapter {
 
-        private static final Logger log = LoggerFactory.getLogger(TimeServerHandler.class);
-
-        @Override
-        public void channelActive(ChannelHandlerContext ctx) {
-
-            final ByteBuf time = ctx.alloc().buffer(4);
-            time.writeInt((int) (System.currentTimeMillis() / 1000L));
-
-            final ChannelFuture f = ctx.writeAndFlush(time);
-            f.addListener((ChannelFutureListener) future -> {
-                ctx.close();
-                log.info("ChannelHandlerContext closed");
-            });
-        }
+        private static final Logger log = LoggerFactory.getLogger(PackageServer.TimeServerHandler.class);
+        private int count = 0;
 
         @Override
         public void channelRead(ChannelHandlerContext ctx, Object msg) {
-            log.info("Echo Server echo {}", ((ByteBuf) msg).toString(CharsetUtil.UTF_8));
-            ctx.write(msg);
-            ctx.flush();
-        }
 
+            String body = (String) msg;
+            log.debug("This is {} times receive client:[{}]", ++count, body);
+            body += "$_";
+            ByteBuf echo = Unpooled.copiedBuffer(body.getBytes());
+            ctx.writeAndFlush(echo);
 
-        @Override
-        public void channelReadComplete(ChannelHandlerContext ctx) {
-            ctx.writeAndFlush(Unpooled.EMPTY_BUFFER).addListener(ChannelFutureListener.CLOSE);
         }
 
         @Override
