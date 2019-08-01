@@ -2,11 +2,9 @@ package com.netty.exercise.decode;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.util.CharsetUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,7 +32,17 @@ public class TimeServer {
                             ch.pipeline().addLast(new TimeServerHandler());
                         }
                     })
+                    /**
+                     * 对应的是tcp/ip协议listen函数中的backlog参数，
+                     * 函数listen(int socketfd,int backlog)用来初始化服务端可连接队列，
+                     * 服务端处理客户端连接请求是顺序处理的，所以同一时间只能处理一个客户端连接，
+                     * 多个客户端来的时候，服务端将不能处理的客户端连接请求放在队列中等待处理，backlog参数指定了队列的大小
+                     *
+                     */
                     .option(ChannelOption.SO_BACKLOG, 128)
+                    /**
+                     * 心跳检测
+                     */
                     .childOption(ChannelOption.SO_KEEPALIVE, true);
             ChannelFuture f = b.bind(port).sync();
             f.channel().closeFuture().sync();
@@ -59,19 +67,6 @@ public class TimeServer {
                 ctx.close();
                 log.info("ChannelHandlerContext closed");
             });
-        }
-
-        @Override
-        public void channelRead(ChannelHandlerContext ctx, Object msg) {
-            log.info("Echo Server echo {}", ((ByteBuf) msg).toString(CharsetUtil.UTF_8));
-            ctx.write(msg);
-            ctx.flush();
-        }
-
-
-        @Override
-        public void channelReadComplete(ChannelHandlerContext ctx) {
-            ctx.writeAndFlush(Unpooled.EMPTY_BUFFER).addListener(ChannelFutureListener.CLOSE);
         }
 
         @Override
