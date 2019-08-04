@@ -15,8 +15,8 @@ public class OrderFactory {
         order.setBillTo(address);
         Customer customer = new Customer();
         customer.setCustomerNumber(orderID);
-        customer.setFirstName("李");
-        customer.setLastName("林峰");
+        customer.setFirstName("men");
+        customer.setLastName("mason");
         order.setCustomer(customer);
         order.setShipping(Shipping.INTERNATIONAL_MAIL);
         order.setShipTo(address);
