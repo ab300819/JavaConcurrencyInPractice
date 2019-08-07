@@ -6,6 +6,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageEncoder;
 import io.netty.util.CharsetUtil;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -13,8 +14,8 @@ public class NettyMessageEncoder extends MessageToMessageEncoder<NettyMessage> {
 
     private MarshallingEncoder marshallingEncoder;
 
-    public NettyMessageEncoder(MarshallingEncoder marshallingEncoder) {
-        this.marshallingEncoder = marshallingEncoder;
+    public NettyMessageEncoder() throws IOException {
+        this.marshallingEncoder = new MarshallingEncoder();
     }
 
     @Override
