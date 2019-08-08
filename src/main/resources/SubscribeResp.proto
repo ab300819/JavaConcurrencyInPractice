@@ -1,5 +1,5 @@
 syntax = "proto3";
-option java_package = "com.netty.exercise.serial";
+option java_package = "com.netty.demo.codec";
 option java_outer_classname = "SubscribeRespProto";
 
 message SubscribeResp {
