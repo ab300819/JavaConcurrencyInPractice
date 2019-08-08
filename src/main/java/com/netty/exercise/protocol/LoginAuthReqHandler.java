@@ -17,15 +17,20 @@ public class LoginAuthReqHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         NettyMessage message = (NettyMessage) msg;
-        if (message.getHeader() != null && message.getHeader().getType() == MessageType.LOGIN_RESP.getValue()) {
+
+        // 如果是握手应答消息，需要判断是否认证成功
+        if (message.getHeader() != null
+                && message.getHeader().getType() == MessageType.LOGIN_RESP.getValue()) {
             byte loginResult = (byte) message.getBody();
             if (loginResult != (byte) 0) {
+                // 握手失败，关闭连接
                 ctx.close();
             } else {
-                log.info("Login is ok:{}", message);
+                log.info("Login is ok : {}", message);
                 ctx.fireChannelRead(msg);
             }
         } else {
+            //调用下一个channel链..
             ctx.fireChannelRead(msg);
         }
     }
@@ -35,8 +40,10 @@ public class LoginAuthReqHandler extends ChannelInboundHandlerAdapter {
         ctx.fireExceptionCaught(cause);
     }
 
+    /**
+     * 构建登录请求
+     */
     private NettyMessage buildLoginReq() {
-
         NettyMessage message = new NettyMessage();
         MessageHeader header = new MessageHeader();
         header.setType(MessageType.LOGIN_REQ.getValue());

@@ -21,10 +21,11 @@ public class LoginAuthRespHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         NettyMessage message = (NettyMessage) msg;
 
+        // 如果是握手请求消息，处理，其它消息透传
         if (message.getHeader() != null
                 && message.getHeader().getType() == MessageType.LOGIN_REQ.getValue()) {
             String nodeIndex = ctx.channel().remoteAddress().toString();
-            NettyMessage loginResp = null;
+            NettyMessage loginResp;
             // 重复登陆，拒绝
             if (nodeCheck.containsKey(nodeIndex)) {
                 loginResp = buildResponse((byte) -1);
@@ -32,30 +33,30 @@ public class LoginAuthRespHandler extends ChannelInboundHandlerAdapter {
                 InetSocketAddress address = (InetSocketAddress) ctx.channel()
                         .remoteAddress();
                 String ip = address.getAddress().getHostAddress();
-                boolean isOK = false;
+                boolean isOk = false;
                 for (String wip : whiteList) {
                     if (wip.equals(ip)) {
-                        isOK = true;
+                        isOk = true;
                         break;
                     }
                 }
-                loginResp = isOK ? buildResponse((byte) 0)
+                loginResp = isOk ? buildResponse((byte) 0)
                         : buildResponse((byte) -1);
-                if (isOK) {
+                if (isOk) {
                     nodeCheck.put(nodeIndex, true);
                 }
             }
-            log.info("The login response is : " + loginResp
-                    + " body [" + loginResp.getBody() + "]");
+            log.info("The login response is : {} body [{}]", loginResp, loginResp.getBody());
             ctx.writeAndFlush(loginResp);
         } else {
             ctx.fireChannelRead(msg);
         }
-
     }
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        cause.printStackTrace();
+        // 删除缓存
         nodeCheck.remove(ctx.channel().remoteAddress().toString());
         ctx.close();
         ctx.fireExceptionCaught(cause);

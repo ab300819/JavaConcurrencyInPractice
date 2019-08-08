@@ -9,12 +9,21 @@ public class ChannelBufferByteOutput implements ByteOutput {
 
     private final ByteBuf buffer;
 
+    /**
+     * Create a new instance which use the given {@link ByteBuf}
+     */
     public ChannelBufferByteOutput(ByteBuf buffer) {
         this.buffer = buffer;
     }
 
-    public ByteBuf getBuffer() {
-        return buffer;
+    @Override
+    public void close() throws IOException {
+        // Nothing to do
+    }
+
+    @Override
+    public void flush() throws IOException {
+        // nothing to do
     }
 
     @Override
@@ -28,17 +37,14 @@ public class ChannelBufferByteOutput implements ByteOutput {
     }
 
     @Override
-    public void write(byte[] bytes, int i, int i1) throws IOException {
-        buffer.writeBytes(bytes, i, i1);
+    public void write(byte[] bytes, int srcIndex, int length) throws IOException {
+        buffer.writeBytes(bytes, srcIndex, length);
     }
 
-    @Override
-    public void close() throws IOException {
-
-    }
-
-    @Override
-    public void flush() throws IOException {
-
+    /**
+     * Return the {@link ByteBuf} which contains the written content
+     */
+    public ByteBuf getBuffer() {
+        return buffer;
     }
 }

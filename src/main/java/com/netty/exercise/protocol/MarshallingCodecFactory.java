@@ -4,7 +4,7 @@ import org.jboss.marshalling.*;
 
 import java.io.IOException;
 
-public class MarshallingCodeCFactory {
+public class MarshallingCodecFactory {
 
     public static Marshaller buildMarshalling() throws IOException {
         final MarshallerFactory marshallerFactory = Marshalling.getProvidedMarshallerFactory("serial");
