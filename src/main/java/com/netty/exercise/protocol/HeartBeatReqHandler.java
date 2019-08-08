@@ -32,6 +32,7 @@ public class HeartBeatReqHandler extends ChannelInboundHandlerAdapter {
         if (heartBeat != null) {
             heartBeat.cancel(true);
         }
+        ctx.fireExceptionCaught(cause);
     }
 
     public class HeartBeatTask implements Runnable {
@@ -48,14 +49,14 @@ public class HeartBeatReqHandler extends ChannelInboundHandlerAdapter {
             log.info("Client sen heart beat message to server :---> {}", heartBeat);
             ctx.writeAndFlush(heartBeat);
         }
-    }
 
-    private NettyMessage buildHeartBeat() {
-        NettyMessage message = new NettyMessage();
-        MessageHeader header = new MessageHeader();
-        header.setType(MessageType.HEARTBEAT_REQ.getValue());
-        message.setHeader(header);
-        return message;
+        private NettyMessage buildHeartBeat() {
+            NettyMessage message = new NettyMessage();
+            MessageHeader header = new MessageHeader();
+            header.setType(MessageType.HEARTBEAT_REQ.getValue());
+            message.setHeader(header);
+            return message;
+        }
     }
 
 }

@@ -45,7 +45,7 @@ public class ChannelBufferByteInput implements ByteInput {
 
     @Override
     public int available() throws IOException {
-        return buffer.readByte();
+        return buffer.readableBytes();
     }
 
     @Override

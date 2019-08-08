@@ -21,28 +21,35 @@ public class LoginAuthRespHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         NettyMessage message = (NettyMessage) msg;
 
-        if (message.getHeader() != null && message.getHeader().getType() == MessageType.HEARTBEAT_REQ.getValue()) {
+        if (message.getHeader() != null
+                && message.getHeader().getType() == MessageType.LOGIN_REQ.getValue()) {
             String nodeIndex = ctx.channel().remoteAddress().toString();
-            NettyMessage loginResp;
+            NettyMessage loginResp = null;
+            // 重复登陆，拒绝
             if (nodeCheck.containsKey(nodeIndex)) {
                 loginResp = buildResponse((byte) -1);
             } else {
-                InetSocketAddress address = (InetSocketAddress) ctx.channel().remoteAddress();
+                InetSocketAddress address = (InetSocketAddress) ctx.channel()
+                        .remoteAddress();
                 String ip = address.getAddress().getHostAddress();
-                boolean isOk = false;
+                boolean isOK = false;
                 for (String wip : whiteList) {
                     if (wip.equals(ip)) {
-                        isOk = true;
+                        isOK = true;
                         break;
                     }
                 }
-                loginResp = isOk ? buildResponse((byte) 0) : buildResponse((byte) -1);
-                if (isOk) {
+                loginResp = isOK ? buildResponse((byte) 0)
+                        : buildResponse((byte) -1);
+                if (isOK) {
                     nodeCheck.put(nodeIndex, true);
                 }
-                log.info("The login response is :{} body [{}]", loginResp, loginResp.getBody());
-                ctx.fireChannelRead(msg);
             }
+            log.info("The login response is : " + loginResp
+                    + " body [" + loginResp.getBody() + "]");
+            ctx.writeAndFlush(loginResp);
+        } else {
+            ctx.fireChannelRead(msg);
         }
 
     }
