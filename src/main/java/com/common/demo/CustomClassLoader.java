@@ -1,4 +1,4 @@
-package com.common.util;
+package com.common.demo;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -10,7 +10,7 @@ import java.nio.channels.FileChannel;
 import java.nio.channels.WritableByteChannel;
 
 /**
- * 指定类加载器
+ * 自定义类加载器
  *
  * @author mason
  * @see ClassLoader#findClass(String) 不破坏双亲委派模型
