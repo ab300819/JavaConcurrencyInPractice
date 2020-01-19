@@ -1,4 +1,5 @@
 package net.jcip.annotations;
+
 import java.lang.annotation.*;
 
 /*
@@ -27,6 +28,9 @@ import java.lang.annotation.*;
  * <p>
  * Immutable objects are inherently thread-safe; they may be passed between threads or
  * published without synchronization.
+ *
+ * @author Brian Goetz
+ * @author Tim Peierls
  */
 @Documented
 @Target(ElementType.TYPE)
