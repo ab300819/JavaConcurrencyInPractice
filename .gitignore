@@ -62,3 +62,5 @@ fabric.properties
 hs_err_pid*
 /JavaExplore.iml
 /JavaExplore.ipr
+
+!ContainerDemo/src/main/resources/META-INF/services/org.apache.juli.logging.Log

@@ -2,6 +2,9 @@ package org.mybatis.demo;
 
 import lombok.Data;
 
+/**
+ * @author mason
+ */
 @Data
 public class TestDto {
 
