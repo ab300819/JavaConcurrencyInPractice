@@ -18,7 +18,7 @@ public class Schedule {
     @Scheduled(cron = "0/5 * * * * ?")
     public void outputEveryFiveSecond() {
 
-        logger.debug("计数：{}", nowTime(new Date()));
+        logger.info("计数：{}", nowTime(new Date()));
     }
 
     private String nowTime(Date date) {
@@ -29,7 +29,6 @@ public class Schedule {
         String second = localTime.getSecond() < 10 ? "0" + localTime.getSecond() : String.valueOf(localTime.getSecond());
 
         return hour + ":" + minute + ":" + second;
-
     }
 
 }
