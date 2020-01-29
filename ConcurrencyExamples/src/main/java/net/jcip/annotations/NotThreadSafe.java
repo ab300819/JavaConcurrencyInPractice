@@ -1,4 +1,5 @@
 package net.jcip.annotations;
+
 import java.lang.annotation.*;
 
 /*
@@ -17,6 +18,9 @@ import java.lang.annotation.*;
  * This annotation primarily exists for clarifying the non-thread-safety of a class
  * that might otherwise be assumed to be thread-safe, despite the fact that it is a bad
  * idea to assume a class is thread-safe without good reason.
+ *
+ * @author Brian Goetz
+ * @author Tim Peierls
  * @see ThreadSafe
  */
 @Documented
