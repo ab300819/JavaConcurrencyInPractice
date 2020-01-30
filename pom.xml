@@ -10,10 +10,9 @@
     <version>1.0</version>
     <modules>
         <module>ServletDemo</module>
-        <module>UtilDemo</module>
-        <module>ConcurrencyExamples</module>
-        <module>NettyDemo</module>
+        <module>CommonDemo</module>
         <module>ConcurrencyDemo</module>
+        <module>NettyDemo</module>
         <module>SpringMVCDemo</module>
         <module>ContainerDemo</module>
     </modules>

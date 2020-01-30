@@ -5,11 +5,11 @@
 <web-app>
     <display-name>Archetype Created Web Application</display-name>
     <servlet>
-        <servlet-name>demo-servlet</servlet-name>
-        <servlet-class>com.servlet.demo.SimpleServletDemo</servlet-class>
+        <servlet-name>com.currency.demo-servlet</servlet-name>
+        <servlet-class>com.servlet.com.currency.demo.SimpleServletDemo</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>demo-servlet</servlet-name>
+        <servlet-name>com.currency.demo-servlet</servlet-name>
         <url-pattern>/*</url-pattern>
     </servlet-mapping>
 </web-app>

@@ -380,7 +380,7 @@ public final class SubscribeRespProto {
                 com.netty.demo.codec.SubscribeRespProto.SubscribeResp.class, com.netty.demo.codec.SubscribeRespProto.SubscribeResp.Builder.class);
       }
 
-      // Construct using com.netty.demo.codec.SubscribeRespProto.SubscribeResp.newBuilder()
+      // Construct using com.netty.com.currency.demo.codec.SubscribeRespProto.SubscribeResp.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -709,7 +709,7 @@ public final class SubscribeRespProto {
     java.lang.String[] descriptorData = {
       "\n\023SubscribeResp.proto\"A\n\rSubscribeResp\022\020" +
       "\n\010subReqId\030\001 \001(\005\022\020\n\010respCode\030\002 \001(\005\022\014\n\004de" +
-      "sc\030\003 \001(\tB/\n\031com.netty.demo.serialB\022S" +
+      "sc\030\003 \001(\tB/\n\031com.netty.com.currency.demo.serialB\022S" +
       "ubscribeRespProtob\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor

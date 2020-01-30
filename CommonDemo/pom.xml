@@ -9,8 +9,8 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>UtilDemo</artifactId>
-    <groupId>org.common.demo</groupId>
+    <artifactId>CommonDemo</artifactId>
+    <groupId>org.common.com.currency.demo</groupId>
     <version>1.0</version>
 
     <dependencies>

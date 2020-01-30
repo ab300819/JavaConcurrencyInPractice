@@ -10,14 +10,17 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>ServletDemo</artifactId>
+    <groupId>org.common.com.currency.demo</groupId>
+    <version>1.0</version>
+
     <dependencies>
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
         </dependency>
         <dependency>
-            <artifactId>UtilDemo</artifactId>
-            <groupId>org.common.demo</groupId>
+            <artifactId>CommonDemo</artifactId>
+            <groupId>org.common.com.currency.demo</groupId>
             <version>1.0</version>
         </dependency>
     </dependencies>

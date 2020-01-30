@@ -1,6 +1,5 @@
 package com.common.util;
 
-import com.common.demo.CustomClassLoader;
 import org.junit.Test;
 
 import java.lang.reflect.InvocationTargetException;

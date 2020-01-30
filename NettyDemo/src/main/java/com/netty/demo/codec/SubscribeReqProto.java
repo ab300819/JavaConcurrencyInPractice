@@ -530,7 +530,7 @@ public final class SubscribeReqProto {
                                 com.netty.demo.codec.SubscribeReqProto.SubscribeReq.class, com.netty.demo.codec.SubscribeReqProto.SubscribeReq.Builder.class);
             }
 
-            // Construct using com.netty.demo.codec.SubscribeReqProto.SubscribeReq.newBuilder()
+            // Construct using com.netty.com.currency.demo.codec.SubscribeReqProto.SubscribeReq.newBuilder()
             private Builder() {
                 maybeForceBuilderInitialization();
             }
@@ -1053,7 +1053,7 @@ public final class SubscribeReqProto {
                 "\n\022SubscribeReq.proto\"X\n\014SubscribeReq\022\020\n\010" +
                         "subReqId\030\001 \001(\005\022\020\n\010userName\030\002 \001(\t\022\023\n\013prod" +
                         "uctName\030\003 \001(\t\022\017\n\007address\030\004 \003(\tB.\n\031com.ne" +
-                        "tty.demo.serialB\021SubscribeReqProtob\006" +
+                        "tty.com.currency.demo.serialB\021SubscribeReqProtob\006" +
                         "proto3"
         };
         descriptor = com.google.protobuf.Descriptors.FileDescriptor
