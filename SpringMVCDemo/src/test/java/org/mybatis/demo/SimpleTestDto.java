@@ -1,5 +1,6 @@
 package org.mybatis.demo;
 
+import com.demo.mybatis.TestDto;
 import org.apache.ibatis.builder.StaticSqlSource;
 import org.apache.ibatis.cache.Cache;
 import org.apache.ibatis.cache.decorators.LoggingCache;

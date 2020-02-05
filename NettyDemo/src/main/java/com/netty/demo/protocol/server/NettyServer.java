@@ -16,6 +16,12 @@ import io.netty.handler.timeout.ReadTimeoutHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * 自定义协议服务端
+ * {@link <a href="https://www.cnblogs.com/carl10086/p/6195568.html />}
+ *
+ * @author mason
+ */
 public class NettyServer {
 
     private static final Logger log = LoggerFactory.getLogger(NettyServer.class);

@@ -18,6 +18,12 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * 自定义协议客户端
+ * {@link <a href="https://www.cnblogs.com/carl10086/p/6195568.html />}
+ *
+ * @author maosn
+ */
 public class NettyClient {
 
     private static final Logger log = LoggerFactory.getLogger(NettyClient.class);

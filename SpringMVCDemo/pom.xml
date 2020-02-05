@@ -12,6 +12,7 @@
     <artifactId>SpringMVCDemo</artifactId>
     <groupId>org.common.com.currency.demo</groupId>
     <version>1.0</version>
+    <packaging>war</packaging>
 
     <dependencies>
         <dependency>
