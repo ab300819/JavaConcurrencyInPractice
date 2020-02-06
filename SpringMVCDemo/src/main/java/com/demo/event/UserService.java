@@ -1,8 +1,8 @@
 package com.demo.event;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.ApplicationEventPublisherAware;
 import org.springframework.stereotype.Service;
 
 /**
@@ -12,17 +12,14 @@ import org.springframework.stereotype.Service;
  */
 @Slf4j
 @Service
-public class UserService implements ApplicationEventPublisherAware {
+public class UserService {
 
+    @Autowired
     private ApplicationEventPublisher applicationEventPublisher;
 
-    @Override
-    public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
-        this.applicationEventPublisher = applicationEventPublisher;
-    }
 
     public void register(String name) {
-        log.info("用户 {} 已注册",name);
+        log.info("用户 {} 已注册", name);
         applicationEventPublisher.publishEvent(new UserRegisterEvent(name));
     }
 }
