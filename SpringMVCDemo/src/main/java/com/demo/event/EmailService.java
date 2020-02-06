@@ -1,7 +1,7 @@
 package com.demo.event;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 /**
@@ -11,8 +11,9 @@ import org.springframework.stereotype.Service;
  */
 @Slf4j
 @Service
-public class EmailService implements ApplicationListener<UserRegisterEvent> {
-    @Override
+public class EmailService {
+
+    @EventListener
     public void onApplicationEvent(UserRegisterEvent event) {
         log.info("{} 用户已注册，并发送邮件", event.getSource());
     }
