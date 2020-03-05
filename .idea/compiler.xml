@@ -12,7 +12,10 @@
         <module name="ContainerDemo" />
         <module name="ServletDemo" />
         <module name="NettyDemo" />
+        <module name="server-provider" />
+        <module name="server-consumer" />
         <module name="ConcurrencyDemo" />
+        <module name="server-api" />
       </profile>
     </annotationProcessing>
   </component>

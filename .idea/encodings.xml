@@ -9,6 +9,12 @@
     <file url="file://$PROJECT_DIR$/ConcurrencyDemo/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ContainerDemo/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ContainerDemo/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/DubboDemo/server-api/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/DubboDemo/server-api/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/DubboDemo/server-consumer/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/DubboDemo/server-consumer/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/DubboDemo/server-provider/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/DubboDemo/server-provider/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/NettyDemo" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/NettyDemo/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/NettyDemo/src/main/resources" charset="UTF-8" />
