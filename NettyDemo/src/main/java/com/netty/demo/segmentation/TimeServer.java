@@ -52,9 +52,15 @@ public class TimeServer {
         }
     }
 
-    public static class TimeServerHandler extends ChannelInboundHandlerAdapter {
+    public static class TimeServerHandler extends SimpleChannelInboundHandler<ByteBuf> {
 
         private static final Logger log = LoggerFactory.getLogger(TimeServerHandler.class);
+
+
+        @Override
+        protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
+
+        }
 
         @Override
         public void channelActive(ChannelHandlerContext ctx) {
