@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>NettyDemo</artifactId>
-    <groupId>org.common.com.currency.demo</groupId>
+    <groupId>org.common.demo</groupId>
     <version>1.0</version>
 
     <dependencies>
@@ -39,15 +39,6 @@
             <artifactId>jboss-marshalling-serial</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-core</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
         </dependency>
@@ -64,8 +55,8 @@
             <artifactId>junit</artifactId>
         </dependency>
         <dependency>
-            <artifactId>CommonDemo</artifactId>
-            <groupId>org.common.com.currency.demo</groupId>
+            <artifactId>common</artifactId>
+            <groupId>org.common.demo</groupId>
             <version>1.0</version>
         </dependency>
     </dependencies>

@@ -2,9 +2,6 @@
 <project version="4">
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/CommonDemo" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/CommonDemo/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/CommonDemo/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ConcurrencyDemo" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ConcurrencyDemo/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ContainerDemo/src/main/java" charset="UTF-8" />
@@ -20,8 +17,13 @@
     <file url="file://$PROJECT_DIR$/NettyDemo/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ServletDemo" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ServletDemo/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/SpringDemo/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/SpringDemo/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/SpringMVCDemo" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/SpringMVCDemo/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/SpringMVCDemo/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/common" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/common/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/common/src/main/resources" charset="UTF-8" />
   </component>
 </project>
