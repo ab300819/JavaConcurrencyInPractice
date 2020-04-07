@@ -19,7 +19,7 @@
         <module>SpringDemo</module>
     </modules>
     <properties>
-        <spring.version>5.2.2.RELEASE</spring.version>
+        <spring.version>5.2.5.RELEASE</spring.version>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
