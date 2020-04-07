@@ -14,25 +14,24 @@
           <element id="module-output" name="SpringMVCDemo" />
         </element>
         <element id="directory" name="lib">
-          <element id="library" level="project" name="Maven: org.springframework:spring-core:5.2.0.RELEASE" />
-          <element id="library" level="project" name="Maven: org.springframework:spring-jcl:5.2.0.RELEASE" />
-          <element id="library" level="project" name="Maven: org.springframework:spring-webmvc:5.2.0.RELEASE" />
-          <element id="library" level="project" name="Maven: org.springframework:spring-aop:5.2.0.RELEASE" />
-          <element id="library" level="project" name="Maven: org.springframework:spring-beans:5.2.0.RELEASE" />
-          <element id="library" level="project" name="Maven: org.springframework:spring-context:5.2.0.RELEASE" />
-          <element id="library" level="project" name="Maven: org.springframework:spring-expression:5.2.0.RELEASE" />
-          <element id="library" level="project" name="Maven: org.springframework:spring-web:5.2.0.RELEASE" />
-          <element id="library" level="project" name="Maven: org.springframework:spring-orm:5.2.0.RELEASE" />
-          <element id="library" level="project" name="Maven: org.springframework:spring-jdbc:5.2.0.RELEASE" />
-          <element id="library" level="project" name="Maven: org.springframework:spring-tx:5.2.0.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-webmvc:5.2.2.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-aop:5.2.2.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-beans:5.2.2.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-context:5.2.2.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-core:5.2.2.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-jcl:5.2.2.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-expression:5.2.2.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-web:5.2.2.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-orm:5.2.2.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-jdbc:5.2.2.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-tx:5.2.2.RELEASE" />
           <element id="library" level="project" name="Maven: org.mybatis:mybatis:3.5.3" />
           <element id="library" level="project" name="Maven: org.mybatis:mybatis-spring:2.0.3" />
           <element id="library" level="project" name="Maven: mysql:mysql-connector-java:8.0.18" />
           <element id="library" level="project" name="Maven: com.google.protobuf:protobuf-java:3.8.0" />
-          <element id="library" level="project" name="Maven: javax.servlet:javax.servlet-api:4.0.1" />
-          <element id="library" level="project" name="Maven: org.slf4j:slf4j-api:1.7.26" />
-          <element id="library" level="project" name="Maven: ch.qos.logback:logback-core:1.2.3" />
           <element id="library" level="project" name="Maven: ch.qos.logback:logback-classic:1.2.3" />
+          <element id="library" level="project" name="Maven: ch.qos.logback:logback-core:1.2.3" />
+          <element id="library" level="project" name="Maven: org.slf4j:slf4j-api:1.7.25" />
           <element id="library" level="project" name="Maven: ch.qos.logback:logback-access:1.2.3" />
         </element>
       </element>
