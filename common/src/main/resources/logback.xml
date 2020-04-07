@@ -11,8 +11,6 @@
             <pattern>%yellow(%date{yyyy-MM-dd HH:mm:ss}) | %highlight(%-5level) | %green([%thread]) | %blue(%file:%line) | %cyan(%logger{15}) | %msg %n</pattern>
         </encoder>
     </appender>
-
-
     <root level="DEBUG">
         <appender-ref ref="STDOUT"/>
     </root>
