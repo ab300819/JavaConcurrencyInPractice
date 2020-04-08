@@ -1,20 +1,22 @@
 package com.common.util;
 
+
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.core.util.BufferRecyclers;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
 
+/**
+ * JSON 工具包
+ *
+ * @author mason
+ */
 public final class JsonUtil {
+
+    private static final String EMPTY_STR = "";
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     static {
@@ -23,106 +25,50 @@ public final class JsonUtil {
         OBJECT_MAPPER.configure(JsonParser.Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true);
     }
 
-    public static boolean is(String json) {
-        if (json != null && json.length() > 1) {
-            try {
-                int count = 0;
-                final JsonParser parser = new ObjectMapper().getFactory().createParser(json);
-                while (parser.nextToken() != null && count < 10000) {
-                    count++;
-                }
-                return true;
-            } catch (Throwable e) {
-            }
-        }
-
-        return false;
+    private JsonUtil() throws IllegalAccessException {
+        throw new IllegalAccessException();
     }
 
-    public static JsonNode read(String json) {
-        try {
-            return OBJECT_MAPPER.readTree(json);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public static boolean not(String json) {
-        return !is(json);
-    }
-
-    public static String quote(String source) {
-        if (StringUtils.isNotEmpty(source)) {
-            return new String(BufferRecyclers.getJsonStringEncoder().quoteAsString(source));
-        }
-        return source;
-    }
-
-    public static <T> T toObject(Class<T> clazz, String json) {
-        if (clazz != null && StringUtils.isNotEmpty(json)) {
+    /**
+     * convert JSON string to object
+     *
+     * @param json  json string
+     * @param clazz object class
+     * @param <T>   object
+     * @return object
+     */
+    public static <T> T fromJson(String json, Class<T> clazz) {
+        if (clazz != null && StringUtils.isNotBlank(json)) {
             try {
                 return OBJECT_MAPPER.readValue(json, clazz);
-            } catch (Throwable e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-
         return null;
     }
 
-    public static <T> List<T> toList(Class<T> clazz, String json) {
-        if (clazz != null && StringUtils.isNotEmpty(json)) {
-            try {
-                return OBJECT_MAPPER.readValue(json, OBJECT_MAPPER.getTypeFactory().constructCollectionType(ArrayList.class, clazz));
-            } catch (Throwable e) {
-                e.printStackTrace();
-            }
+    /**
+     * convert JSON object to string
+     *
+     * @param object JSON object
+     * @return string
+     */
+    public static String toJson(Object object) {
+        if (object == null) {
+            return EMPTY_STR;
         }
 
-        return Collections.emptyList();
-    }
-
-    public static <T> Map<String, T> toMap(String json) {
-        if (StringUtils.isNotBlank(json)) {
-            try {
-                return OBJECT_MAPPER.readValue(json, new TypeReference<Map<String, T>>() {
-                });
-            } catch (Throwable e) {
-                e.printStackTrace();
-            }
-        }
-        return Collections.emptyMap();
-    }
-
-    public static Map<String, String> toStringMap(String json) {
-        return toMap(json);
-    }
-
-    public static String toString(Object obj) {
-        if (obj != null) {
-            if (obj instanceof String) {
-                return (String) obj;
-            }
-            try {
-                return OBJECT_MAPPER.writeValueAsString(obj);
-            } catch (Throwable e) {
-                e.printStackTrace();
-            }
+        if (object instanceof String) {
+            return (String) object;
         }
 
-        return "";
-    }
-
-    public static byte[] toBytes(Object obj) {
-        if (obj != null) {
-            try {
-                return OBJECT_MAPPER.writeValueAsBytes(obj);
-            } catch (Throwable e) {
-                e.printStackTrace();
-            }
+        try {
+            return OBJECT_MAPPER.writeValueAsString(object);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
         }
-        return new byte[0];
+        return EMPTY_STR;
     }
 
 }
