@@ -5,6 +5,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.DelimiterBasedFrameDecoder;
 import io.netty.handler.codec.string.StringDecoder;
@@ -14,14 +15,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 使用 DelimiterBasedFrameDecoder 拆包
+ * 使用 {@link DelimiterBasedFrameDecoder} 拆包
  *
  * @author mason
  */
-public class EchoServer {
+public class DelimiterBasedFrameServer {
 
     public static void main(String[] args) throws Exception {
-        new EchoServer().start(9090);
+        new DelimiterBasedFrameServer().start(9090);
     }
 
     public void start(int port) throws Exception {
@@ -35,13 +36,13 @@ public class EchoServer {
                     .option(ChannelOption.SO_BACKLOG, 128)
                     .childOption(ChannelOption.SO_KEEPALIVE, true)
                     .handler(new LoggingHandler(LogLevel.INFO))
-                    .childHandler(new ChannelInitializer() {
+                    .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
-                        protected void initChannel(Channel ch) {
+                        protected void initChannel(SocketChannel ch) {
                             ByteBuf delimiter = Unpooled.copiedBuffer(("$_").getBytes());
                             ch.pipeline().addLast(new DelimiterBasedFrameDecoder(1024, delimiter));
                             ch.pipeline().addLast(new StringDecoder());
-                            ch.pipeline().addLast(new EchoServerHandler());
+                            ch.pipeline().addLast(new DelimiterBasedFrameServerHandler());
                         }
                     });
             ChannelFuture f = b.bind(port).sync();
@@ -52,18 +53,17 @@ public class EchoServer {
         }
     }
 
-    public static class EchoServerHandler extends ChannelInboundHandlerAdapter {
+    public static class DelimiterBasedFrameServerHandler extends SimpleChannelInboundHandler<String> {
 
-        private static final Logger log = LoggerFactory.getLogger(PackageServer.TimeServerHandler.class);
+        private static final Logger log = LoggerFactory.getLogger(LineBasedFrameServer.LineBasedFrameServerHandler.class);
         private int count = 0;
 
         @Override
-        public void channelRead(ChannelHandlerContext ctx, Object msg) {
+        public void channelRead0(ChannelHandlerContext ctx, String msg) {
 
-            String body = (String) msg;
-            log.debug("This is {} times receive client:[{}]", ++count, body);
-            body += "$_";
-            ByteBuf echo = Unpooled.copiedBuffer(body.getBytes());
+            log.debug("This is {} times receive client:[{}]", ++count, msg);
+            msg += "$_";
+            ByteBuf echo = Unpooled.copiedBuffer(msg.getBytes());
             ctx.writeAndFlush(echo);
 
         }
