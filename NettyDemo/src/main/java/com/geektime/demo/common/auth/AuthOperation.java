@@ -1,7 +1,7 @@
 package com.geektime.demo.common.auth;
 
 
-import io.netty.example.study.common.Operation;
+import com.geektime.demo.common.Operation;
 import lombok.Data;
 import lombok.extern.java.Log;
 
@@ -14,7 +14,7 @@ public class AuthOperation extends Operation {
 
     @Override
     public AuthOperationResult execute() {
-        if("admin".equalsIgnoreCase(this.userName)){
+        if ("admin".equalsIgnoreCase(this.userName)) {
             AuthOperationResult orderResponse = new AuthOperationResult(true);
             return orderResponse;
         }

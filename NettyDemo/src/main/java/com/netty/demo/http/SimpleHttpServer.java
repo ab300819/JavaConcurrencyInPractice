@@ -4,7 +4,6 @@ import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.sctp.nio.NioSctpServerChannel;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.http.*;
@@ -30,7 +29,6 @@ public class SimpleHttpServer {
                 .channel(NioServerSocketChannel.class)
                 .handler(new LoggingHandler(LogLevel.INFO))
                 .childHandler(new ChannelInitializer<SocketChannel>() {
-
                     @Override
                     protected void initChannel(SocketChannel ch) throws Exception {
                         ChannelPipeline pipeline = ch.pipeline();
@@ -56,7 +54,7 @@ public class SimpleHttpServer {
         private static final byte[] CONTENT = "Hello world".getBytes();
 
         @Override
-        protected void channelRead0(ChannelHandlerContext ctx, HttpObject msg) throws Exception {
+        protected void channelRead0(ChannelHandlerContext ctx, HttpObject msg) {
             if (msg instanceof HttpRequest) {
                 HttpRequest httpRequest = (HttpRequest) msg;
                 FullHttpResponse httpResponse =
@@ -64,19 +62,8 @@ public class SimpleHttpServer {
                 httpResponse.headers()
                         .set(CONTENT_TYPE, HttpHeaderValues.TEXT_PLAIN)
                         .set(CONTENT_LENGTH, httpResponse.content().readableBytes());
-                ctx.write(httpResponse);
+                ctx.writeAndFlush(httpResponse);
             }
-        }
-
-        @Override
-        public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
-            ctx.flush();
-        }
-
-        @Override
-        public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-            ctx.close();
-            cause.printStackTrace();
         }
     }
 
