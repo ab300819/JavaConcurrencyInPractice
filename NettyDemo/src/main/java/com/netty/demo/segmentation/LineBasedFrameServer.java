@@ -5,23 +5,23 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.LineBasedFrameDecoder;
 import io.netty.handler.codec.string.StringDecoder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Date;
 
 /**
- * 使用 LineBasedFrameDecoder 拆包
+ * 使用 {@link LineBasedFrameDecoder} 拆包
  *
- * @author mason
+ * @author maosn
  */
-public class PackageServer {
+public class LineBasedFrameServer {
 
     public static void main(String[] args) throws Exception {
-        new PackageServer().start(9090);
+        new LineBasedFrameServer().start(9090);
     }
 
     public void start(int port) throws Exception {
@@ -34,12 +34,13 @@ public class PackageServer {
                     .channel(NioServerSocketChannel.class)
                     .option(ChannelOption.SO_BACKLOG, 128)
                     .childOption(ChannelOption.SO_KEEPALIVE, true)
-                    .childHandler(new ChannelInitializer() {
+                    .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
-                        protected void initChannel(Channel ch) {
+                        protected void initChannel(SocketChannel ch) {
+
                             ch.pipeline().addLast(new LineBasedFrameDecoder(128));
                             ch.pipeline().addLast(new StringDecoder());
-                            ch.pipeline().addLast(new TimeServerHandler());
+                            ch.pipeline().addLast(new LineBasedFrameServerHandler());
                         }
                     });
             ChannelFuture f = b.bind(port).sync();
@@ -50,23 +51,18 @@ public class PackageServer {
         }
     }
 
-    public static class TimeServerHandler extends ChannelInboundHandlerAdapter {
+    @Slf4j
+    public static class LineBasedFrameServerHandler extends SimpleChannelInboundHandler<String> {
 
-        private static final Logger log = LoggerFactory.getLogger(TimeServerHandler.class);
         private int count = 0;
 
         @Override
-        public void channelRead(ChannelHandlerContext ctx, Object msg) {
-
-
-            String result = (String) msg;
-            log.debug("Receive message:{}", result);
-
-            String currentTime = "QUERY TIME ORDER".equalsIgnoreCase(result) ? new Date().toString() : "BAD ORDER";
+        protected void channelRead0(ChannelHandlerContext ctx, String msg) {
+            log.debug("Receive message:{}", msg);
+            String currentTime = "QUERY TIME ORDER".equalsIgnoreCase(msg) ? new Date().toString() : "BAD ORDER";
             currentTime = currentTime + System.getProperty("line.separator");
             ByteBuf resp = Unpooled.copiedBuffer(currentTime.getBytes());
             ctx.writeAndFlush(resp);
-
         }
 
         @Override

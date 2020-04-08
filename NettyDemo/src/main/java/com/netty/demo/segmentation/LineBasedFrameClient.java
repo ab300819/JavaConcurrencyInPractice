@@ -9,17 +9,18 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.LineBasedFrameDecoder;
 import io.netty.handler.codec.string.StringDecoder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
-public class PackageClient {
-
-    private static final Logger log = LoggerFactory.getLogger(PackageClient.class);
+/**
+ * 使用 {@link LineBasedFrameDecoder} 拆包
+ *
+ * @author maosn
+ */
+public class LineBasedFrameClient {
 
     public static void main(String[] args) throws Exception {
-        new PackageClient().connect(9090, "localhost");
+        new LineBasedFrameClient().connect(9090, "localhost");
     }
-
 
     public void connect(int port, String host) throws Exception {
 
@@ -36,7 +37,7 @@ public class PackageClient {
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
                             socketChannel.pipeline().addLast(new LineBasedFrameDecoder(128));
                             socketChannel.pipeline().addLast(new StringDecoder());
-                            socketChannel.pipeline().addLast(new TimeClientHandler());
+                            socketChannel.pipeline().addLast(new LineBasedFrameClientHandler());
                         }
 
                     });
@@ -47,31 +48,30 @@ public class PackageClient {
         }
     }
 
-    public static class TimeClientHandler extends ChannelInboundHandlerAdapter {
-        private static final Logger log = LoggerFactory.getLogger(TimeClientHandler.class);
+    @Slf4j
+    public static class LineBasedFrameClientHandler extends SimpleChannelInboundHandler<String> {
 
-        private int counter=0;
-        private byte[] req=("QUERY TIME ORDER"+System.getProperty("line.separator")).getBytes();
+        private int counter = 0;
+        private byte[] req = ("QUERY TIME ORDER" + System.getProperty("line.separator")).getBytes();
 
         @Override
         public void channelActive(ChannelHandlerContext ctx) {
-            ByteBuf message=null;
+            ByteBuf message = null;
             for (int i = 0; i < 100; i++) {
-                message= Unpooled.buffer(req.length);
+                message = Unpooled.buffer(req.length);
                 message.writeBytes(req);
                 ctx.writeAndFlush(message);
             }
         }
 
         @Override
-        public void channelRead(ChannelHandlerContext ctx, Object msg) {
-
-            String body=(String) msg;
-            log.debug("Now is: {};the count is: {}", body, ++counter);
+        protected void channelRead0(ChannelHandlerContext ctx, String msg) {
+            log.debug("Now is: {};the count is: {}", msg, ++counter);
         }
 
         @Override
         public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+            cause.printStackTrace();
             ctx.close();
         }
     }
