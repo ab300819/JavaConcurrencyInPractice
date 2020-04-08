@@ -1,6 +1,6 @@
 package com.geektime.demo.common.auth;
 
-import io.netty.example.study.common.OperationResult;
+import com.geektime.demo.common.OperationResult;
 import lombok.Data;
 
 @Data

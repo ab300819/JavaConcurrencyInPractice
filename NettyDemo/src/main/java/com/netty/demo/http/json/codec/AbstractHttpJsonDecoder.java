@@ -30,6 +30,6 @@ public abstract class AbstractHttpJsonDecoder<T> extends MessageToMessageDecoder
         if (isPrint) {
             log.debug("The body is : {}", content);
         }
-        return JsonUtil.toObject(clazz, content);
+        return JsonUtil.fromJson(content, clazz);
     }
 }

@@ -1,7 +1,7 @@
 package com.geektime.demo.common.keepalive;
 
 
-import io.netty.example.study.common.Operation;
+import com.geektime.demo.common.Operation;
 import lombok.Data;
 import lombok.extern.java.Log;
 
@@ -9,7 +9,7 @@ import lombok.extern.java.Log;
 @Log
 public class KeepaliveOperation extends Operation {
 
-    private long time ;
+    private long time;
 
     public KeepaliveOperation() {
         this.time = System.nanoTime();

@@ -1,7 +1,7 @@
 package com.geektime.demo.common.order;
 
 
-import io.netty.example.study.common.Operation;
+import com.geektime.demo.common.Operation;
 import lombok.Data;
 
 @Data
