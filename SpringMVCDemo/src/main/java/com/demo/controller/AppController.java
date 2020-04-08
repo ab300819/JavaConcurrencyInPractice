@@ -1,10 +1,8 @@
-package com.demo;
+package com.demo.controller;
 
 import com.demo.event.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -19,10 +17,9 @@ public class AppController {
     private UserService userService;
 
     @GetMapping("/event")
-    @ResponseBody
     public String userRegisterEvent() {
         userService.register("mason");
-        return "";
+        return "Hello world";
     }
 
 }
