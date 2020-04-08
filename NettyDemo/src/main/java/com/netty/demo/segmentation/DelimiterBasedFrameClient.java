@@ -9,17 +9,18 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.DelimiterBasedFrameDecoder;
 import io.netty.handler.codec.string.StringDecoder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
-public class EchoClient {
-
-    private static final Logger log = LoggerFactory.getLogger(PackageClient.class);
+/**
+ * 使用 {@link DelimiterBasedFrameDecoder} 拆包
+ *
+ * @author mason
+ */
+public class DelimiterBasedFrameClient {
 
     public static void main(String[] args) throws Exception {
-        new EchoClient().connect(9090, "localhost");
+        new DelimiterBasedFrameClient().connect(9090, "localhost");
     }
-
 
     public void connect(int port, String host) throws Exception {
 
@@ -37,7 +38,7 @@ public class EchoClient {
                             ByteBuf delimiter = Unpooled.copiedBuffer("$_".getBytes());
                             socketChannel.pipeline().addLast(new DelimiterBasedFrameDecoder(1024, delimiter));
                             socketChannel.pipeline().addLast(new StringDecoder());
-                            socketChannel.pipeline().addLast(new EchoClientHandler());
+                            socketChannel.pipeline().addLast(new DelimiterBasedFrameClientHandler());
                         }
 
                     });
@@ -48,8 +49,8 @@ public class EchoClient {
         }
     }
 
-    public static class EchoClientHandler extends ChannelInboundHandlerAdapter {
-        private static final Logger log = LoggerFactory.getLogger(PackageClient.TimeClientHandler.class);
+    @Slf4j
+    public static class DelimiterBasedFrameClientHandler extends SimpleChannelInboundHandler<String> {
 
         private int counter = 0;
         private byte[] req = ("Hi, mason. Welcome to netty.$_").getBytes();
@@ -60,7 +61,7 @@ public class EchoClient {
         }
 
         @Override
-        public void channelRead(ChannelHandlerContext ctx, Object msg) {
+        public void channelRead0(ChannelHandlerContext ctx, String msg) {
             log.debug("This is {} times receive server:{}", ++counter, msg);
         }
 
