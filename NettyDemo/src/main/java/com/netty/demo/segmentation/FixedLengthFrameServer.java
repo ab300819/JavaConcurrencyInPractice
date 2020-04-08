@@ -3,25 +3,23 @@ package com.netty.demo.segmentation;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.FixedLengthFrameDecoder;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.Serializable;
+import lombok.extern.slf4j.Slf4j;
 
 /**
- * 使用 FixedLengthFrameDecoder 拆包
+ * 使用 {@link FixedLengthFrameDecoder} 拆包
  *
  * @author mason
  */
-public class EchoChangeServer {
+public class FixedLengthFrameServer {
 
     public static void main(String[] args) throws Exception {
-        new EchoChangeServer().start(9090);
+        new FixedLengthFrameServer().start(9090);
     }
 
     public void start(int port) throws Exception {
@@ -35,12 +33,12 @@ public class EchoChangeServer {
                     .option(ChannelOption.SO_BACKLOG, 128)
                     .childOption(ChannelOption.SO_KEEPALIVE, true)
                     .handler(new LoggingHandler(LogLevel.INFO))
-                    .childHandler(new ChannelInitializer() {
+                    .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
-                        protected void initChannel(Channel ch) {
+                        protected void initChannel(SocketChannel ch) {
                             ch.pipeline().addLast(new FixedLengthFrameDecoder(20));
                             ch.pipeline().addLast(new StringDecoder());
-                            ch.pipeline().addLast(new EchoServerHandler());
+                            ch.pipeline().addLast(new FixedLengthFrameServerHandler());
                         }
                     });
             ChannelFuture f = b.bind(port).sync();
@@ -51,16 +49,14 @@ public class EchoChangeServer {
         }
     }
 
-    public static class EchoServerHandler extends ChannelInboundHandlerAdapter implements Serializable {
+    @Slf4j
+    public static class FixedLengthFrameServerHandler extends SimpleChannelInboundHandler<String>{
 
-        private static final Logger log = LoggerFactory.getLogger(PackageServer.TimeServerHandler.class);
         private int count = 0;
 
         @Override
-        public void channelRead(ChannelHandlerContext ctx, Object msg) {
-
+        protected void channelRead0(ChannelHandlerContext ctx, String msg) {
             log.debug("Receive client:{}", msg);
-
         }
 
         @Override
