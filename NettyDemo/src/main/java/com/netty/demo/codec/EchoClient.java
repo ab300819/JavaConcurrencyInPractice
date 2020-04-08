@@ -1,12 +1,14 @@
 package com.netty.demo.codec;
 
 import io.netty.bootstrap.Bootstrap;
+import io.netty.buffer.ByteBuf;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.LengthFieldPrepender;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +25,6 @@ public class EchoClient {
 
 
     public void connect(int port, String host) throws Exception {
-
         EventLoopGroup group = new NioEventLoopGroup();
         Bootstrap b = new Bootstrap();
 
@@ -33,7 +34,6 @@ public class EchoClient {
                     .option(ChannelOption.TCP_NODELAY, true)
                     .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 3000)
                     .handler(new ChannelInitializer<SocketChannel>() {
-
                         @Override
                         protected void initChannel(SocketChannel socketChannel) {
                             socketChannel.pipeline().addLast(new LengthFieldBasedFrameDecoder(65535, 0, 2, 0, 2));
@@ -51,8 +51,9 @@ public class EchoClient {
         }
     }
 
-    public static class EchoClientHandler extends ChannelInboundHandlerAdapter {
-        private static final Logger log = LoggerFactory.getLogger(EchoClientHandler.class);
+
+    @Slf4j
+    public static class EchoClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
 
         @Override
         public void channelReadComplete(ChannelHandlerContext ctx) {
@@ -60,7 +61,7 @@ public class EchoClient {
         }
 
         @Override
-        public void channelRead(ChannelHandlerContext ctx, Object msg) {
+        protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) {
             log.debug("Receive from server:{}", msg);
         }
 
@@ -74,9 +75,10 @@ public class EchoClient {
         @Override
         public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
             ctx.close();
+            cause.printStackTrace();
         }
 
-        List<TestSerial> strList() {
+        private List<TestSerial> strList() {
             List<TestSerial> strList = new ArrayList<>();
             for (int i = 0; i < 50; i++) {
                 TestSerial testSerial = new TestSerial();
