@@ -4,12 +4,14 @@ import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * 时间服务端
+ *
  * @author mason
  */
 public class TimeServer {
@@ -26,22 +28,24 @@ public class TimeServer {
         try {
             b.group(bossGroup, workGroup)
                     .channel(NioServerSocketChannel.class)
-                    .childHandler(new ChannelInitializer() {
+                    .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
-                        protected void initChannel(Channel ch) {
+                        protected void initChannel(SocketChannel ch) {
                             ch.pipeline().addLast(new TimeServerHandler());
                         }
                     })
-                    /**
-                     * 对应的是tcp/ip协议listen函数中的backlog参数，
-                     * 函数listen(int socketfd,int backlog)用来初始化服务端可连接队列，
-                     * 服务端处理客户端连接请求是顺序处理的，所以同一时间只能处理一个客户端连接，
-                     * 多个客户端来的时候，服务端将不能处理的客户端连接请求放在队列中等待处理，backlog参数指定了队列的大小
-                     *
+
+                    /*
+                      对应的是tcp/ip协议listen函数中的backlog参数，
+                      函数listen(int socketfd,int backlog)用来初始化服务端可连接队列，
+                      服务端处理客户端连接请求是顺序处理的，所以同一时间只能处理一个客户端连接，
+                      多个客户端来的时候，服务端将不能处理的客户端连接请求放在队列中等待处理，backlog参数指定了队列的大小
+
                      */
                     .option(ChannelOption.SO_BACKLOG, 128)
-                    /**
-                     * 心跳检测
+
+                    /*
+                      心跳检测
                      */
                     .childOption(ChannelOption.SO_KEEPALIVE, true);
             ChannelFuture f = b.bind(port).sync();
@@ -58,7 +62,7 @@ public class TimeServer {
 
 
         @Override
-        protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
+        protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) {
 
         }
 

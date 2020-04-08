@@ -13,6 +13,7 @@ import java.util.Date;
 
 /**
  * 时间客户端
+ *
  * @author mason
  */
 public class TimeClient {
@@ -36,7 +37,7 @@ public class TimeClient {
                     .handler(new ChannelInitializer<SocketChannel>() {
 
                         @Override
-                        protected void initChannel(SocketChannel socketChannel) throws Exception {
+                        protected void initChannel(SocketChannel socketChannel) {
                             socketChannel.pipeline().addLast(new TimeClientHandler());
                         }
 
@@ -51,9 +52,8 @@ public class TimeClient {
     public static class TimeClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
         private static final Logger log = LoggerFactory.getLogger(TimeClientHandler.class);
 
-
         @Override
-        protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
+        protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) {
             try {
                 long currentMills = msg.readUnsignedInt() * 1000L;
                 log.info("server time {}", new Date(currentMills));
@@ -64,7 +64,7 @@ public class TimeClient {
         }
 
         @Override
-        public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
             ctx.close();
             cause.printStackTrace();
         }
