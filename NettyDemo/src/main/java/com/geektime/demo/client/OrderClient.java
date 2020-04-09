@@ -14,10 +14,11 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.ExecutionException;
 
-
+@Slf4j
 public class OrderClient {
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {

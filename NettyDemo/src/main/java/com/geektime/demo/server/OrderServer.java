@@ -4,6 +4,10 @@ import com.geektime.demo.common.Operation;
 import com.geektime.demo.common.OperationResult;
 import com.geektime.demo.common.RequestMessage;
 import com.geektime.demo.common.ResponseMessage;
+import com.geektime.demo.server.codec.OrderFrameDecoder;
+import com.geektime.demo.server.codec.OrderFrameEncoder;
+import com.geektime.demo.server.codec.OrderProtocolDecoder;
+import com.geektime.demo.server.codec.OrderProtocolEncoder;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -37,7 +41,10 @@ public class OrderServer {
             @Override
             protected void initChannel(NioSocketChannel ch) {
                 ChannelPipeline pipeline = ch.pipeline();
-
+                pipeline.addLast(new OrderFrameDecoder());
+                pipeline.addLast(new OrderFrameEncoder());
+                pipeline.addLast(new OrderProtocolEncoder());
+                pipeline.addLast(new OrderProtocolDecoder());
                 pipeline.addLast(new OrderServerHandler());
             }
         });
