@@ -2,9 +2,12 @@ package com.geektime.demo.common.order;
 
 
 import com.geektime.demo.common.Operation;
+import com.google.common.util.concurrent.Uninterruptibles;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.concurrent.TimeUnit;
 
 @Data
 @NoArgsConstructor
@@ -21,8 +24,9 @@ public class OrderOperation extends Operation {
 
     @Override
     public OrderOperationResult execute() {
-        log.info("order's executing startup with orderRequest: {}" , toString());
-        //execute order logic
+        log.info("order's executing startup with orderRequest: {}", toString());
+        // 模拟耗时操作
+        Uninterruptibles.sleepUninterruptibly(3, TimeUnit.SECONDS);
         log.info("order's executing complete");
         return new OrderOperationResult(tableId, dish, true);
     }
