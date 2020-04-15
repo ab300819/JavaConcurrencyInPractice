@@ -18,6 +18,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.util.concurrent.DefaultThreadFactory;
+import io.netty.util.concurrent.UnorderedThreadPoolEventExecutor;
 
 /**
  * Order 服务端
@@ -42,11 +43,13 @@ public class OrderServer {
         serverBootstrap.childOption(NioChannelOption.TCP_NODELAY, true);
         serverBootstrap.option(NioChannelOption.SO_BACKLOG, 1024);
 
+        // 使用线程池处理耗时业务逻辑，适用 IO 密集型
+        UnorderedThreadPoolEventExecutor business = new UnorderedThreadPoolEventExecutor(10, new DefaultThreadFactory("business"));
         serverBootstrap.childHandler(new ChannelInitializer<NioSocketChannel>() {
             @Override
             protected void initChannel(NioSocketChannel ch) {
                 ChannelPipeline pipeline = ch.pipeline();
-                pipeline.addLast(new LoggingHandler(LogLevel.DEBUG));
+//                pipeline.addLast(new LoggingHandler(LogLevel.DEBUG));
 
                 pipeline.addLast("frameDecoder", new OrderFrameDecoder());
                 pipeline.addLast("frameEncoder", new OrderFrameEncoder());
@@ -55,7 +58,7 @@ public class OrderServer {
                 pipeline.addLast("metrics", new MetricHandler());
 
                 pipeline.addLast(new LoggingHandler(LogLevel.INFO));
-                pipeline.addLast("serverHandler", new OrderServerHandler());
+                pipeline.addLast(business, new OrderServerHandler());
             }
         });
 
