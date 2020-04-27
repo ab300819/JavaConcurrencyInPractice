@@ -59,11 +59,9 @@ public class OrderClient {
 
             OperationResultFuture operationResultFuture = new OperationResultFuture();
             requestPendingCenter.add(streamId, operationResultFuture);
-            for (int i = 0; i < 100; i++) {
-                channelFuture.channel().writeAndFlush(requestMessage);
-            }
+            channelFuture.channel().writeAndFlush(requestMessage);
             OperationResult operationResult = operationResultFuture.get();
-            System.out.println(operationResult);
+            log.info(operationResult.toString());
             channelFuture.channel().closeFuture().sync();
         } finally {
             work.shutdownGracefully();
