@@ -12,13 +12,17 @@ function setConnected(connected) {
 }
 
 function connect() {
-    var socket = new WebSocket('ws://localhost:8282/stomp-over-websocket');
+    var uid = document.getElementById("user-id").value;
+    console.log(uid);
+    var host='ws://localhost:8282/stomp-over-websocket?uid='+uid;
+    var socket = new WebSocket(host);
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
         setConnected(true);
         console.log('Connected: ' + frame);
-        stompClient.subscribe('/topic/greetings', function (greeting) {
+        stompClient.subscribe('/user/'+uid+'/topic/replay', function (greeting) {
             showGreeting(JSON.parse(greeting.body).content);
+
         });
     });
 }
@@ -32,7 +36,10 @@ function disconnect() {
 }
 
 function sendName() {
-    stompClient.send("/app/hello", {}, JSON.stringify({'name': $("#name").val()}));
+    stompClient.send("/app/target", {}, JSON.stringify({
+        'content': $("#name").val(),
+        'to': document.getElementById("target").value
+    }));
 }
 
 function showGreeting(message) {
