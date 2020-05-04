@@ -1,5 +1,7 @@
 package com.currency.demo;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.PriorityQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -12,6 +14,7 @@ import java.util.concurrent.locks.ReentrantLock;
  *
  * @author mason
  */
+@Slf4j
 public class ProducerToConsumer {
 
     private final int queueSize = 10;
@@ -42,7 +45,7 @@ public class ProducerToConsumer {
                 lock.lock();
                 try {
                     while (queue.size() == queueSize) {
-                        System.out.println("queue is full");
+                        log.info("queue is full");
                         try {
                             notFull.await();
                         } catch (InterruptedException e) {
@@ -52,7 +55,7 @@ public class ProducerToConsumer {
                     }
                     queue.add(1);
                     notEmpty.signal();
-                    System.out.println("insert one element into queue " + (queueSize - queue.size()));
+                    log.info("insert one element into queue " + (queueSize - queue.size()));
                 } finally {
                     lock.unlock();
                 }
@@ -70,7 +73,7 @@ public class ProducerToConsumer {
                 lock.lock();
                 try {
                     while (queue.isEmpty()) {
-                        System.out.println("queue is empty");
+                        log.info("queue is empty");
                         try {
                             notEmpty.await();
                         } catch (InterruptedException e) {
@@ -80,7 +83,7 @@ public class ProducerToConsumer {
                     }
                     queue.poll();
                     notFull.signal();
-                    System.out.println("take one element from queue " + queue.size());
+                    log.info("take one element from queue " + queue.size());
                 } finally {
                     lock.unlock();
                 }
