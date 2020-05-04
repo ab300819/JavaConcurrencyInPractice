@@ -8,6 +8,8 @@ import com.geektime.demo.common.OperationResult;
 import com.geektime.demo.common.RequestMessage;
 import com.geektime.demo.common.ResponseMessage;
 import com.geektime.demo.common.order.OrderOperation;
+import com.geektime.demo.server.handler.ClientIdleCheckHandler;
+import com.geektime.demo.server.handler.KeepaliveHandler;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -38,6 +40,9 @@ public class OrderClient {
             @Override
             protected void initChannel(NioSocketChannel ch) {
                 ChannelPipeline pipeline = ch.pipeline();
+
+                pipeline.addLast(new ClientIdleCheckHandler());
+
                 pipeline.addLast(new OrderFrameDecoder());
                 pipeline.addLast(new OrderFrameEncoder());
 
@@ -47,6 +52,7 @@ public class OrderClient {
                 pipeline.addLast(new OrderClientHandler(requestPendingCenter));
 
                 pipeline.addLast(new OperationToRequestMessageEncoder());
+                pipeline.addLast(new KeepaliveHandler());
                 pipeline.addLast(new LoggingHandler(LogLevel.INFO));
             }
         });
