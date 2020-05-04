@@ -8,6 +8,7 @@ import com.geektime.demo.server.codec.OrderFrameDecoder;
 import com.geektime.demo.server.codec.OrderFrameEncoder;
 import com.geektime.demo.server.codec.OrderProtocolDecoder;
 import com.geektime.demo.server.codec.OrderProtocolEncoder;
+import com.geektime.demo.server.handler.AuthHandler;
 import com.geektime.demo.server.handler.MetricHandler;
 import com.geektime.demo.server.handler.ServerIdleCheckHandler;
 import io.netty.bootstrap.ServerBootstrap;
@@ -68,8 +69,9 @@ public class OrderServer {
                 pipeline.addLast("frameEncoder", new OrderFrameEncoder());
                 pipeline.addLast("protocolEncoder", new OrderProtocolEncoder());
                 pipeline.addLast("protocolDecoder", new OrderProtocolDecoder());
-                pipeline.addLast("metrics", new MetricHandler());
+                pipeline.addLast("metricsHandler", new MetricHandler());
 
+                pipeline.addLast("authHandler", new AuthHandler());
                 pipeline.addLast(new LoggingHandler(LogLevel.INFO));
                 pipeline.addLast("flushEnhance", new FlushConsolidationHandler(5, true));
                 pipeline.addLast(business, new OrderServerHandler());
