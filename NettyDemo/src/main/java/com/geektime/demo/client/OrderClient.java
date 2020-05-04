@@ -7,6 +7,7 @@ import com.geektime.demo.client.dispatcher.RequestPendingCenter;
 import com.geektime.demo.common.OperationResult;
 import com.geektime.demo.common.RequestMessage;
 import com.geektime.demo.common.ResponseMessage;
+import com.geektime.demo.common.auth.AuthOperation;
 import com.geektime.demo.common.order.OrderOperation;
 import com.geektime.demo.server.handler.ClientIdleCheckHandler;
 import com.geektime.demo.server.handler.KeepaliveHandler;
@@ -60,6 +61,9 @@ public class OrderClient {
         ChannelFuture channelFuture = group.connect(address, port);
         try {
             channelFuture.sync();
+            RequestMessage authMessage = new RequestMessage(IdUtil.nextId(), new AuthOperation("admin", "password"));
+            channelFuture.channel().writeAndFlush(authMessage);
+
             long streamId = IdUtil.nextId();
             RequestMessage requestMessage = new RequestMessage(streamId, new OrderOperation(1001, "tudou"));
 
