@@ -17,18 +17,23 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
+import io.netty.handler.ssl.SslContext;
+import io.netty.handler.ssl.SslContextBuilder;
+import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.net.ssl.SSLException;
+import java.security.cert.CertificateException;
 import java.util.concurrent.ExecutionException;
 
 @Slf4j
 public class OrderClient {
 
-    public static void main(String[] args) throws ExecutionException, InterruptedException {
+    public static void main(String[] args) throws ExecutionException, InterruptedException, CertificateException, SSLException {
         OrderClient.connect("localhost", 9090);
     }
 
-    public static void connect(String address, int port) throws InterruptedException, ExecutionException {
+    public static void connect(String address, int port) throws InterruptedException, ExecutionException, SSLException {
 
         EventLoopGroup work = new NioEventLoopGroup();
         RequestPendingCenter requestPendingCenter = new RequestPendingCenter();
@@ -37,6 +42,11 @@ public class OrderClient {
         group.channel(NioSocketChannel.class);
         group.group(work);
 
+        SslContext sslContext = SslContextBuilder
+                .forClient()
+                .trustManager(InsecureTrustManagerFactory.INSTANCE)
+                .build();
+
         group.handler(new ChannelInitializer<NioSocketChannel>() {
             @Override
             protected void initChannel(NioSocketChannel ch) {
@@ -44,6 +54,7 @@ public class OrderClient {
 
                 pipeline.addLast(new ClientIdleCheckHandler());
 
+                pipeline.addLast(sslContext.newHandler(ch.alloc()));
                 pipeline.addLast(new OrderFrameDecoder());
                 pipeline.addLast(new OrderFrameEncoder());
 
