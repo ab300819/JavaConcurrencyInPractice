@@ -18,5 +18,15 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <artifactId>common</artifactId>
+            <groupId>org.common.demo</groupId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
 </project>
