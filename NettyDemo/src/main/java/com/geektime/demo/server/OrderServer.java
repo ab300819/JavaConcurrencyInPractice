@@ -23,23 +23,30 @@ import io.netty.handler.ipfilter.IpSubnetFilterRule;
 import io.netty.handler.ipfilter.RuleBasedIpFilter;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
+import io.netty.handler.ssl.SslContext;
+import io.netty.handler.ssl.SslContextBuilder;
+import io.netty.handler.ssl.util.SelfSignedCertificate;
 import io.netty.handler.traffic.GlobalTrafficShapingHandler;
 import io.netty.util.concurrent.DefaultThreadFactory;
 import io.netty.util.concurrent.UnorderedThreadPoolEventExecutor;
 import lombok.extern.slf4j.Slf4j;
+
+import javax.net.ssl.SSLException;
+import java.security.cert.CertificateException;
 
 /**
  * Order 服务端
  *
  * @author mason
  */
+@Slf4j
 public class OrderServer {
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException, CertificateException, SSLException {
         OrderServer.start(9090);
     }
 
-    public static void start(int port) throws InterruptedException {
+    public static void start(int port) throws InterruptedException, CertificateException, SSLException {
 
         EventLoopGroup boss = new NioEventLoopGroup(0, new DefaultThreadFactory("boss"));
         EventLoopGroup work = new NioEventLoopGroup(0, new DefaultThreadFactory("work"));
@@ -56,6 +63,11 @@ public class OrderServer {
         UnorderedThreadPoolEventExecutor business = new UnorderedThreadPoolEventExecutor(10, new DefaultThreadFactory("business"));
         // 流量整形
         GlobalTrafficShapingHandler trafficShapingHandler = new GlobalTrafficShapingHandler(new NioEventLoopGroup(), 100 * 1024 * 1024, 100 * 1024 * 1024);
+
+        SelfSignedCertificate selfCertificate = new SelfSignedCertificate();
+        log.info("self certificate path: {}", selfCertificate.certificate().toString());
+        SslContext sslContext = SslContextBuilder.forServer(selfCertificate.certificate(), selfCertificate.privateKey()).build();
+
         serverBootstrap.childHandler(new ChannelInitializer<NioSocketChannel>() {
             @Override
             protected void initChannel(NioSocketChannel ch) {
@@ -65,6 +77,8 @@ public class OrderServer {
                 pipeline.addLast("TShandler", trafficShapingHandler);
                 // 空闲检测
                 pipeline.addLast("idleHandler", new ServerIdleCheckHandler());
+                // 添加 ssl
+                pipeline.addLast("sslHandler", sslContext.newHandler(ch.alloc()));
                 pipeline.addLast("frameDecoder", new OrderFrameDecoder());
                 pipeline.addLast("frameEncoder", new OrderFrameEncoder());
                 pipeline.addLast("protocolEncoder", new OrderProtocolEncoder());
