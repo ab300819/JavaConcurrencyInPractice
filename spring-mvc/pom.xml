@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>SpringMVCDemo</artifactId>
+    <artifactId>spring-mvc</artifactId>
     <groupId>org.common.demo</groupId>
     <version>1.0</version>
     <packaging>war</packaging>
