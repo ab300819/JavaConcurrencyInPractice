@@ -1,13 +1,12 @@
 package com.common.util;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MethodHandleDemoTest {
 
@@ -18,7 +17,7 @@ public class MethodHandleDemoTest {
         MethodHandle mh = lookup.findVirtual(MethodHandleDemo.class, "add", methodType);
 
         int result = (int) mh.invokeExact(new MethodHandleDemo(), 1, 2);
-        assertThat(3, equalTo(result));
+        assertEquals(3, result);
     }
 
 }

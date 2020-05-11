@@ -15,14 +15,13 @@ import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.transaction.Transaction;
 import org.apache.ibatis.transaction.jdbc.JdbcTransaction;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.IsNull.notNullValue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * mybatis 手动执行
@@ -83,7 +82,7 @@ public class SimpleTestDto {
         MappedStatement ms = msBuilder.build();
 
         List<TestDto> testDtos = executor.query(ms, 1L, RowBounds.DEFAULT, Executor.NO_RESULT_HANDLER);
-        assertThat(testDtos, notNullValue());
+        assertNotNull(testDtos);
     }
 
 }
