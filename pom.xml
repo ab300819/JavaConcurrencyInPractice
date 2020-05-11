@@ -10,13 +10,13 @@
     <version>1.0</version>
     <modules>
         <module>common</module>
-        <module>ConcurrencyDemo</module>
-        <module>NettyDemo</module>
-        <module>ServletDemo</module>
-        <module>ContainerDemo</module>
-        <module>SpringMVCDemo</module>
-        <module>DubboDemo</module>
-        <module>SpringDemo</module>
+        <module>concurrency</module>
+        <module>netty</module>
+        <module>servlet</module>
+        <module>container</module>
+        <module>spring-mvc</module>
+        <module>dubbo</module>
+        <module>spring</module>
         <module>algorithm</module>
     </modules>
     <properties>
