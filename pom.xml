@@ -17,6 +17,7 @@
         <module>SpringMVCDemo</module>
         <module>DubboDemo</module>
         <module>SpringDemo</module>
+        <module>algorithm</module>
     </modules>
     <properties>
         <spring.version>5.2.2.RELEASE</spring.version>
@@ -161,9 +162,9 @@
                 <version>1.18.8</version>
             </dependency>
             <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <version>4.12</version>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter</artifactId>
+                <version>5.6.2</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
