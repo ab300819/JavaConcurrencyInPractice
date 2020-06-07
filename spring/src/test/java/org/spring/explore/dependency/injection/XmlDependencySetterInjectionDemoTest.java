@@ -12,7 +12,7 @@ import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
  * @author mason
  */
 @Slf4j
-class XmlDependencySetterInjectionTest {
+class XmlDependencySetterInjectionDemoTest {
 
     private DefaultListableBeanFactory listableBeanFactory;
 

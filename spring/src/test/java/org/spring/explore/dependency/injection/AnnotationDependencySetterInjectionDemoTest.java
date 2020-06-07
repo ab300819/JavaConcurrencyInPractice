@@ -13,7 +13,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
  * @author mason
  */
 @Slf4j
-class AnnotationDependencySetterInjectionTest {
+class AnnotationDependencySetterInjectionDemoTest {
 
     private AnnotationConfigApplicationContext applicationContext;
 
