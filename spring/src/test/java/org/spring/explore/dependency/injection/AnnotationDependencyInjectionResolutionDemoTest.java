@@ -19,7 +19,7 @@ class AnnotationDependencyInjectionResolutionDemoTest {
     void setUp() {
         // 创建 BeanFactory 容器
         applicationContext = new AnnotationConfigApplicationContext();
-        applicationContext.register(AnnotationDependencyFieldInjectionDemo.class);
+        applicationContext.register(AnnotationDependencyInjectionResolutionDemo.class);
 
         XmlBeanDefinitionReader beanDefinitionReader = new XmlBeanDefinitionReader(applicationContext);
         String xmlResourcePath = "classpath:dependency-lookup-context.xml";
