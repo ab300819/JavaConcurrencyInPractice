@@ -5,6 +5,9 @@ import org.spring.explore.common.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 
+import java.util.Collection;
+import java.util.Map;
+
 /**
  * 65. 注解驱动的依赖注入处理过程
  *
@@ -26,5 +29,8 @@ public class AnnotationDependencyInjectionResolutionDemo {
      */
     @Autowired
     private User user;
+
+    @Autowired
+    private Map<String,User> userMap;
 
 }
