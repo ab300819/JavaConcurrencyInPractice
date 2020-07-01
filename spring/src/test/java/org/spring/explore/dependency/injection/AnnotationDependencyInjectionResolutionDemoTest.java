@@ -1,5 +1,6 @@
 package org.spring.explore.dependency.injection;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,6 +12,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
  *
  * @author mason
  */
+@Slf4j
 class AnnotationDependencyInjectionResolutionDemoTest {
 
     private AnnotationConfigApplicationContext applicationContext;
@@ -31,7 +33,9 @@ class AnnotationDependencyInjectionResolutionDemoTest {
 
     @Test
     public void resolveDependenceTest() {
-
+        AnnotationDependencyInjectionResolutionDemo bean = applicationContext.getBean(AnnotationDependencyInjectionResolutionDemo.class);
+        log.info(bean.getUser().toString());
+        log.info(bean.getInjectUser().toString());
     }
 
     @AfterEach

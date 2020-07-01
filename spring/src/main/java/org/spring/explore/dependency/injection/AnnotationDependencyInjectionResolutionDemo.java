@@ -1,12 +1,20 @@
 package org.spring.explore.dependency.injection;
 
 import lombok.Data;
+import org.spring.explore.common.annotation.InjectedUser;
 import org.spring.explore.common.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
+import org.springframework.context.annotation.Bean;
 
-import java.util.Collection;
+import java.lang.annotation.Annotation;
+import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Set;
+
+import static org.springframework.context.annotation.AnnotationConfigUtils.AUTOWIRED_ANNOTATION_PROCESSOR_BEAN_NAME;
 
 /**
  * 65. 注解驱动的依赖注入处理过程
@@ -31,6 +39,22 @@ public class AnnotationDependencyInjectionResolutionDemo {
     private User user;
 
     @Autowired
-    private Map<String,User> userMap;
+    private Map<String, User> userMap;
+
+    @InjectedUser
+    private User injectUser;
+
+    @Bean(name = AUTOWIRED_ANNOTATION_PROCESSOR_BEAN_NAME)
+    public static AutowiredAnnotationBeanPostProcessor beanPostProcessor() {
+        AutowiredAnnotationBeanPostProcessor beanPostProcessor = new AutowiredAnnotationBeanPostProcessor();
+
+        Set<Class<? extends Annotation>> injectAnnotation = new LinkedHashSet<>();
+        injectAnnotation.add(Autowired.class);
+        injectAnnotation.add(Value.class);
+        injectAnnotation.add(InjectedUser.class);
+        beanPostProcessor.setAutowiredAnnotationTypes(injectAnnotation);
+
+        return beanPostProcessor;
+    }
 
 }
