@@ -1,33 +1,32 @@
 package com.exercise.demo.common.util;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.MDC;
 
 import java.util.UUID;
 
 public class TraceIdUtil {
 
-    public final static String TRACE_ID = "trace-id";
+    /**
+     * header 中 trace id 的 key
+     */
+    public final static String TRACE_ID_HEADER = "Trace-Id";
 
+    /**
+     * MDC 中 trace id 的 key
+     */
+    public final static String TRACE_ID = "traceId";
+
+    /**
+     * 默认 trace id 值
+     */
     public final static String DEFAULT_TRACE_ID = "0";
 
-    public static void setTraceId(String traceId) {
-        traceId = StringUtils.isBlank(traceId) ? DEFAULT_TRACE_ID : traceId;
-        MDC.put(TRACE_ID, traceId);
-    }
-
-    public static String getTraceId() {
-
-        String traceId = MDC.get(TRACE_ID);
-        return StringUtils.isBlank(traceId) ? DEFAULT_TRACE_ID : traceId;
-    }
-
-    public static boolean defaultTraceId(String traceId) {
-        return DEFAULT_TRACE_ID.equals(traceId);
+    public static void setTraceIdHeader(String traceIdHeader) {
+        MDC.put(TRACE_ID, traceIdHeader);
     }
 
     public static String generateTraceId() {
-        return UUID.randomUUID().toString();
+        return UUID.randomUUID().toString().replaceAll("-", "");
     }
 
 }

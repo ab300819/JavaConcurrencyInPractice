@@ -13,6 +13,9 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
+/**
+ * @author mason
+ */
 @WebFilter(urlPatterns = "/*", filterName = "traceIdFilter")
 @Order(1)
 public class TraceIdFilter extends GenericFilterBean {
@@ -24,12 +27,12 @@ public class TraceIdFilter extends GenericFilterBean {
     }
 
     private void initTraceId(HttpServletRequest request) {
-        String traceId = request.getParameter(TraceIdUtil.TRACE_ID);
+        String traceId = request.getHeader(TraceIdUtil.TRACE_ID_HEADER);
 
-        if (StringUtils.isBlank(traceId) || TraceIdUtil.defaultTraceId(traceId)) {
+        if (StringUtils.isBlank(traceId)) {
             traceId = TraceIdUtil.generateTraceId();
         }
 
-        TraceIdUtil.setTraceId(traceId);
+        TraceIdUtil.setTraceIdHeader(traceId);
     }
 }

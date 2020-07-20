@@ -11,6 +11,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * Hello world!
+ *
+ * @author mason
  */
 @ServletComponentScan(basePackages = "com.exercise.demo.common.filter")
 @MapperScan(basePackages = "com.exercise.demo.mybatis")
@@ -25,9 +27,7 @@ public class Application {
 
     @Bean
     public CommandLineRunner commandLineRunner() {
-        return args -> {
-            log.info("application started");
-        };
+        return args -> log.info("application started");
     }
 
 }
