@@ -17,11 +17,8 @@ public class AppController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private User user;
-
     @GetMapping("/event")
-    public User userRegisterEvent() {
+    public User userRegisterEvent(User user) {
         userService.register("mason");
         return user;
     }
