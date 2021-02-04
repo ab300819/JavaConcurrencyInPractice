@@ -1,6 +1,8 @@
 package com.common.util;
 
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,6 +12,7 @@ import java.util.Map;
  *
  * @author mason
  */
+@Slf4j
 public class BeanUtil {
 
     public static Map<String, String> getAllFields(Object object) {
@@ -32,7 +35,7 @@ public class BeanUtil {
                     fieldMap.put(field.getName(), value.toString());
                 }
             } catch (IllegalAccessException e) {
-                continue;
+                log.info("occur IllegalAccessException");
             }
         }
         getFields(fieldMap, clazz.getSuperclass(), object);
