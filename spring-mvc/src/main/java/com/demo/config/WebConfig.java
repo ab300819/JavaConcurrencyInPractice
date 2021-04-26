@@ -7,6 +7,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * mvc 配置
+ *
+ * @author mason
  */
 @Configuration
 @EnableWebMvc
