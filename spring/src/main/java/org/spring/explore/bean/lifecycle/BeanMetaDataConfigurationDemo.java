@@ -1,13 +1,18 @@
 package org.spring.explore.bean.lifecycle;
 
-import lombok.extern.slf4j.Slf4j;
 import org.spring.explore.common.domain.User;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.support.PropertiesBeanDefinitionReader;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.EncodedResource;
+import lombok.extern.slf4j.Slf4j;
 
+/**
+ * <p>通过属性文件配置 bean<p/>
+ *
+ * @author mason
+ */
 @Slf4j
 public class BeanMetaDataConfigurationDemo {
 
