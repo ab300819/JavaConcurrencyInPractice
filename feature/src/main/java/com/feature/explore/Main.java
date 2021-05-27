@@ -11,6 +11,9 @@ public class Main {
         List<Integer> numList = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
         System.out.println(numList.toString());
 
+        var hello="Hello World!";
+        System.out.println(hello);
+
     }
 
 }

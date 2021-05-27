@@ -12,6 +12,4 @@
     <groupId>org.feature.explore</groupId>
     <artifactId>feature</artifactId>
     <version>1.0</version>
-    <dependencies>
-    </dependencies>
 </project>
