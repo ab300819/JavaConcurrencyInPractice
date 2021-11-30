@@ -1,4 +1,4 @@
-package org.explorer.demo;
+package org.explore.demo;
 
 import java.nio.charset.StandardCharsets;
 
