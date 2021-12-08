@@ -1,6 +1,7 @@
 package org.explore.demo;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Date;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,6 +54,10 @@ public class NettyRedisServe {
                             @Override
                             protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
                                 log.info(msg.toString(StandardCharsets.UTF_8));
+
+                                ByteBuf byteBuf = ctx.alloc().buffer();
+                                byteBuf.writeBytes(("Hello World!" + new Date()).getBytes(StandardCharsets.UTF_8));
+                                ctx.writeAndFlush(byteBuf);
                             }
                         });
                     }

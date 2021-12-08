@@ -14,12 +14,15 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.util.Version;
 
 public class NettyRedisClient {
 
     private final static Logger log = LoggerFactory.getLogger(NettyRedisClient.class);
 
     public static void main(String[] args) {
+        log.info("netty version: {}", Version.identify().entrySet());
+
         EventLoopGroup group = new NioEventLoopGroup();
         Bootstrap bootstrap = new Bootstrap();
 
@@ -52,7 +55,7 @@ public class NettyRedisClient {
 
         @Override
         protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
-
+            log.info(msg.toString(StandardCharsets.UTF_8));
         }
     }
 
