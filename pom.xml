@@ -16,16 +16,28 @@
     <version>1.0</version>
 
     <modules>
+        <!-- 公共工具 -->
         <module>common</module>
-        <module>concurrency</module>
-        <module>netty</module>
-        <module>servlet</module>
-        <module>container</module>
-        <module>spring-mvc</module>
-        <module>dubbo</module>
-        <module>spring</module>
+        <!-- 探索新特性 -->
+        <module>feature</module>
+        <!-- 探索算法 -->
         <module>algorithm</module>
+        <!-- 探索并发 -->
+        <module>concurrency</module>
+        <!-- 探索 IO -->
+        <module>netty</module>
+        <!-- 探索 servlet -->
+        <module>servlet</module>
+        <!-- 探索 web 容器 -->
+        <module>container</module>
+        <!-- 探索 spring -->
+        <module>spring</module>
+        <!-- 探索 MVC -->
+        <module>spring-mvc</module>
+        <!-- 探索 spring boot -->
         <module>spring-boot</module>
+        <!-- 探索 dubbo -->
+        <module>dubbo</module>
     </modules>
 
     <properties>
@@ -111,11 +123,6 @@
                 <version>1.2.3</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.tomcat.embed</groupId>
-                <artifactId>tomcat-embed-core</artifactId>
-                <version>9.0.41</version>
-            </dependency>
-            <dependency>
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-server</artifactId>
                 <version>9.4.38.v20210224</version>
@@ -126,24 +133,9 @@
                 <version>9.4.25.v20191220</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.dubbo</groupId>
-                <artifactId>dubbo</artifactId>
-                <version>2.7.5</version>
-            </dependency>
-            <dependency>
                 <groupId>org.apache.tomcat.embed</groupId>
                 <artifactId>tomcat-embed-core</artifactId>
                 <version>9.0.41</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-server</artifactId>
-                <version>9.4.38.v20210224</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-servlet</artifactId>
-                <version>9.4.25.v20191220</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.dubbo</groupId>
