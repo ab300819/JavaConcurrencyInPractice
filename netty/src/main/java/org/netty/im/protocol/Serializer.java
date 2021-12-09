@@ -4,7 +4,7 @@ public interface Serializer {
 
     Serializer DEFAULT = new JsonSerializer();
 
-    SerializerAlgorithm getSerializerAlgorithm();
+    byte getSerializerAlgorithm();
 
     byte[] serialize(Object object);
 

@@ -1,7 +1,7 @@
 package org.netty.im.protocol;
 
-public enum SerializerAlgorithm {
+public interface SerializerAlgorithm {
 
-    JSON
+    byte JSON = 1;
 
 }

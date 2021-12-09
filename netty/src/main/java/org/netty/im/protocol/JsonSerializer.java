@@ -16,7 +16,7 @@ import static org.netty.im.protocol.SerializerAlgorithm.JSON;
 public class JsonSerializer implements Serializer {
 
     @Override
-    public SerializerAlgorithm getSerializerAlgorithm() {
+    public byte getSerializerAlgorithm() {
         return JSON;
     }
 
