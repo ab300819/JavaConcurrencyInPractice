@@ -1,12 +1,12 @@
 package com.netty.demo.http.json.codec;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.common.util.JsonUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageDecoder;
 import io.netty.util.CharsetUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public abstract class AbstractHttpJsonDecoder<T> extends MessageToMessageDecoder<T> {
 
@@ -30,6 +30,6 @@ public abstract class AbstractHttpJsonDecoder<T> extends MessageToMessageDecoder
         if (isPrint) {
             log.debug("The body is : {}", content);
         }
-        return JsonUtil.fromJson(content, clazz);
+        return JsonUtil.toObject(content, clazz);
     }
 }

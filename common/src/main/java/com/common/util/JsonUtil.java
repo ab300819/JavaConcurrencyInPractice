@@ -1,74 +1,78 @@
 package com.common.util;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.commons.lang3.StringUtils;
-
-import java.io.IOException;
 
 /**
- * JSON 工具包
+ * JSON 工具类
  *
  * @author mason
  */
-public final class JsonUtil {
+public class JsonUtil {
 
-    private static final String EMPTY_STR = "";
+    private static final Logger log = LoggerFactory.getLogger(JsonUtil.class);
+
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     static {
+        OBJECT_MAPPER.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         OBJECT_MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        OBJECT_MAPPER.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
-        OBJECT_MAPPER.configure(JsonParser.Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true);
+        // 日期反序列化配置
+        OBJECT_MAPPER.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
     }
 
-    private JsonUtil() throws IllegalAccessException {
-        throw new IllegalAccessException();
-    }
-
-    /**
-     * convert JSON string to object
-     *
-     * @param json  json string
-     * @param clazz object class
-     * @param <T>   object
-     * @return object
-     */
-    public static <T> T fromJson(String json, Class<T> clazz) {
-        if (clazz != null && StringUtils.isNotBlank(json)) {
+    public static <T> T toObject(String json, TypeReference<T> reference) {
+        if (reference != null && StringUtils.isNotEmpty(json)) {
             try {
-                return OBJECT_MAPPER.readValue(json, clazz);
+                return OBJECT_MAPPER.readValue(json, reference);
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error("fail to convert to json. {}", e.getMessage());
             }
         }
         return null;
     }
 
-    /**
-     * convert JSON object to string
-     *
-     * @param object JSON object
-     * @return string
-     */
-    public static String toJson(Object object) {
-        if (object == null) {
-            return EMPTY_STR;
+    public static <T> T toObject(String json, Class<T> reference) {
+        if (reference != null && StringUtils.isNotEmpty(json)) {
+            try {
+                return OBJECT_MAPPER.readValue(json, reference);
+            } catch (IOException e) {
+                log.error("fail to convert to json. {}", e.getMessage());
+            }
+        }
+        return null;
+    }
+
+    public static String toString(Object obj) {
+        if (obj != null) {
+            if (obj instanceof String) {
+                return (String) obj;
+            }
+            try {
+                return OBJECT_MAPPER.writeValueAsString(obj);
+            } catch (IOException e) {
+                log.error("fail to  convert to json string. {}", e.getMessage());
+            }
+        }
+        return StringUtils.EMPTY;
+    }
+
+    public static byte[] toBytes(Object obj) {
+        String jsonStr = toString(obj);
+        if (StringUtils.isBlank(jsonStr)) {
+            return new byte[0];
         }
 
-        if (object instanceof String) {
-            return (String) object;
-        }
-
-        try {
-            return OBJECT_MAPPER.writeValueAsString(object);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return EMPTY_STR;
+        return jsonStr.getBytes(StandardCharsets.UTF_8);
     }
 
 }

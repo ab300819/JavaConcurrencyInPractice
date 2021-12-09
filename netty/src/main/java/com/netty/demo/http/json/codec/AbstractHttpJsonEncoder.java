@@ -10,7 +10,7 @@ import io.netty.util.CharsetUtil;
 public abstract class AbstractHttpJsonEncoder<T> extends MessageToMessageEncoder<T> {
 
     protected ByteBuf encode0(ChannelHandlerContext ctx, Object body) {
-        String jsonStr = JsonUtil.toJson(body);
+        String jsonStr = JsonUtil.toString(body);
         return Unpooled.copiedBuffer(jsonStr, CharsetUtil.UTF_8);
     }
 
