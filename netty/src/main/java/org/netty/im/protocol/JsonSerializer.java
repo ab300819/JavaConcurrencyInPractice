@@ -1,4 +1,4 @@
-package org.netty.im.data;
+package org.netty.im.protocol;
 
 import java.nio.charset.StandardCharsets;
 
@@ -6,7 +6,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import com.common.util.JsonUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
 
-import static org.netty.im.data.SerializerAlgorithm.JSON;
+import static org.netty.im.protocol.SerializerAlgorithm.JSON;
 
 /**
  * <p>Json 序列化工具</p>

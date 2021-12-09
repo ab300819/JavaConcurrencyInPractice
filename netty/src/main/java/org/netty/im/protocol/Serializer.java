@@ -1,6 +1,8 @@
-package org.netty.im.data;
+package org.netty.im.protocol;
 
 public interface Serializer {
+
+    Serializer DEFAULT = new JsonSerializer();
 
     SerializerAlgorithm getSerializerAlgorithm();
 

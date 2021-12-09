@@ -1,4 +1,4 @@
-package org.netty.im.data;
+package org.netty.im.protocol;
 
 public class LoginRequestPacket extends Packet {
 
@@ -9,7 +9,7 @@ public class LoginRequestPacket extends Packet {
     private String password;
 
     @Override
-    public Command getCommand() {
+    public byte getCommand() {
         return Command.LOGIN_REQUEST;
     }
 }
