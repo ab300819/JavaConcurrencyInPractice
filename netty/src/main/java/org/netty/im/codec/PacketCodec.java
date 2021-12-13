@@ -19,9 +19,9 @@ import io.netty.buffer.ByteBufAllocator;
  */
 public class PacketCodec {
 
-    private final static int MAGIC_NUMBER = 0x12345678;
-    private final static Map<Byte, Class<? extends Packet>> packetMap;
-    private final static Map<Byte, Serializer> serializerMap;
+    private static final int MAGIC_NUMBER = 0x12345678;
+    private static final Map<Byte, Class<? extends Packet>> packetMap;
+    private static final Map<Byte, Serializer> serializerMap;
 
     static {
         packetMap = new HashMap<>();
@@ -32,8 +32,8 @@ public class PacketCodec {
         serializerMap.put(serializer.getSerializerAlgorithm(), serializer);
     }
 
-    public ByteBuf encode(Packet packet) {
-        ByteBuf byteBuf = ByteBufAllocator.DEFAULT.buffer();
+    public ByteBuf encode(ByteBufAllocator byteBufAllocator,Packet packet) {
+        ByteBuf byteBuf = byteBufAllocator.buffer();
 
         byte[] bytes = Serializer.DEFAULT.serialize(packet);
 

@@ -2,6 +2,7 @@ package org.netty.im;
 
 import org.netty.im.codec.PacketCodec;
 import org.netty.im.protocol.LoginRequestPacket;
+import org.netty.im.protocol.LoginResponsePacket;
 import org.netty.im.protocol.Packet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +32,7 @@ public class ImServe {
                     .childHandler(new ChannelInitializer<NioSocketChannel>() {
                         @Override
                         protected void initChannel(NioSocketChannel ch) throws Exception {
-                            ch.pipeline().addLast();
+                            ch.pipeline().addLast(new ServeHandler());
                         }
                     });
             ChannelFuture future = serverBootstrap.bind().sync();
@@ -49,16 +50,24 @@ public class ImServe {
 
         @Override
         protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
+            log.info("");
             PacketCodec packetCodec = new PacketCodec();
 
             Packet packet = packetCodec.decode(msg);
             if (packet instanceof LoginRequestPacket) {
                 LoginRequestPacket requestPacket = (LoginRequestPacket) packet;
-                if (valid(requestPacket)) {
-                    requestPacket.
-                } else {
 
+                LoginResponsePacket responsePacket = new LoginResponsePacket();
+                if (valid(requestPacket)) {
+                    responsePacket.setSuccess(true);
+                    log.info("login success");
+                } else {
+                    responsePacket.setReason("fail to login");
+                    responsePacket.setSuccess(false);
+                    log.info("login failed");
                 }
+                ByteBuf responseByteBuf = packetCodec.encode(ctx.alloc(), responsePacket);
+                ctx.writeAndFlush(responseByteBuf);
             }
 
         }
