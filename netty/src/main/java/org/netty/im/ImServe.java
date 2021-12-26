@@ -35,7 +35,7 @@ public class ImServe {
                             ch.pipeline().addLast(new ServeHandler());
                         }
                     });
-            ChannelFuture future = serverBootstrap.bind().sync();
+            ChannelFuture future = serverBootstrap.bind(8090).sync();
             future.channel().closeFuture().sync();
         } catch (InterruptedException e) {
             boss.shutdownGracefully();

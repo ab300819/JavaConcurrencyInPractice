@@ -1,6 +1,15 @@
 package org.netty.im;
 
+import java.util.Date;
+
+import org.netty.im.codec.PacketCodec;
+import org.netty.im.protocol.LoginResponsePacket;
+import org.netty.im.protocol.Packet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import io.netty.bootstrap.Bootstrap;
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.EventLoopGroup;
@@ -11,9 +20,11 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 
 public class ImClient {
 
-    public static void main(String[] args) {
-        Bootstrap bootstrap=new Bootstrap();
-        EventLoopGroup work=new NioEventLoopGroup();
+    private static final Logger log = LoggerFactory.getLogger(ImClient.class);
+
+    public static void main(String[] args) throws InterruptedException {
+        Bootstrap bootstrap = new Bootstrap();
+        EventLoopGroup work = new NioEventLoopGroup();
         bootstrap.group(work)
                 .channel(NioSocketChannel.class)
                 .handler(new ChannelInitializer<SocketChannel>() {
@@ -22,15 +33,27 @@ public class ImClient {
                         ch.pipeline().addLast(new ClientHandler());
                     }
                 });
-
+        ChannelFuture future = bootstrap.connect("127.0.0.1", 8090).sync();
+        future.channel().closeFuture().sync();
     }
 
-    public static class ClientHandler extends SimpleChannelInboundHandler {
-
+    public static class ClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
         @Override
-        protected void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
+
+        protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
+            PacketCodec codec = new PacketCodec();
+            Packet packet = codec.decode(msg);
+            if (packet instanceof LoginResponsePacket) {
+                LoginResponsePacket loginResponsePacket = (LoginResponsePacket) packet;
+                if (loginResponsePacket.isSuccess()) {
+                    log.info("{}: login success", new Date());
+                } else {
+                    log.info("{}: login failed, the reason is {}", new Date(), loginResponsePacket.getReason());
+                }
+            }
 
         }
     }
+
 
 }
