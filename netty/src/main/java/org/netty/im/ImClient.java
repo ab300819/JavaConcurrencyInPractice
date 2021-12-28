@@ -1,8 +1,10 @@
 package org.netty.im;
 
 import java.util.Date;
+import java.util.UUID;
 
 import org.netty.im.codec.PacketCodec;
+import org.netty.im.protocol.LoginRequestPacket;
 import org.netty.im.protocol.LoginResponsePacket;
 import org.netty.im.protocol.Packet;
 import org.slf4j.Logger;
@@ -25,21 +27,19 @@ public class ImClient {
     public static void main(String[] args) throws InterruptedException {
         Bootstrap bootstrap = new Bootstrap();
         EventLoopGroup work = new NioEventLoopGroup();
-        bootstrap.group(work)
-                .channel(NioSocketChannel.class)
-                .handler(new ChannelInitializer<SocketChannel>() {
-                    @Override
-                    protected void initChannel(SocketChannel ch) throws Exception {
-                        ch.pipeline().addLast(new ClientHandler());
-                    }
-                });
+        bootstrap.group(work).channel(NioSocketChannel.class).handler(new ChannelInitializer<SocketChannel>() {
+            @Override
+            protected void initChannel(SocketChannel ch) throws Exception {
+                ch.pipeline().addLast(new ClientHandler());
+            }
+        });
         ChannelFuture future = bootstrap.connect("127.0.0.1", 8090).sync();
         future.channel().closeFuture().sync();
     }
 
     public static class ClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
-        @Override
 
+        @Override
         protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
             PacketCodec codec = new PacketCodec();
             Packet packet = codec.decode(msg);
@@ -51,9 +51,22 @@ public class ImClient {
                     log.info("{}: login failed, the reason is {}", new Date(), loginResponsePacket.getReason());
                 }
             }
+        }
+
+        @Override
+        public void channelActive(ChannelHandlerContext ctx) throws Exception {
+            log.info("{}: start login", new Date());
+
+            LoginRequestPacket loginRequestPacket = new LoginRequestPacket();
+            loginRequestPacket.setUserId(UUID.randomUUID().toString());
+            loginRequestPacket.setUserName("mason");
+            loginRequestPacket.setPassword("123456");
+
+            PacketCodec packetCodec = new PacketCodec();
+            ByteBuf byteBuf = packetCodec.encode(ctx.alloc(), loginRequestPacket);
+
+            ctx.writeAndFlush(byteBuf);
 
         }
     }
-
-
 }

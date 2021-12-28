@@ -4,7 +4,6 @@ import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.lang3.ArrayUtils;
 import com.common.util.JsonUtil;
-import com.fasterxml.jackson.core.type.TypeReference;
 
 import static org.netty.im.protocol.SerializerAlgorithm.JSON;
 
@@ -32,7 +31,6 @@ public class JsonSerializer implements Serializer {
         }
 
         String jsonStr = new String(bytes, StandardCharsets.UTF_8);
-        return JsonUtil.toObject(jsonStr, new TypeReference<T>() {
-        });
+        return JsonUtil.toObject(jsonStr, clazz);
     }
 }
