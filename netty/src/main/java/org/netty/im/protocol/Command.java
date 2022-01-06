@@ -8,10 +8,16 @@ package org.netty.im.protocol;
 public interface Command {
 
     /**
-     * 登录
+     * 登录请求
      */
     byte LOGIN_REQUEST = 1;
 
+    /**
+     * 登录返回
+     */
     byte LOGIN_RESPONSE = 2;
+
+
+    byte message_request=3;
 
 }
