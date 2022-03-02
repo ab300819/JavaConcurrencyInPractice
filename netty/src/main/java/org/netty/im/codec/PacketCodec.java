@@ -7,6 +7,8 @@ import org.netty.im.protocol.Command;
 import org.netty.im.protocol.JsonSerializer;
 import org.netty.im.protocol.LoginRequestPacket;
 import org.netty.im.protocol.LoginResponsePacket;
+import org.netty.im.protocol.MessageRequestPacket;
+import org.netty.im.protocol.MessageResponsePacket;
 import org.netty.im.protocol.Packet;
 import org.netty.im.protocol.Serializer;
 import io.netty.buffer.ByteBuf;
@@ -28,6 +30,8 @@ public class PacketCodec {
         packetMap = new HashMap<>();
         packetMap.put(Command.LOGIN_REQUEST, LoginRequestPacket.class);
         packetMap.put(Command.LOGIN_RESPONSE, LoginResponsePacket.class);
+        packetMap.put(Command.MESSAGE_REQUEST, MessageRequestPacket.class);
+        packetMap.put(Command.MESSAGE_RESPONSE, MessageResponsePacket.class);
 
         serializerMap = new HashMap<>();
         Serializer serializer = new JsonSerializer();

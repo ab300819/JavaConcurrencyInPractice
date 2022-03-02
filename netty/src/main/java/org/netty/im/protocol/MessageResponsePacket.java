@@ -1,12 +1,11 @@
 package org.netty.im.protocol;
 
 /**
- * <p>请求信息体</p>
+ * <p>响应信息体</p>
  *
  * @author mason
- * @date 2022/1/6 20:56
  */
-public class MessageRequestPacket extends Packet {
+public class MessageResponsePacket extends Packet {
 
     private String message;
 
@@ -20,6 +19,6 @@ public class MessageRequestPacket extends Packet {
 
     @Override
     public byte getCommand() {
-        return Command.MESSAGE_REQUEST;
+        return Command.MESSAGE_RESPONSE;
     }
 }

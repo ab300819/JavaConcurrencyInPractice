@@ -1,8 +1,12 @@
 package org.netty.im;
 
+import java.util.Date;
+
 import org.netty.im.codec.PacketCodec;
 import org.netty.im.protocol.LoginRequestPacket;
 import org.netty.im.protocol.LoginResponsePacket;
+import org.netty.im.protocol.MessageRequestPacket;
+import org.netty.im.protocol.MessageResponsePacket;
 import org.netty.im.protocol.Packet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,8 +56,8 @@ public class ImServe {
         protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
             log.info("");
             PacketCodec packetCodec = new PacketCodec();
-
             Packet packet = packetCodec.decode(msg);
+
             if (packet instanceof LoginRequestPacket) {
                 LoginRequestPacket requestPacket = (LoginRequestPacket) packet;
 
@@ -68,6 +72,15 @@ public class ImServe {
                 }
                 ByteBuf responseByteBuf = packetCodec.encode(ctx.alloc(), responsePacket);
                 ctx.writeAndFlush(responseByteBuf);
+            } else if (packet instanceof MessageRequestPacket) {
+
+                MessageRequestPacket messageRequestPacket = (MessageRequestPacket) packet;
+                log.info(new Date() + ": 收到客户端消息" + messageRequestPacket.getMessage());
+
+                MessageResponsePacket messageResponsePacket = new MessageResponsePacket();
+                messageResponsePacket.setMessage("服务端回复：【" + messageRequestPacket.getMessage() + "】");
+                ByteBuf responseByteBuf = packetCodec.encode(ctx.alloc(), messageResponsePacket);
+                ctx.channel().writeAndFlush(responseByteBuf);
             }
 
         }
