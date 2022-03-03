@@ -14,7 +14,10 @@ import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOutboundHandlerAdapter;
+import io.netty.channel.ChannelPromise;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
@@ -36,7 +39,14 @@ public class ImServe {
                     .childHandler(new ChannelInitializer<NioSocketChannel>() {
                         @Override
                         protected void initChannel(NioSocketChannel ch) throws Exception {
+                            ch.pipeline().addLast(new InBoundHandlerA());
+                            ch.pipeline().addLast(new InBoundHandlerB());
+                            ch.pipeline().addLast(new InBoundHandlerC());
                             ch.pipeline().addLast(new ServeHandler());
+
+                            ch.pipeline().addLast(new OutBoundHandlerC());
+                            ch.pipeline().addLast(new OutBoundHandlerB());
+                            ch.pipeline().addLast(new OutBoundHandlerA());
                         }
                     });
             ChannelFuture future = serverBootstrap.bind(8090).sync();
@@ -87,6 +97,54 @@ public class ImServe {
 
         private boolean valid(LoginRequestPacket packet) {
             return true;
+        }
+    }
+
+    public static class InBoundHandlerA extends ChannelInboundHandlerAdapter {
+        @Override
+        public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+            log.info("==> A");
+            super.channelRead(ctx, msg);
+        }
+    }
+
+    public static class InBoundHandlerB extends ChannelInboundHandlerAdapter {
+        @Override
+        public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+            log.info("==> B");
+            super.channelRead(ctx, msg);
+        }
+    }
+
+    public static class InBoundHandlerC extends ChannelInboundHandlerAdapter {
+        @Override
+        public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+            log.info("==> C");
+            super.channelRead(ctx, msg);
+        }
+    }
+
+    public static class OutBoundHandlerA extends ChannelOutboundHandlerAdapter {
+        @Override
+        public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
+            log.info("<== A");
+            super.write(ctx, msg, promise);
+        }
+    }
+
+    public static class OutBoundHandlerB extends ChannelOutboundHandlerAdapter {
+        @Override
+        public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
+            log.info("<== B");
+            super.write(ctx, msg, promise);
+        }
+    }
+
+    public static class OutBoundHandlerC extends ChannelOutboundHandlerAdapter {
+        @Override
+        public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
+            log.info("<== C");
+            super.write(ctx, msg, promise);
         }
     }
 
