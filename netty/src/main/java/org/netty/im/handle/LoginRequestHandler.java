@@ -2,6 +2,7 @@ package org.netty.im.handle;
 
 import org.netty.im.protocol.LoginRequestPacket;
 import org.netty.im.protocol.LoginResponsePacket;
+import org.netty.im.util.LoginUtil;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +20,7 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
         LoginResponsePacket responsePacket = new LoginResponsePacket();
         if (valid(msg)) {
             responsePacket.setSuccess(true);
+            LoginUtil.markLogin(ctx.channel());
             log.info("login success");
         } else {
             responsePacket.setReason("fail to login");
