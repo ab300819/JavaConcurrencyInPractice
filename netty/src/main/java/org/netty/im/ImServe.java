@@ -3,6 +3,7 @@ package org.netty.im;
 import java.util.Date;
 
 import org.netty.im.codec.PacketCodec;
+import org.netty.im.codec.PacketDecoder;
 import org.netty.im.protocol.LoginRequestPacket;
 import org.netty.im.protocol.LoginResponsePacket;
 import org.netty.im.protocol.MessageRequestPacket;
@@ -42,6 +43,7 @@ public class ImServe {
                             ch.pipeline().addLast(new InBoundHandlerA());
                             ch.pipeline().addLast(new InBoundHandlerB());
                             ch.pipeline().addLast(new InBoundHandlerC());
+                            ch.pipeline().addLast(new PacketDecoder());
                             ch.pipeline().addLast(new ServeHandler());
 
                             ch.pipeline().addLast(new OutBoundHandlerC());
@@ -71,17 +73,7 @@ public class ImServe {
             if (packet instanceof LoginRequestPacket) {
                 LoginRequestPacket requestPacket = (LoginRequestPacket) packet;
 
-                LoginResponsePacket responsePacket = new LoginResponsePacket();
-                if (valid(requestPacket)) {
-                    responsePacket.setSuccess(true);
-                    log.info("login success");
-                } else {
-                    responsePacket.setReason("fail to login");
-                    responsePacket.setSuccess(false);
-                    log.info("login failed");
-                }
-                ByteBuf responseByteBuf = packetCodec.encode(ctx.alloc(), responsePacket);
-                ctx.writeAndFlush(responseByteBuf);
+
             } else if (packet instanceof MessageRequestPacket) {
 
                 MessageRequestPacket messageRequestPacket = (MessageRequestPacket) packet;
@@ -93,10 +85,6 @@ public class ImServe {
                 ctx.channel().writeAndFlush(responseByteBuf);
             }
 
-        }
-
-        private boolean valid(LoginRequestPacket packet) {
-            return true;
         }
     }
 
