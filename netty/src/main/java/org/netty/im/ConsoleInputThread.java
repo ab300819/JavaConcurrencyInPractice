@@ -2,10 +2,8 @@ package org.netty.im;
 
 import java.util.Scanner;
 
-import org.netty.im.codec.PacketCodec;
 import org.netty.im.protocol.MessageRequestPacket;
 import org.netty.im.util.LoginUtil;
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
 
@@ -28,10 +26,7 @@ public class ConsoleInputThread implements Runnable {
 
                 MessageRequestPacket packet = new MessageRequestPacket();
                 packet.setMessage(line);
-
-                PacketCodec packetCodec = new PacketCodec();
-                ByteBuf byteBuf = packetCodec.encode(channel.alloc(), packet);
-                channel.writeAndFlush(byteBuf);
+                channel.writeAndFlush(packet);
             }
         }
     }

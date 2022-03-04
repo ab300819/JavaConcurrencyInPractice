@@ -1,25 +1,18 @@
 package org.netty.im;
 
-import java.util.Date;
-
-import org.netty.im.codec.PacketCodec;
 import org.netty.im.codec.PacketDecoder;
-import org.netty.im.protocol.LoginRequestPacket;
-import org.netty.im.protocol.LoginResponsePacket;
-import org.netty.im.protocol.MessageRequestPacket;
-import org.netty.im.protocol.MessageResponsePacket;
-import org.netty.im.protocol.Packet;
+import org.netty.im.codec.PacketEncoder;
+import org.netty.im.handle.LoginRequestHandler;
+import org.netty.im.handle.MessageRequestHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOutboundHandlerAdapter;
 import io.netty.channel.ChannelPromise;
-import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
@@ -44,8 +37,10 @@ public class ImServe {
                             ch.pipeline().addLast(new InBoundHandlerB());
                             ch.pipeline().addLast(new InBoundHandlerC());
                             ch.pipeline().addLast(new PacketDecoder());
-                            ch.pipeline().addLast(new ServeHandler());
+                            ch.pipeline().addLast(new LoginRequestHandler());
+                            ch.pipeline().addLast(new MessageRequestHandler());
 
+                            ch.pipeline().addLast(new PacketEncoder());
                             ch.pipeline().addLast(new OutBoundHandlerC());
                             ch.pipeline().addLast(new OutBoundHandlerB());
                             ch.pipeline().addLast(new OutBoundHandlerA());
@@ -59,32 +54,6 @@ public class ImServe {
         } finally {
             boss.shutdownGracefully();
             work.shutdownGracefully();
-        }
-    }
-
-    public static class ServeHandler extends SimpleChannelInboundHandler<ByteBuf> {
-
-        @Override
-        protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
-            log.info("");
-            PacketCodec packetCodec = new PacketCodec();
-            Packet packet = packetCodec.decode(msg);
-
-            if (packet instanceof LoginRequestPacket) {
-                LoginRequestPacket requestPacket = (LoginRequestPacket) packet;
-
-
-            } else if (packet instanceof MessageRequestPacket) {
-
-                MessageRequestPacket messageRequestPacket = (MessageRequestPacket) packet;
-                log.info(new Date() + ": 收到客户端消息" + messageRequestPacket.getMessage());
-
-                MessageResponsePacket messageResponsePacket = new MessageResponsePacket();
-                messageResponsePacket.setMessage("服务端回复：【" + messageRequestPacket.getMessage() + "】");
-                ByteBuf responseByteBuf = packetCodec.encode(ctx.alloc(), messageResponsePacket);
-                ctx.channel().writeAndFlush(responseByteBuf);
-            }
-
         }
     }
 

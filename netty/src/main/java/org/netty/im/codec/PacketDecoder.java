@@ -14,7 +14,7 @@ import io.netty.handler.codec.ByteToMessageDecoder;
 public class PacketDecoder extends ByteToMessageDecoder {
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
-        PacketCodec decoder = new PacketCodec();
-        out.add(decoder.decode(in));
+        PacketCodec codec = new PacketCodec();
+        out.add(codec.decode(in));
     }
 }

@@ -12,12 +12,11 @@ import org.netty.im.protocol.MessageResponsePacket;
 import org.netty.im.protocol.Packet;
 import org.netty.im.protocol.Serializer;
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufAllocator;
 
 /**
  * <p>数据包编解码</p>
  *
- * @author mengshen
+ * @author mason
  * @date 2021/12/9 20:30
  */
 public class PacketCodec {
@@ -38,8 +37,7 @@ public class PacketCodec {
         serializerMap.put(serializer.getSerializerAlgorithm(), serializer);
     }
 
-    public ByteBuf encode(ByteBufAllocator byteBufAllocator,Packet packet) {
-        ByteBuf byteBuf = byteBufAllocator.buffer();
+    public void encode(ByteBuf byteBuf, Packet packet) {
 
         byte[] bytes = Serializer.DEFAULT.serialize(packet);
 
@@ -49,8 +47,6 @@ public class PacketCodec {
         byteBuf.writeByte(packet.getCommand());
         byteBuf.writeInt(bytes.length);
         byteBuf.writeBytes(bytes);
-
-        return byteBuf;
     }
 
     public Packet decode(ByteBuf byteBuf) {

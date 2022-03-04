@@ -1,25 +1,18 @@
 package org.netty.im;
 
-import java.util.Date;
-import java.util.UUID;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-import org.netty.im.codec.PacketCodec;
-import org.netty.im.protocol.LoginRequestPacket;
-import org.netty.im.protocol.LoginResponsePacket;
-import org.netty.im.protocol.MessageResponsePacket;
-import org.netty.im.protocol.Packet;
-import org.netty.im.util.LoginUtil;
+import org.netty.im.codec.PacketDecoder;
+import org.netty.im.codec.PacketEncoder;
+import org.netty.im.handle.LoginResponseHandler;
+import org.netty.im.handle.MessageResponseHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.EventLoopGroup;
-import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
@@ -36,7 +29,11 @@ public class ImClient {
         bootstrap.group(work).channel(NioSocketChannel.class).handler(new ChannelInitializer<SocketChannel>() {
             @Override
             protected void initChannel(SocketChannel ch) throws Exception {
-                ch.pipeline().addLast(new ClientHandler());
+                ch.pipeline().addLast(new PacketDecoder());
+                ch.pipeline().addLast(new LoginResponseHandler());
+                ch.pipeline().addLast(new MessageResponseHandler());
+
+                ch.pipeline().addLast(new PacketEncoder());
             }
         });
         ChannelFuture channelFuture = bootstrap.connect("127.0.0.1", 8090).sync()
@@ -48,40 +45,4 @@ public class ImClient {
         channelFuture.channel().closeFuture().sync();
     }
 
-    public static class ClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
-
-        @Override
-        protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
-            PacketCodec codec = new PacketCodec();
-            Packet packet = codec.decode(msg);
-            if (packet instanceof LoginResponsePacket) {
-                LoginResponsePacket loginResponsePacket = (LoginResponsePacket) packet;
-                if (loginResponsePacket.isSuccess()) {
-                    LoginUtil.markLogin(ctx.channel());
-                    log.info("{}: login success", new Date());
-                } else {
-                    log.info("{}: login failed, the reason is {}", new Date(), loginResponsePacket.getReason());
-                }
-            } else if (packet instanceof MessageResponsePacket) {
-                MessageResponsePacket messageResponsePacket = (MessageResponsePacket) packet;
-                log.info(new Date() + ": 收到服务端的信息: " + messageResponsePacket.getMessage());
-            }
-        }
-
-        @Override
-        public void channelActive(ChannelHandlerContext ctx) throws Exception {
-            log.info("{}: start login", new Date());
-
-            LoginRequestPacket loginRequestPacket = new LoginRequestPacket();
-            loginRequestPacket.setUserId(UUID.randomUUID().toString());
-            loginRequestPacket.setUserName("mason");
-            loginRequestPacket.setPassword("123456");
-
-            PacketCodec packetCodec = new PacketCodec();
-            ByteBuf byteBuf = packetCodec.encode(ctx.alloc(), loginRequestPacket);
-
-            ctx.writeAndFlush(byteBuf);
-
-        }
-    }
 }
