@@ -1,5 +1,6 @@
 package org.netty.im;
 
+import org.netty.im.codec.FrameCodec;
 import org.netty.im.codec.PacketDecoder;
 import org.netty.im.codec.PacketEncoder;
 import org.netty.im.handle.LoginRequestHandler;
@@ -33,6 +34,7 @@ public class ImServe {
                     .childHandler(new ChannelInitializer<NioSocketChannel>() {
                         @Override
                         protected void initChannel(NioSocketChannel ch) throws Exception {
+                            ch.pipeline().addLast(new FrameCodec());
                             ch.pipeline().addLast(new InBoundHandlerA());
                             ch.pipeline().addLast(new InBoundHandlerB());
                             ch.pipeline().addLast(new InBoundHandlerC());
