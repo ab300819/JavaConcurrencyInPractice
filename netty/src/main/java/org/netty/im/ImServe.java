@@ -3,6 +3,8 @@ package org.netty.im;
 import org.netty.im.codec.FrameCodec;
 import org.netty.im.codec.PacketDecoder;
 import org.netty.im.codec.PacketEncoder;
+import org.netty.im.handle.AuthHandler;
+import org.netty.im.handle.LifeCycleHandler;
 import org.netty.im.handle.LoginRequestHandler;
 import org.netty.im.handle.MessageRequestHandler;
 import org.slf4j.Logger;
@@ -38,6 +40,7 @@ public class ImServe {
                             ch.pipeline().addLast(new InBoundHandlerA());
                             ch.pipeline().addLast(new InBoundHandlerB());
                             ch.pipeline().addLast(new InBoundHandlerC());
+                            ch.pipeline().addLast(new LifeCycleHandler());
                             ch.pipeline().addLast(new PacketDecoder());
                             ch.pipeline().addLast(new LoginRequestHandler());
                             ch.pipeline().addLast(new MessageRequestHandler());
