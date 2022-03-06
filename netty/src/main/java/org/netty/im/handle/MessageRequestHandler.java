@@ -1,9 +1,10 @@
 package org.netty.im.handle;
 
-import java.util.Date;
-
 import org.netty.im.protocol.MessageRequestPacket;
 import org.netty.im.protocol.MessageResponsePacket;
+import org.netty.im.protocol.Session;
+import org.netty.im.util.SessionUtil;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
@@ -19,9 +20,20 @@ public class MessageRequestHandler extends SimpleChannelInboundHandler<MessageRe
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, MessageRequestPacket msg) throws Exception {
-        log.info(new Date() + ": 收到客户端消息" + msg.getMessage());
+        Session session = SessionUtil.getSession(ctx.channel());
+
         MessageResponsePacket messageResponsePacket = new MessageResponsePacket();
-        messageResponsePacket.setMessage("服务端回复：【" + msg.getMessage() + "】");
-        ctx.channel().writeAndFlush(messageResponsePacket);
+        messageResponsePacket.setFromUserId(session.getUserId());
+        messageResponsePacket.setFromUserName(session.getUserName());
+        messageResponsePacket.setMessage(msg.getMessage());
+
+        Channel toUserChannel = SessionUtil.getChannel(msg.getToUserId());
+
+        if (toUserChannel != null && SessionUtil.hasLogin(toUserChannel)) {
+            toUserChannel.writeAndFlush(messageResponsePacket);
+        } else {
+            log.warn("[{}] 不在线，发送失败！");
+        }
+
     }
 }
