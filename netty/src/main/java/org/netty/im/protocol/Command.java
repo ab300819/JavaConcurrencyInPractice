@@ -47,4 +47,24 @@ public interface Command {
      */
     byte CREATE_GROUP_RESPONSE = 8;
 
+    /**
+     * 退出请求
+     */
+    byte logout_request = 5;
+
+    /**
+     * 请求返回
+     */
+    byte logout_response = 6;
+
+    /**
+     * 创建群请求
+     */
+    byte create_group_request = 7;
+
+    /**
+     * 创建群返回
+     */
+    byte create_group_response = 8;
+
 }

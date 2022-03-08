@@ -4,7 +4,6 @@ import java.util.Scanner;
 
 import org.netty.im.command.ConsoleCommandManager;
 import org.netty.im.command.LoginConsoleCommand;
-import org.netty.im.protocol.MessageRequestPacket;
 import org.netty.im.util.SessionUtil;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
@@ -28,12 +27,10 @@ public class ConsoleInputThread implements Runnable {
     public void run() {
         while (!Thread.interrupted()) {
             if (!SessionUtil.hasLogin(channel)) {
-               loginConsoleCommand.exec(sc,channel);
+                loginConsoleCommand.exec(sc, channel);
             } else {
                 log.info("输入信息：");
-                String toUserId = sc.next();
-                String message = sc.next();
-                channel.writeAndFlush(new MessageRequestPacket(toUserId, message));
+                consoleCommandManager.exec(sc, channel);
             }
         }
     }

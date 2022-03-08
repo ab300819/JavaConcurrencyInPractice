@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-import org.netty.im.util.SessionUtil;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,10 +22,6 @@ public class ConsoleCommandManager implements ConsoleCommand {
     @Override
     public void exec(Scanner in, Channel channel) {
         String command = in.next();
-
-        if(!SessionUtil.hasLogin(channel)){
-            return;
-        }
 
         ConsoleCommand consoleCommand = consoleCommandMap.get(command);
         if (consoleCommand != null) {
