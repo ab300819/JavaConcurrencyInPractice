@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.netty.im.protocol.Command;
+import org.netty.im.protocol.CreateGroupRequestPacket;
+import org.netty.im.protocol.CreateGroupResponsePacket;
 import org.netty.im.protocol.JsonSerializer;
 import org.netty.im.protocol.LoginRequestPacket;
 import org.netty.im.protocol.LoginResponsePacket;
@@ -31,6 +33,8 @@ public class PacketCodec {
         packetMap.put(Command.LOGIN_RESPONSE, LoginResponsePacket.class);
         packetMap.put(Command.MESSAGE_REQUEST, MessageRequestPacket.class);
         packetMap.put(Command.MESSAGE_RESPONSE, MessageResponsePacket.class);
+        packetMap.put(Command.CREATE_GROUP_REQUEST, CreateGroupRequestPacket.class);
+        packetMap.put(Command.CREATE_GROUP_RESPONSE, CreateGroupResponsePacket.class);
 
         serializerMap = new HashMap<>();
         Serializer serializer = new JsonSerializer();
