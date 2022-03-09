@@ -48,23 +48,23 @@ public interface Command {
     byte CREATE_GROUP_RESPONSE = 8;
 
     /**
-     * 退出请求
+     * 加入群组请求
      */
-    byte logout_request = 5;
+    byte JOIN_GROUP_REQUEST = 11;
 
     /**
-     * 请求返回
+     * 加入群组返回
      */
-    byte logout_response = 6;
+    byte JOIN_GROUP_RESPONSE = 12;
 
     /**
-     * 创建群请求
+     * 退出群组请求
      */
-    byte create_group_request = 7;
+    byte QUIT_GROUP_REQUEST = 13;
 
     /**
-     * 创建群返回
+     * 退出群组返回
      */
-    byte create_group_response = 8;
+    byte create_group_response = 14;
 
 }

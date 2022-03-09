@@ -5,6 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.netty.im.protocol.Attributes;
 import org.netty.im.protocol.Session;
 import io.netty.channel.Channel;
+import io.netty.channel.group.ChannelGroup;
 import io.netty.util.Attribute;
 
 /**
@@ -16,6 +17,8 @@ import io.netty.util.Attribute;
 public class SessionUtil {
 
     private final static ConcurrentHashMap<String, Channel> userIdChannelMap = new ConcurrentHashMap<>();
+
+    private final static ConcurrentHashMap<String, ChannelGroup> groupIdChannelMap = new ConcurrentHashMap<>();
 
     public static void bindSession(Session session, Channel channel) {
         userIdChannelMap.put(session.getUserId(), channel);
@@ -42,4 +45,11 @@ public class SessionUtil {
         return channel.attr(Attributes.SESSION).get();
     }
 
+    public static void bindChannelGroup(String groupId, ChannelGroup group) {
+        groupIdChannelMap.put(groupId, group);
+    }
+
+    public static ChannelGroup getChannelGroup(String groupId) {
+        return groupIdChannelMap.get(groupId);
+    }
 }

@@ -32,11 +32,12 @@ public class CreateGroupRequestHandler extends SimpleChannelInboundHandler<Creat
             }
         }
 
+        String groupId = IDUtil.randomId();
         CreateGroupResponsePacket createGroupResponsePacket = new CreateGroupResponsePacket();
         createGroupResponsePacket.setSuccess(true);
-        createGroupResponsePacket.setGroupId(IDUtil.randomId());
+        createGroupResponsePacket.setGroupId(groupId);
         createGroupResponsePacket.setUserNameList(userNameList);
-
+        SessionUtil.bindChannelGroup(groupId, channelGroup);
         channelGroup.writeAndFlush(createGroupResponsePacket);
 
         log.info("群创建成功，id 为[{}], 群里面有：{}", createGroupResponsePacket.getGroupId(), createGroupResponsePacket.getUserNameList());

@@ -6,6 +6,7 @@ import java.util.concurrent.Executors;
 import org.netty.im.codec.PacketDecoder;
 import org.netty.im.codec.PacketEncoder;
 import org.netty.im.handle.CreateGroupResponseHandler;
+import org.netty.im.handle.JoinGroupResponseHandler;
 import org.netty.im.handle.LoginResponseHandler;
 import org.netty.im.handle.MessageResponseHandler;
 import org.slf4j.Logger;
@@ -34,6 +35,7 @@ public class ImClient {
                 ch.pipeline().addLast(new LoginResponseHandler());
                 ch.pipeline().addLast(new MessageResponseHandler());
                 ch.pipeline().addLast(new CreateGroupResponseHandler());
+                ch.pipeline().addLast(new JoinGroupResponseHandler());
                 ch.pipeline().addLast(new PacketEncoder());
             }
         });
