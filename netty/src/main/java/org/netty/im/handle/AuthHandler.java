@@ -19,7 +19,7 @@ public class AuthHandler extends ChannelInboundHandlerAdapter {
             ctx.channel().close();
         } else {
             ctx.pipeline().remove(this);
-            super.channelActive(ctx);
+            super.channelRead(ctx, msg);
         }
     }
 
