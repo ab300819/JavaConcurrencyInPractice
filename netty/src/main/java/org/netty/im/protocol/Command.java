@@ -48,6 +48,16 @@ public interface Command {
     byte CREATE_GROUP_RESPONSE = 8;
 
     /**
+     * 展示群成员请求
+     */
+    byte LIST_GROUP_MEMBERS_REQUEST=9;
+
+    /**
+     * 展示群成员返回
+     */
+    byte LIST_GROUP_MEMBERS_RESPONSE=10;
+
+    /**
      * 加入群组请求
      */
     byte JOIN_GROUP_REQUEST = 11;
@@ -65,6 +75,6 @@ public interface Command {
     /**
      * 退出群组返回
      */
-    byte create_group_response = 14;
+    byte QUIT_GROUP_RESPONSE = 14;
 
 }

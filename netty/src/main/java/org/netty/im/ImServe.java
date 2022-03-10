@@ -9,6 +9,7 @@ import org.netty.im.handle.JoinGroupRequestHandler;
 import org.netty.im.handle.LifeCycleHandler;
 import org.netty.im.handle.LoginRequestHandler;
 import org.netty.im.handle.MessageRequestHandler;
+import org.netty.im.handle.QuitGroupRequestHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import io.netty.bootstrap.ServerBootstrap;
@@ -49,6 +50,7 @@ public class ImServe {
                             ch.pipeline().addLast(new MessageRequestHandler());
                             ch.pipeline().addLast(new CreateGroupRequestHandler());
                             ch.pipeline().addLast(new JoinGroupRequestHandler());
+                            ch.pipeline().addLast(new QuitGroupRequestHandler());
 
                             ch.pipeline().addLast(new PacketEncoder());
                             ch.pipeline().addLast(new OutBoundHandlerC());

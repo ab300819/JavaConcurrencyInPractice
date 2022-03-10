@@ -9,6 +9,7 @@ import org.netty.im.handle.CreateGroupResponseHandler;
 import org.netty.im.handle.JoinGroupResponseHandler;
 import org.netty.im.handle.LoginResponseHandler;
 import org.netty.im.handle.MessageResponseHandler;
+import org.netty.im.handle.QuitGroupResponseHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import io.netty.bootstrap.Bootstrap;
@@ -36,6 +37,7 @@ public class ImClient {
                 ch.pipeline().addLast(new MessageResponseHandler());
                 ch.pipeline().addLast(new CreateGroupResponseHandler());
                 ch.pipeline().addLast(new JoinGroupResponseHandler());
+                ch.pipeline().addLast(new QuitGroupResponseHandler());
                 ch.pipeline().addLast(new PacketEncoder());
             }
         });
