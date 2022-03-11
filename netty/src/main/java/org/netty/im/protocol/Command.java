@@ -50,12 +50,12 @@ public interface Command {
     /**
      * 展示群成员请求
      */
-    byte LIST_GROUP_MEMBERS_REQUEST=9;
+    byte LIST_GROUP_MEMBERS_REQUEST = 9;
 
     /**
      * 展示群成员返回
      */
-    byte LIST_GROUP_MEMBERS_RESPONSE=10;
+    byte LIST_GROUP_MEMBERS_RESPONSE = 10;
 
     /**
      * 加入群组请求

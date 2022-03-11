@@ -11,7 +11,7 @@ import io.netty.util.Attribute;
 /**
  * <p>登录操作</p>
  *
- * @author mengshen
+ * @author Mason
  * @date 2022/1/10 17:42
  */
 public class SessionUtil {

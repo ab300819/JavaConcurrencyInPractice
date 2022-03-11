@@ -7,6 +7,7 @@ import org.netty.im.handle.AuthHandler;
 import org.netty.im.handle.CreateGroupRequestHandler;
 import org.netty.im.handle.JoinGroupRequestHandler;
 import org.netty.im.handle.LifeCycleHandler;
+import org.netty.im.handle.ListGroupMembersRequestHandler;
 import org.netty.im.handle.LoginRequestHandler;
 import org.netty.im.handle.MessageRequestHandler;
 import org.netty.im.handle.QuitGroupRequestHandler;
@@ -51,6 +52,7 @@ public class ImServe {
                             ch.pipeline().addLast(new CreateGroupRequestHandler());
                             ch.pipeline().addLast(new JoinGroupRequestHandler());
                             ch.pipeline().addLast(new QuitGroupRequestHandler());
+                            ch.pipeline().addLast(new ListGroupMembersRequestHandler());
 
                             ch.pipeline().addLast(new PacketEncoder());
                             ch.pipeline().addLast(new OutBoundHandlerC());

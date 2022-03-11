@@ -17,7 +17,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 /**
  * <p>模拟 redis 协议</p>
  *
- * @author mengshen
+ * @author Mason
  * @date 2021/11/23 20:24
  */
 public class NettyRedisServe {
