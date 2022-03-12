@@ -11,6 +11,7 @@ import org.netty.im.handle.ListGroupMembersResponseHandler;
 import org.netty.im.handle.LoginResponseHandler;
 import org.netty.im.handle.MessageResponseHandler;
 import org.netty.im.handle.QuitGroupResponseHandler;
+import org.netty.im.handle.SendToGroupResponseHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import io.netty.bootstrap.Bootstrap;
@@ -40,6 +41,7 @@ public class ImClient {
                 ch.pipeline().addLast(new JoinGroupResponseHandler());
                 ch.pipeline().addLast(new QuitGroupResponseHandler());
                 ch.pipeline().addLast(new ListGroupMembersResponseHandler());
+                ch.pipeline().addLast(new SendToGroupResponseHandler());
                 ch.pipeline().addLast(new PacketEncoder());
             }
         });
