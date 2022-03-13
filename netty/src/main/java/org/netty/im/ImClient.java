@@ -6,6 +6,8 @@ import java.util.concurrent.Executors;
 import org.netty.im.codec.PacketDecoder;
 import org.netty.im.codec.PacketEncoder;
 import org.netty.im.handle.CreateGroupResponseHandler;
+import org.netty.im.handle.HeartBeatTimerHandler;
+import org.netty.im.handle.IMIdleStateHandler;
 import org.netty.im.handle.JoinGroupResponseHandler;
 import org.netty.im.handle.ListGroupMembersResponseHandler;
 import org.netty.im.handle.LoginResponseHandler;
@@ -34,6 +36,7 @@ public class ImClient {
         bootstrap.group(work).channel(NioSocketChannel.class).handler(new ChannelInitializer<SocketChannel>() {
             @Override
             protected void initChannel(SocketChannel ch) throws Exception {
+                ch.pipeline().addLast(new IMIdleStateHandler());
                 ch.pipeline().addLast(new PacketDecoder());
                 ch.pipeline().addLast(new LoginResponseHandler());
                 ch.pipeline().addLast(new MessageResponseHandler());
@@ -43,6 +46,7 @@ public class ImClient {
                 ch.pipeline().addLast(new ListGroupMembersResponseHandler());
                 ch.pipeline().addLast(new SendToGroupResponseHandler());
                 ch.pipeline().addLast(new PacketEncoder());
+                ch.pipeline().addLast(new HeartBeatTimerHandler());
             }
         });
         ChannelFuture channelFuture = bootstrap.connect("127.0.0.1", 8090).sync()

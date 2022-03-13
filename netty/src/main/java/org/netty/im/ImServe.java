@@ -5,6 +5,8 @@ import org.netty.im.codec.PacketDecoder;
 import org.netty.im.codec.PacketEncoder;
 import org.netty.im.handle.AuthHandler;
 import org.netty.im.handle.CreateGroupRequestHandler;
+import org.netty.im.handle.HeartBeatRequestHandler;
+import org.netty.im.handle.IMIdleStateHandler;
 import org.netty.im.handle.JoinGroupRequestHandler;
 import org.netty.im.handle.LifeCycleHandler;
 import org.netty.im.handle.ListGroupMembersRequestHandler;
@@ -41,6 +43,7 @@ public class ImServe {
                     .childHandler(new ChannelInitializer<NioSocketChannel>() {
                         @Override
                         protected void initChannel(NioSocketChannel ch) throws Exception {
+                            ch.pipeline().addLast(new IMIdleStateHandler());
                             ch.pipeline().addLast(new FrameCodec());
                             ch.pipeline().addLast(new InBoundHandlerA());
                             ch.pipeline().addLast(new InBoundHandlerB());
@@ -48,6 +51,7 @@ public class ImServe {
                             ch.pipeline().addLast(new LifeCycleHandler());
                             ch.pipeline().addLast(new PacketDecoder());
                             ch.pipeline().addLast(new LoginRequestHandler());
+                            ch.pipeline().addLast(new HeartBeatRequestHandler());
                             ch.pipeline().addLast(new AuthHandler());
                             ch.pipeline().addLast(new MessageRequestHandler());
                             ch.pipeline().addLast(new CreateGroupRequestHandler());
