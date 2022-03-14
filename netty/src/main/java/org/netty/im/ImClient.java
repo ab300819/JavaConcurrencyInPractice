@@ -1,7 +1,9 @@
 package org.netty.im;
 
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import org.netty.im.codec.PacketDecoder;
 import org.netty.im.codec.PacketEncoder;
@@ -28,7 +30,7 @@ public class ImClient {
 
     private static final Logger log = LoggerFactory.getLogger(ImClient.class);
 
-    private static final Executor executor = Executors.newFixedThreadPool(5);
+    private static final ExecutorService EXECUTOR_SERVICE = new ThreadPoolExecutor(4,4,5, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
 
     public static void main(String[] args) throws InterruptedException {
         Bootstrap bootstrap = new Bootstrap();
@@ -52,7 +54,7 @@ public class ImClient {
         ChannelFuture channelFuture = bootstrap.connect("127.0.0.1", 8090).sync()
                 .addListener(future -> {
                     if (future.isSuccess()) {
-                        executor.execute(new ConsoleInputThread(((ChannelFuture) future).channel()));
+                        EXECUTOR_SERVICE.submit(new ConsoleInputThread(((ChannelFuture) future).channel()));
                     }
                 });
         channelFuture.channel().closeFuture().sync();
