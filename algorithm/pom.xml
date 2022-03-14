@@ -12,6 +12,12 @@
     <groupId>org.algorithm.explore</groupId>
     <artifactId>algorithm</artifactId>
     <version>1.0</version>
+
+    <properties>
+        <maven.compiler.source>15</maven.compiler.source>
+        <maven.compiler.target>15</maven.compiler.target>
+    </properties>
+
     <dependencies>
         <dependency>
             <artifactId>common</artifactId>
