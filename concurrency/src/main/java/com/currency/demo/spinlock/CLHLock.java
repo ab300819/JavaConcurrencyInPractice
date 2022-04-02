@@ -53,8 +53,35 @@ public class CLHLock {
             return;
         }
 
+        currentThreadNode.remove();
+
         if (!UPDATER.compareAndSet(this, node, null)) {
             node.setLocked(false);
         }
+    }
+
+    public static void main(String[] args) {
+
+        final CLHLock lock = new CLHLock();
+
+        for (int i = 1; i <= 10; i++) {
+            new Thread(generateTask(lock, String.valueOf(i))).start();
+        }
+
+    }
+
+    private static Runnable generateTask(final CLHLock lock, final String taskId) {
+        return () -> {
+            lock.lock();
+
+            try {
+                Thread.sleep(3000);
+            } catch (Exception e) {
+
+            }
+
+            System.out.println(String.format("Thread %s Completed", taskId));
+            lock.unlock();
+        };
     }
 }
