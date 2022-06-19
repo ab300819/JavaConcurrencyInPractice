@@ -3,7 +3,7 @@ package org.algorithm.explore;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class TreeTests {
+class BinaryTreeTests {
 
     @Test
     public void testCase() {
