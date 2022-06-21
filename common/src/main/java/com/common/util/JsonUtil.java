@@ -30,38 +30,48 @@ public class JsonUtil {
         OBJECT_MAPPER.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
     }
 
+    private JsonUtil() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static <T> T toObject(String json, TypeReference<T> reference) {
-        if (reference != null && StringUtils.isNotEmpty(json)) {
-            try {
-                return OBJECT_MAPPER.readValue(json, reference);
-            } catch (IOException e) {
-                log.error("fail to convert to json. {}", e.getMessage());
-            }
+        if (reference == null || StringUtils.isBlank(json)) {
+            return null;
+        }
+        try {
+            return OBJECT_MAPPER.readValue(json, reference);
+        } catch (IOException e) {
+            log.error("fail to convert to json. {}", e.getMessage());
         }
         return null;
     }
 
     public static <T> T toObject(String json, Class<T> reference) {
-        if (reference != null && StringUtils.isNotEmpty(json)) {
-            try {
-                return OBJECT_MAPPER.readValue(json, reference);
-            } catch (IOException e) {
-                log.error("fail to convert to json. {}", e.getMessage());
-            }
+        if (reference == null || StringUtils.isBlank(json)) {
+            return null;
+        }
+
+        try {
+            return OBJECT_MAPPER.readValue(json, reference);
+        } catch (IOException e) {
+            log.error("fail to convert to json. {}", e.getMessage());
         }
         return null;
     }
 
     public static String toString(Object obj) {
-        if (obj != null) {
-            if (obj instanceof String) {
-                return (String) obj;
-            }
-            try {
-                return OBJECT_MAPPER.writeValueAsString(obj);
-            } catch (IOException e) {
-                log.error("fail to  convert to json string. {}", e.getMessage());
-            }
+        if (obj == null) {
+            return null;
+        }
+
+        if (obj instanceof String) {
+            return (String) obj;
+        }
+
+        try {
+            return OBJECT_MAPPER.writeValueAsString(obj);
+        } catch (IOException e) {
+            log.error("fail to  convert to json string. {}", e.getMessage());
         }
         return StringUtils.EMPTY;
     }
