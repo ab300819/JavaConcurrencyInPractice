@@ -1,4 +1,4 @@
-package org.netty.rpc.common;
+package org.netty.rpc.core.common;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 
-import static org.netty.rpc.common.constants.RpcConstants.MAGIC_NUMBER;
+import static org.netty.rpc.core.common.constants.RpcConstants.MAGIC_NUMBER;
 
 /**
  * <p></p>

@@ -1,4 +1,4 @@
-package org.netty.rpc.common.config;
+package org.netty.rpc.core.common.config;
 
 /**
  * <p></p>

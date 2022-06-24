@@ -1,4 +1,4 @@
-package org.netty.rpc.client;
+package org.netty.rpc.core.client;
 
 /**
  * <p></p>

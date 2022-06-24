@@ -1,4 +1,4 @@
-package org.netty.rpc.common.constants;
+package org.netty.rpc.core.common.constants;
 
 /**
  * <p></p>

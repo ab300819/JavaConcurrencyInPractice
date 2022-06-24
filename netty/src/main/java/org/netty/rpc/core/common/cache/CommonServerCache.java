@@ -1,11 +1,11 @@
-package org.netty.rpc.common.cache;
+package org.netty.rpc.core.common.cache;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-import org.netty.rpc.common.RpcInvocation;
+import org.netty.rpc.core.common.RpcInvocation;
 
 /**
  * <p></p>

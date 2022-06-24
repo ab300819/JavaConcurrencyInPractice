@@ -1,4 +1,4 @@
-package org.netty.rpc.proxy;
+package org.netty.rpc.core.proxy;
 
 import java.lang.reflect.Proxy;
 

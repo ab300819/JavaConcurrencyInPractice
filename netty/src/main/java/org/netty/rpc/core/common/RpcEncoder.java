@@ -1,4 +1,4 @@
-package org.netty.rpc.common;
+package org.netty.rpc.core.common;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;

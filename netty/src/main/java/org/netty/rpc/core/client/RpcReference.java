@@ -1,6 +1,6 @@
-package org.netty.rpc.client;
+package org.netty.rpc.core.client;
 
-import org.netty.rpc.proxy.ProxyFactory;
+import org.netty.rpc.core.proxy.ProxyFactory;
 
 /**
  * <p></p>

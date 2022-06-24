@@ -1,8 +1,8 @@
-package org.netty.rpc.server;
+package org.netty.rpc.core.server;
 
-import org.netty.rpc.common.RpcDecoder;
-import org.netty.rpc.common.RpcEncoder;
-import org.netty.rpc.common.config.ServerConfig;
+import org.netty.rpc.core.common.RpcDecoder;
+import org.netty.rpc.core.common.RpcEncoder;
+import org.netty.rpc.core.common.config.ServerConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import io.netty.bootstrap.ServerBootstrap;

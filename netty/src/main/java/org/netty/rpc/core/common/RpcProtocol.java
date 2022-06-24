@@ -1,8 +1,8 @@
-package org.netty.rpc.common;
+package org.netty.rpc.core.common;
 
 import java.io.Serializable;
 
-import org.netty.rpc.common.constants.RpcConstants;
+import org.netty.rpc.core.common.constants.RpcConstants;
 
 /**
  * <p></p>
