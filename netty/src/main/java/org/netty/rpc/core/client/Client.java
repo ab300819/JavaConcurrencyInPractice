@@ -3,11 +3,14 @@ package org.netty.rpc.core.client;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import org.netty.rpc.core.common.RpcDecoder;
+import org.netty.rpc.core.common.RpcEncoder;
 import org.netty.rpc.core.common.RpcInvocation;
 import org.netty.rpc.core.common.RpcProtocol;
 import org.netty.rpc.core.common.cache.CommonServerCache;
 import org.netty.rpc.core.common.config.ClientConfig;
 import org.netty.rpc.core.proxy.JDKProxyFactory;
+import org.netty.rpc.interfaces.DataService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.common.util.JsonUtil;
@@ -49,7 +52,9 @@ public class Client {
         bootstrap.handler(new ChannelInitializer<SocketChannel>() {
             @Override
             protected void initChannel(SocketChannel ch) throws Exception {
-                ch.pipeline().addLast();
+                ch.pipeline().addLast(new RpcEncoder());
+                ch.pipeline().addLast(new RpcDecoder());
+                ch.pipeline().addLast(new ClientHandler());
             }
         });
 
@@ -86,6 +91,11 @@ public class Client {
         ClientConfig config = new ClientConfig("localhost", 9090);
         Client client = new Client(config);
         RpcReference rpcReference = client.startClient();
+        DataService dataService = rpcReference.get(DataService.class);
+        for (int i = 0; i < 100; i++) {
+            String result = dataService.sendData("test");
+            log.info(result);
+        }
 
     }
 }
