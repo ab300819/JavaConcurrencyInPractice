@@ -40,9 +40,16 @@ public class ImServe {
         try {
             serverBootstrap.group(boss, work)
                     .channel(NioServerSocketChannel.class)
+                    .handler(new ChannelInitializer<NioSocketChannel>() {
+                        @Override
+                        protected void initChannel(NioSocketChannel ch) {
+                            log.info("处理启动逻辑");
+                        }
+                    })
                     .childHandler(new ChannelInitializer<NioSocketChannel>() {
                         @Override
-                        protected void initChannel(NioSocketChannel ch) throws Exception {
+                        protected void initChannel(NioSocketChannel ch) {
+                            log.info("处理数据逻辑 handler");
                             ch.pipeline().addLast(new IMIdleStateHandler());
                             ch.pipeline().addLast(new FrameCodec());
                             ch.pipeline().addLast(new InBoundHandlerA());
@@ -66,7 +73,7 @@ public class ImServe {
                             ch.pipeline().addLast(new OutBoundHandlerA());
                         }
                     });
-            ChannelFuture future = serverBootstrap.bind(8090).sync();
+            ChannelFuture future = bind(serverBootstrap, 8090);
             future.channel().closeFuture().sync();
         } catch (InterruptedException e) {
             boss.shutdownGracefully();
@@ -75,6 +82,20 @@ public class ImServe {
             boss.shutdownGracefully();
             work.shutdownGracefully();
         }
+    }
+
+    public static ChannelFuture bind(final ServerBootstrap serverBootstrap, final int port) {
+        return serverBootstrap.bind(port).addListener(future -> {
+            if (future.isSuccess()) {
+                log.info("server start success at {}", port);
+            } else {
+                if (port > 65536) {
+                    log.info("start failed");
+                }
+                log.info("server start fail at {}", port);
+                bind(serverBootstrap, port + 1);
+            }
+        });
     }
 
     public static class InBoundHandlerA extends ChannelInboundHandlerAdapter {
