@@ -1,7 +1,7 @@
 package org.netty.rpc.core.proxy;
 
 /**
- * <p></p>
+ * <p>代理工厂借口</p>
  *
  * @author mason
  * @date 2022/6/23 23:35

@@ -114,18 +114,61 @@ public class ProxyGenerator {
     }
 
     private static String modifier(int mod) {
+        if (Modifier.isPublic(mod)) {
+            return "public";
+        }
 
-        return null;
+        if (Modifier.isProtected(mod)) {
+            return "protected";
+        }
+        if (Modifier.isPrivate(mod)) {
+            return "private";
+        }
+        return "";
     }
 
     public static String getParameterType(Class<?> clazz) {
+        if (clazz.isArray()) {   //数组类型
+            StringBuilder sb = new StringBuilder();
+            do {
+                sb.append("[]");
+                clazz = clazz.getComponentType();
+            } while (clazz.isArray());
 
-        return null;
+            return clazz.getName() + sb.toString();
+        }
+        return clazz.getName();
     }
 
     private static String asArgument(Class<?> cl, String name) {
-
-        return null;
+        if (cl.isPrimitive()) {
+            if (Boolean.TYPE == cl) {
+                return name + "==null?false:((Boolean)" + name + ").booleanValue()";
+            }
+            if (Byte.TYPE == cl) {
+                return name + "==null?(byte)0:((Byte)" + name + ").byteValue()";
+            }
+            if (Character.TYPE == cl) {
+                return name + "==null?(char)0:((Character)" + name + ").charValue()";
+            }
+            if (Double.TYPE == cl) {
+                return name + "==null?(double)0:((Double)" + name + ").doubleValue()";
+            }
+            if (Float.TYPE == cl) {
+                return name + "==null?(float)0:((Float)" + name + ").floatValue()";
+            }
+            if (Integer.TYPE == cl) {
+                return name + "==null?(int)0:((Integer)" + name + ").intValue()";
+            }
+            if (Long.TYPE == cl) {
+                return name + "==null?(long)0:((Long)" + name + ").longValue()";
+            }
+            if (Short.TYPE == cl) {
+                return name + "==null?(short)0:((Short)" + name + ").shortValue()";
+            }
+            throw new RuntimeException(name + " is unknown primitive type.");
+        }
+        return "(" + getParameterType(cl) + ")" + name;
     }
 
     private static String generateClassName(Class<?> type) {
