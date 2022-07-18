@@ -1,13 +1,17 @@
 package com.common.util;
 
-import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Test;
-
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
+import org.junit.jupiter.api.Test;
+import lombok.extern.slf4j.Slf4j;
+
 /**
- * ²âÊÔ sort
+ * æµ‹è¯• sort
  *
  * @author mason
  */
