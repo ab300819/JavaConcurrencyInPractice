@@ -172,6 +172,11 @@
                 <version>2.7.5</version>
                 <type>pom</type>
             </dependency>
+            <dependency>
+                <groupId>org.yaml</groupId>
+                <artifactId>snakeyaml</artifactId>
+                <version>1.30</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

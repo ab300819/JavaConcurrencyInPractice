@@ -1,6 +1,6 @@
 package org.netty.rpc.core.server;
 
-import java.io.DataInput;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.netty.rpc.interfaces.DataService;
@@ -19,11 +19,16 @@ public class DataServiceImpl implements DataService {
 
     @Override
     public String sendData(String body) {
-        return null;
+        System.out.println("这里是服务提供者，body is " + body);
+        return "success";
     }
 
     @Override
     public List<String> getList() {
-        return null;
+        ArrayList arrayList = new ArrayList();
+        arrayList.add("idea1");
+        arrayList.add("idea2");
+        arrayList.add("idea3");
+        return arrayList;
     }
 }

@@ -8,13 +8,40 @@ package org.netty.rpc.core.common.config;
  */
 public class ServerConfig {
 
-    private int port;
+    private int registryPort;
+    private String registryAddress;
+    private String applicationName;
+    private String serviceName;
 
-    public int getPort() {
-        return port;
+    public int getRegistryPort() {
+        return registryPort;
     }
 
-    public void setPort(int port) {
-        this.port = port;
+    public void setRegistryPort(int registryPort) {
+        this.registryPort = registryPort;
+    }
+
+    public String getRegistryAddress() {
+        return registryAddress;
+    }
+
+    public void setRegistryAddress(String registryAddress) {
+        this.registryAddress = registryAddress;
+    }
+
+    public String getApplicationName() {
+        return applicationName;
+    }
+
+    public void setApplicationName(String applicationName) {
+        this.applicationName = applicationName;
+    }
+
+    public String getServiceName() {
+        return serviceName;
+    }
+
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
     }
 }

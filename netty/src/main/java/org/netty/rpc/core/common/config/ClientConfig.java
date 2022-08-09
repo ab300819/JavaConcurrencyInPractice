@@ -8,13 +8,27 @@ package org.netty.rpc.core.common.config;
  */
 public class ClientConfig {
 
+    private final String applicationName;
+
     private final int port;
 
     private final String address;
 
-    public ClientConfig(String address, int port) {
+    private String proxyType;
+
+    public ClientConfig(String applicationName, int port, String address, String proxyType) {
+        this.applicationName = applicationName;
         this.port = port;
         this.address = address;
+        this.proxyType = proxyType;
+    }
+
+    public ClientConfig(String applicationName, int port, String address) {
+        this(applicationName, port, address, null);
+    }
+
+    public String getApplicationName() {
+        return applicationName;
     }
 
     public int getPort() {
@@ -23,5 +37,9 @@ public class ClientConfig {
 
     public String getAddress() {
         return address;
+    }
+
+    public String getProxyType() {
+        return proxyType;
     }
 }

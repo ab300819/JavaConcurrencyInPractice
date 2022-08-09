@@ -1,8 +1,16 @@
 package org.netty.rpc.core.server;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import org.netty.rpc.core.common.RpcDecoder;
 import org.netty.rpc.core.common.RpcEncoder;
+import org.netty.rpc.core.common.cache.CommonServerCache;
 import org.netty.rpc.core.common.config.ServerConfig;
+import org.netty.rpc.core.common.utils.CommonUtils;
+import org.netty.rpc.core.registy.RegistryService;
+import org.netty.rpc.core.registy.Url;
+import org.netty.rpc.core.registy.zookeeper.ZookeeperRegister;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import io.netty.bootstrap.ServerBootstrap;
@@ -12,6 +20,8 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.ServerChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+
+import static org.netty.rpc.core.common.cache.CommonServerCache.PROVIDER_URL_SET;
 
 /**
  * <p></p>
@@ -23,11 +33,15 @@ public class Server {
 
     private static final Logger log = LoggerFactory.getLogger(Server.class);
 
+    private static final ExecutorService executorService = Executors.newFixedThreadPool(8);
+
     private EventLoopGroup bossGroup;
 
     private EventLoopGroup workerGroup;
 
     private ServerConfig serverConfig;
+
+    private RegistryService registryService;
 
     public EventLoopGroup getBossGroup() {
         return bossGroup;
@@ -72,22 +86,53 @@ public class Server {
                         ch.pipeline().addLast(new RpcDecoder());
                         ch.pipeline().addLast(new ServerHandler());
                     }
-                })
-                .bind(serverConfig.getPort())
-                .sync();
+                });
+        batchExportUrl();
+        bootstrap.bind(serverConfig.getRegistryPort()).sync();
     }
 
-    public void registyServer() {
+    public void initServerConfig() {
+        ServerConfig serverConfig = new ServerConfig();
+        serverConfig.setRegistryPort(9093);
+        serverConfig.setApplicationName("irpc-provider");
+        serverConfig.setRegistryAddress("localhost:2181");
+        setServerConfig(serverConfig);
+    }
 
+    public void registryServer(Object serviceBean) {
+        if (serviceBean.getClass().getInterfaces().length == 0) {
+            throw new RuntimeException("service must had interfaces!");
+        }
+
+        Class<?>[] clazzArray = serviceBean.getClass().getInterfaces();
+        if (clazzArray.length > 1) {
+            throw new RuntimeException("service must only had one interface!");
+        }
+
+        if (registryService == null) {
+            registryService = new ZookeeperRegister(serverConfig.getRegistryAddress());
+        }
+
+        Class<?> interfaceClass = clazzArray[0];
+        CommonServerCache.PROVIDER_CLASS_MAP.put(interfaceClass.getName(), serviceBean);
+        Url url = new Url();
+        url.setApplicationName(serverConfig.getApplicationName());
+        url.setServiceName(interfaceClass.getName());
+        url.addParameter("host", CommonUtils.getLocalIP());
+        url.addParameter("port", String.valueOf(serverConfig.getRegistryPort()));
+        PROVIDER_URL_SET.add(url);
+    }
+
+    public void batchExportUrl() {
+        for (Url url : PROVIDER_URL_SET) {
+            executorService.submit(() -> registryService.register(url));
+        }
     }
 
     public static void main(String[] args) throws InterruptedException {
         Server server = new Server();
-        ServerConfig config = new ServerConfig();
-        config.setPort(9090);
-        server.setServerConfig(config);
-        server.registyServer();
+        server.initServerConfig();
+        server.registryServer(new DataServiceImpl());
         server.startApplication();
-
     }
 }
