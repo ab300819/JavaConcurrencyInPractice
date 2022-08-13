@@ -24,6 +24,7 @@ public class RpcProtocol implements Serializable {
 
     public RpcProtocol(byte[] content) {
         this.content = content;
+        this.contentLength = content.length;
     }
 
     public short getMagicNumber() {

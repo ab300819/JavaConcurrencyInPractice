@@ -8,16 +8,16 @@ package org.netty.rpc.core.common.config;
  */
 public class ServerConfig {
 
-    private int registryPort;
+    private Integer registryPort;
     private String registryAddress;
     private String applicationName;
     private String serviceName;
 
-    public int getRegistryPort() {
+    public Integer getRegistryPort() {
         return registryPort;
     }
 
-    public void setRegistryPort(int registryPort) {
+    public void setRegistryPort(Integer registryPort) {
         this.registryPort = registryPort;
     }
 

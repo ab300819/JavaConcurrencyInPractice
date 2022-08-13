@@ -2,8 +2,6 @@ package org.netty.rpc.core.registy.zookeeper;
 
 import java.util.List;
 
-import org.netty.rpc.core.common.event.MRpcEvent;
-import org.netty.rpc.core.common.event.MRpcUpdateEvent;
 import org.netty.rpc.core.common.event.data.URLChangeWrapper;
 import org.netty.rpc.core.registy.AbstractRegister;
 import org.netty.rpc.core.registy.RegistryService;
@@ -27,7 +25,7 @@ public class ZookeeperRegister extends AbstractRegister implements RegistryServi
 
     @Override
     public void register(Url url) {
-        if (zookeeperClient.existNode(ROOT)) {
+        if (!this.zookeeperClient.existNode(ROOT)) {
             zookeeperClient.createPersistentData(ROOT, "");
         }
 
@@ -49,7 +47,7 @@ public class ZookeeperRegister extends AbstractRegister implements RegistryServi
 
     @Override
     public void subscribe(Url url) {
-        if (!zookeeperClient.existNode(ROOT)) {
+        if (!this.zookeeperClient.existNode(ROOT)) {
             zookeeperClient.createPersistentData(ROOT, "");
         }
 
@@ -65,7 +63,8 @@ public class ZookeeperRegister extends AbstractRegister implements RegistryServi
 
     @Override
     public void doAfterSubscribe(Url url) {
-        String newServerNodePath = ROOT + "/" + url.getApplicationName() + "/provider";
+        //监听是否有新的服务注册
+        String newServerNodePath = ROOT + "/" + url.getServiceName() + "/provider";
         watchChildNodeData(newServerNodePath);
     }
 
@@ -78,7 +77,7 @@ public class ZookeeperRegister extends AbstractRegister implements RegistryServi
             urlChangeWrapper.setProviderUrl(childrenDataList);
             urlChangeWrapper.setServiceName(path.split("/")[2]);
 
-            MRpcEvent mRpcEvent = new MRpcUpdateEvent(urlChangeWrapper);
+//            MRpcEvent mRpcEvent = new MRpcUpdateEvent(urlChangeWrapper);
 //            MRpcListenerLoader.
         });
     }

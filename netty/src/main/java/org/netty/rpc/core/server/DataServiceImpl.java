@@ -15,11 +15,11 @@ import org.slf4j.LoggerFactory;
  */
 public class DataServiceImpl implements DataService {
 
-    private static final Logger logger = LoggerFactory.getLogger(DataServiceImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(DataServiceImpl.class);
 
     @Override
     public String sendData(String body) {
-        System.out.println("这里是服务提供者，body is " + body);
+        log.info("这里是服务提供者，body is " + body);
         return "success";
     }
 

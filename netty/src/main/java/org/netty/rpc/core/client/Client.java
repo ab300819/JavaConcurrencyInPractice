@@ -8,10 +8,9 @@ import org.netty.rpc.core.common.RpcDecoder;
 import org.netty.rpc.core.common.RpcEncoder;
 import org.netty.rpc.core.common.RpcInvocation;
 import org.netty.rpc.core.common.RpcProtocol;
-import org.netty.rpc.core.common.cache.CommonServerCache;
+import org.netty.rpc.core.common.cache.CommonClientCache;
 import org.netty.rpc.core.common.config.ClientConfig;
 import org.netty.rpc.core.common.event.MRpcListenerLoader;
-import org.netty.rpc.core.common.utils.CommonUtils;
 import org.netty.rpc.core.proxy.JDKProxyFactory;
 import org.netty.rpc.core.proxy.JavassistProxyFactory;
 import org.netty.rpc.core.registy.AbstractRegister;
@@ -55,12 +54,9 @@ public class Client {
         return clientConfig;
     }
 
-    public AbstractRegister getRegister() {
-        return register;
-    }
 
-    public void setRegister(AbstractRegister register) {
-        this.register = register;
+    public void setClientConfig(ClientConfig clientConfig) {
+        this.clientConfig = clientConfig;
     }
 
     public MRpcListenerLoader getmRpcListenerLoader() {
@@ -93,7 +89,7 @@ public class Client {
         });
         mRpcListenerLoader = new MRpcListenerLoader();
         mRpcListenerLoader.init();
-        clientConfig = new ClientConfig("irpc-provider", 9093, "localhost:2181");
+        clientConfig = new ClientConfig("irpc-provider", 9090, "localhost:2181");
         RpcReference rpcReference;
         if ("javassist".equals(clientConfig.getProxyType())) {
             rpcReference = new RpcReference(new JavassistProxyFactory());
@@ -110,7 +106,7 @@ public class Client {
         Url url = new Url();
         url.setApplicationName(clientConfig.getApplicationName());
         url.setServiceName(serviceBean.getName());
-        url.addParameter("host", CommonUtils.getLocalIP());
+        url.addParameter("host", "127.0.0.1");
         register.subscribe(url);
 
     }
@@ -135,13 +131,14 @@ public class Client {
         executor.execute(new AsyncSendJob());
     }
 
-    static class AsyncSendJob implements Runnable {
+    public static class AsyncSendJob implements Runnable {
 
         @Override
         public void run() {
             while (true) {
                 try {
-                    RpcInvocation data = CommonServerCache.SEND_QUEUE.take();
+                    //阻塞模式
+                    RpcInvocation data = CommonClientCache.SEND_QUEUE.take();
                     String json = JsonUtil.toString(data);
                     RpcProtocol rpcProtocol = new RpcProtocol(json.getBytes());
                     ChannelFuture channelFuture = ConnectionHandler.getChannelFuture(data.getTargetServiceName());

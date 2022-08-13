@@ -7,7 +7,6 @@ import org.netty.rpc.core.common.RpcDecoder;
 import org.netty.rpc.core.common.RpcEncoder;
 import org.netty.rpc.core.common.cache.CommonServerCache;
 import org.netty.rpc.core.common.config.ServerConfig;
-import org.netty.rpc.core.common.utils.CommonUtils;
 import org.netty.rpc.core.registy.RegistryService;
 import org.netty.rpc.core.registy.Url;
 import org.netty.rpc.core.registy.zookeeper.ZookeeperRegister;
@@ -17,8 +16,8 @@ import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
-import io.netty.channel.ServerChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
 import static org.netty.rpc.core.common.cache.CommonServerCache.PROVIDER_URL_SET;
@@ -43,22 +42,6 @@ public class Server {
 
     private RegistryService registryService;
 
-    public EventLoopGroup getBossGroup() {
-        return bossGroup;
-    }
-
-    public void setBossGroup(EventLoopGroup bossGroup) {
-        this.bossGroup = bossGroup;
-    }
-
-    public EventLoopGroup getWorkerGroup() {
-        return workerGroup;
-    }
-
-    public void setWorkerGroup(EventLoopGroup workerGroup) {
-        this.workerGroup = workerGroup;
-    }
-
     public ServerConfig getServerConfig() {
         return serverConfig;
     }
@@ -73,14 +56,11 @@ public class Server {
         ServerBootstrap bootstrap = new ServerBootstrap();
         bootstrap.group(bossGroup, workerGroup)
                 .channel(NioServerSocketChannel.class)
-                .option(ChannelOption.TCP_NODELAY, true)
                 .option(ChannelOption.SO_BACKLOG, 1024)
-                .option(ChannelOption.SO_SNDBUF, 16 * 1024)
                 .option(ChannelOption.SO_RCVBUF, 16 * 1024)
-                .option(ChannelOption.SO_KEEPALIVE, true)
-                .childHandler(new ChannelInitializer<ServerChannel>() {
+                .childHandler(new ChannelInitializer<SocketChannel>() {
                     @Override
-                    protected void initChannel(ServerChannel ch) throws Exception {
+                    protected void initChannel(SocketChannel ch) throws Exception {
                         log.info("init provider");
                         ch.pipeline().addLast(new RpcEncoder());
                         ch.pipeline().addLast(new RpcDecoder());
@@ -93,7 +73,7 @@ public class Server {
 
     public void initServerConfig() {
         ServerConfig serverConfig = new ServerConfig();
-        serverConfig.setRegistryPort(9093);
+        serverConfig.setRegistryPort(9090);
         serverConfig.setApplicationName("irpc-provider");
         serverConfig.setRegistryAddress("localhost:2181");
         setServerConfig(serverConfig);
@@ -118,7 +98,7 @@ public class Server {
         Url url = new Url();
         url.setApplicationName(serverConfig.getApplicationName());
         url.setServiceName(interfaceClass.getName());
-        url.addParameter("host", CommonUtils.getLocalIP());
+        url.addParameter("host", "127.0.0.1");
         url.addParameter("port", String.valueOf(serverConfig.getRegistryPort()));
         PROVIDER_URL_SET.add(url);
     }
