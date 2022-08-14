@@ -6,7 +6,9 @@ import java.util.concurrent.Executors;
 import org.netty.rpc.core.common.RpcDecoder;
 import org.netty.rpc.core.common.RpcEncoder;
 import org.netty.rpc.core.common.cache.CommonServerCache;
+import org.netty.rpc.core.common.config.PropertiesLoader;
 import org.netty.rpc.core.common.config.ServerConfig;
+import org.netty.rpc.core.common.utils.CommonUtils;
 import org.netty.rpc.core.registy.RegistryService;
 import org.netty.rpc.core.registy.Url;
 import org.netty.rpc.core.registy.zookeeper.ZookeeperRegister;
@@ -72,11 +74,8 @@ public class Server {
     }
 
     public void initServerConfig() {
-        ServerConfig serverConfig = new ServerConfig();
-        serverConfig.setRegistryPort(9090);
-        serverConfig.setApplicationName("irpc-provider");
-        serverConfig.setRegistryAddress("localhost:2181");
-        setServerConfig(serverConfig);
+        PropertiesLoader loader = new PropertiesLoader();
+        setServerConfig(loader.getServerConfig());
     }
 
     public void registryServer(Object serviceBean) {
@@ -98,8 +97,8 @@ public class Server {
         Url url = new Url();
         url.setApplicationName(serverConfig.getApplicationName());
         url.setServiceName(interfaceClass.getName());
-        url.addParameter("host", "127.0.0.1");
-        url.addParameter("port", String.valueOf(serverConfig.getRegistryPort()));
+        url.addParameter(Url.HOST, CommonUtils.getLocalIP());
+        url.addParameter(Url.PORT, String.valueOf(serverConfig.getRegistryPort()));
         PROVIDER_URL_SET.add(url);
     }
 

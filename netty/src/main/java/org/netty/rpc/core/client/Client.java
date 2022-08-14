@@ -10,7 +10,9 @@ import org.netty.rpc.core.common.RpcInvocation;
 import org.netty.rpc.core.common.RpcProtocol;
 import org.netty.rpc.core.common.cache.CommonClientCache;
 import org.netty.rpc.core.common.config.ClientConfig;
+import org.netty.rpc.core.common.config.PropertiesLoader;
 import org.netty.rpc.core.common.event.MRpcListenerLoader;
+import org.netty.rpc.core.common.utils.CommonUtils;
 import org.netty.rpc.core.proxy.JDKProxyFactory;
 import org.netty.rpc.core.proxy.JavassistProxyFactory;
 import org.netty.rpc.core.registy.AbstractRegister;
@@ -89,7 +91,9 @@ public class Client {
         });
         mRpcListenerLoader = new MRpcListenerLoader();
         mRpcListenerLoader.init();
-        clientConfig = new ClientConfig("irpc-provider", 9090, "localhost:2181");
+
+        PropertiesLoader loader = new PropertiesLoader();
+        clientConfig = loader.getClientConfig();
         RpcReference rpcReference;
         if ("javassist".equals(clientConfig.getProxyType())) {
             rpcReference = new RpcReference(new JavassistProxyFactory());
@@ -106,7 +110,7 @@ public class Client {
         Url url = new Url();
         url.setApplicationName(clientConfig.getApplicationName());
         url.setServiceName(serviceBean.getName());
-        url.addParameter("host", "127.0.0.1");
+        url.addParameter(Url.HOST, CommonUtils.getLocalIP());
         register.subscribe(url);
 
     }

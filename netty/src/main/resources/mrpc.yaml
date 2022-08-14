@@ -1,0 +1,4 @@
+applicationName: mrpc-provider
+serverPort: 9090
+registerAddress: localhost:2181
+proxyType: javassist
