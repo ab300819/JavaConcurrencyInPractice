@@ -78,4 +78,33 @@ public class QueueTest {
         Assertions.assertEquals(exception, target);
     }
 
+    @Test
+    public void circularArrayQueueTest() {
+        int size = 5;
+        Queue queue = new CircularArrayQueue(size);
+        List<String> exception = new ArrayList<>();
+        List<String> target = new ArrayList<>();
+        for (int i = 0; i < size; ++i) {
+            queue.push(String.valueOf(i));
+        }
+
+        queue.take();
+        queue.take();
+        queue.take();
+        queue.push("5");
+        queue.push("6");
+        queue.push("7");
+
+        exception.add("3");
+        exception.add("5");
+        exception.add("6");
+        exception.add("7");
+        exception.add(null);
+        for (int i = 0; i < size; ++i) {
+            target.add(queue.take());
+        }
+
+        Assertions.assertEquals(exception, target);
+    }
+
 }
