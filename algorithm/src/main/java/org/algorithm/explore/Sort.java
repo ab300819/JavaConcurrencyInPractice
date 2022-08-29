@@ -28,4 +28,30 @@ public class Sort {
             }
         }
     }
+
+    public void insertionSort(int[] data) {
+        if (data == null || data.length < 1) {
+            return;
+        }
+        int length = data.length;
+
+        for (int i = 1; i < length; i++) {
+            int value = data[i];
+            int j = i - 1;
+            for (; j >= 0; j--) {
+                if (data[j] > value) {
+                    data[j + 1] = data[j];
+                } else {
+                    break;
+                }
+            }
+            data[j + 1] = value;
+        }
+
+    }
+
+
+    public void selectionSort() {
+
+    }
 }

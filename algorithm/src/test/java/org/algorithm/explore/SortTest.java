@@ -28,4 +28,10 @@ class SortTest {
         sort.bubbleSort(data);
         Assertions.assertArrayEquals(expectation, data);
     }
+
+    @Test
+    void insertionSortTest() {
+        sort.insertionSort(data);
+        Assertions.assertArrayEquals(expectation, data);
+    }
 }
