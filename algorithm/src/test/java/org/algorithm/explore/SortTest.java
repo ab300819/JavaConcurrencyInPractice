@@ -34,4 +34,10 @@ class SortTest {
         sort.insertionSort(data);
         Assertions.assertArrayEquals(expectation, data);
     }
+
+    @Test
+    void selectionSortTest() {
+        sort.selectionSort(data);
+        Assertions.assertArrayEquals(expectation, data);
+    }
 }

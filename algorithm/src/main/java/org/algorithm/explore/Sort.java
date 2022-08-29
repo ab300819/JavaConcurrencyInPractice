@@ -33,8 +33,8 @@ public class Sort {
         if (data == null || data.length < 1) {
             return;
         }
-        int length = data.length;
 
+        int length = data.length;
         for (int i = 1; i < length; i++) {
             int value = data[i];
             int j = i - 1;
@@ -51,7 +51,23 @@ public class Sort {
     }
 
 
-    public void selectionSort() {
+    public void selectionSort(int[] data) {
+        if (data == null || data.length < 1) {
+            return;
+        }
 
+        int length = data.length;
+        for (int i = 0; i < length; i++) {
+            int min = data[i];
+            int location = i;
+            for (int j = i; j < length; j++) {
+                if (data[j] < min) {
+                    min = data[j];
+                    location = j;
+                }
+            }
+            data[location] = data[i];
+            data[i] = min;
+        }
     }
 }
