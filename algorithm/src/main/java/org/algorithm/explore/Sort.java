@@ -70,4 +70,52 @@ public class Sort {
             data[i] = min;
         }
     }
+
+    /**
+     * <a href="https://www.cnblogs.com/chengxiao/p/6194356.html">Merge Sort</a>
+     *
+     * @param data
+     */
+    public void mergeSort(int[] data) {
+        int[] temp = new int[data.length];
+        sort(data, 0, data.length - 1, temp);
+    }
+
+    private void sort(int[] data, int left, int right, int[] temp) {
+        if (left >= right) {
+            return;
+        }
+
+        int mid = (left + right) >> 1;
+        sort(data, left, mid, temp);
+        sort(data, mid + 1, right, temp);
+        merge(data, left, mid, right, temp);
+    }
+
+    private void merge(int[] data, int left, int mid, int right, int[] temp) {
+        int i = left;
+        int j = mid + 1;
+        int t = 0;
+        while (i <= mid && j <= right) {
+            if (data[i] <= data[j]) {
+                temp[t++] = data[i++];
+            } else {
+                temp[t++] = data[j++];
+            }
+        }
+
+        while (i <= mid) {
+            temp[t++] = data[i++];
+        }
+
+        while (j <= right) {
+            temp[t++] = data[j++];
+        }
+
+        t = 0;
+        while (left <= right) {
+            data[left++] = temp[t++];
+        }
+    }
+
 }
