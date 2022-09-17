@@ -118,4 +118,41 @@ public class Sort {
         }
     }
 
+    public void quickSort(int[] data) {
+        quickSortC(data, 0, data.length - 1);
+    }
+
+    private void quickSortC(int[] data, int start, int end) {
+        if (start >= end) {
+            return;
+        }
+
+        int middle = partition(data, start, end);
+        quickSortC(data, start, middle - 1);
+        quickSortC(data, middle + 1, end);
+    }
+
+    private int partition(int[] data, int start, int end) {
+        int pivot = data[end];
+        int i = start;
+        for (int j = start; j < end; ++j) {
+            if (data[j] < pivot) {
+                if (i == j) {
+                    ++i;
+                } else {
+                    int swap = data[i];
+                    data[i] = data[j];
+                    data[j] = swap;
+                    ++i;
+                }
+            }
+        }
+
+        int swap = data[i];
+        data[i] = data[end];
+        data[end] = swap;
+
+        return i;
+    }
+
 }

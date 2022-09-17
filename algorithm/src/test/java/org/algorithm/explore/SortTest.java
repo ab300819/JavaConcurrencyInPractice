@@ -46,4 +46,10 @@ class SortTest {
         sort.mergeSort(data);
         Assertions.assertArrayEquals(expectation, data);
     }
+
+    @Test
+    void quickSortTest() {
+        sort.quickSort(data);
+        Assertions.assertArrayEquals(expectation, data);
+    }
 }
