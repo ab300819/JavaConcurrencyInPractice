@@ -89,7 +89,8 @@ public class Sort {
         int mid = (left + right) >> 1;
         sort(data, left, mid, temp);
         sort(data, mid + 1, right, temp);
-        merge(data, left, mid, right, temp);
+//        merge(data, left, mid, right, temp);
+        mergeBySentry(data, left, mid, right);
     }
 
     private void merge(int[] data, int left, int mid, int right, int[] temp) {
@@ -115,6 +116,29 @@ public class Sort {
         t = 0;
         while (left <= right) {
             data[left++] = temp[t++];
+        }
+    }
+
+    private void mergeBySentry(int[] data, int left, int mid, int right) {
+        int[] leftData = new int[mid - left + 2];
+        int[] rightData = new int[right - mid + 1];
+
+        for (int i = 0; i <= mid - left; ++i) {
+            leftData[i] = data[left + i];
+        }
+        leftData[mid - left + 1] = Integer.MAX_VALUE;
+
+        for (int i = 0; i < right - mid; ++i) {
+            rightData[i] = data[mid + 1 + i];
+        }
+        rightData[right - mid] = Integer.MAX_VALUE;
+
+        int i = 0;
+        int j = 0;
+        int k = left;
+
+        while (k <= right) {
+            data[k++] = leftData[i] <= rightData[j] ? leftData[i++] : rightData[j++];
         }
     }
 
