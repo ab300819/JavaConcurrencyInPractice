@@ -52,4 +52,10 @@ class SortTest {
         sort.quickSort(data);
         Assertions.assertArrayEquals(expectation, data);
     }
+
+    @Test
+    void countSortTest() {
+        sort.countSort(data);
+        Assertions.assertArrayEquals(expectation, data);
+    }
 }
