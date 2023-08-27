@@ -13,6 +13,7 @@ public class ChannelFutureWrapper {
     private ChannelFuture channelFuture;
     private String host;
     private Integer port;
+    private Integer weight;
 
     public ChannelFuture getChannelFuture() {
         return channelFuture;
@@ -36,5 +37,13 @@ public class ChannelFutureWrapper {
 
     public void setPort(Integer port) {
         this.port = port;
+    }
+
+    public Integer getWeight() {
+        return weight;
+    }
+
+    public void setWeight(Integer weight) {
+        this.weight = weight;
     }
 }

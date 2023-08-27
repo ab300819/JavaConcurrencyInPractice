@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
+import org.netty.rpc.core.Selector;
 import org.netty.rpc.core.common.ChannelFutureWrapper;
 import org.netty.rpc.core.common.cache.CommonClientCache;
 import io.netty.bootstrap.Bootstrap;
@@ -65,6 +66,10 @@ public class ConnectionHandler {
         }
         channelFutureWrapperList.add(channelFutureWrapper);
         CommonClientCache.CONNECT_MAP.put(providerServiceName, channelFutureWrapperList);
+
+        Selector selector = new Selector();
+        selector.setProviderServiceName(providerServiceName);
+        CommonClientCache.IROUTER.refreshRouterArray(selector);
     }
 
     public static void disConnect(String providerServiceName, String providerIp) {

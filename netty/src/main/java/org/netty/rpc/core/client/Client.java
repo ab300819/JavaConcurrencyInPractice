@@ -11,6 +11,7 @@ import org.netty.rpc.core.common.RpcProtocol;
 import org.netty.rpc.core.common.cache.CommonClientCache;
 import org.netty.rpc.core.common.config.ClientConfig;
 import org.netty.rpc.core.common.config.PropertiesLoader;
+import org.netty.rpc.core.common.constants.RpcConstants;
 import org.netty.rpc.core.common.event.MRpcListenerLoader;
 import org.netty.rpc.core.common.utils.CommonUtils;
 import org.netty.rpc.core.proxy.JDKProxyFactory;
@@ -18,6 +19,8 @@ import org.netty.rpc.core.proxy.JavassistProxyFactory;
 import org.netty.rpc.core.registy.AbstractRegister;
 import org.netty.rpc.core.registy.Url;
 import org.netty.rpc.core.registy.zookeeper.ZookeeperRegister;
+import org.netty.rpc.core.router.RandomRouterImpl;
+import org.netty.rpc.core.router.RotateRouterImpl;
 import org.netty.rpc.interfaces.DataService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +33,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
+import static org.netty.rpc.core.common.cache.CommonClientCache.IROUTER;
 import static org.netty.rpc.core.common.cache.CommonClientCache.SUBSCRIBE_SERVICE_LIST;
 
 /**
@@ -77,6 +81,15 @@ public class Client {
         this.bootstrap = new Bootstrap();
     }
 
+    public void initClientConfig() {
+        String routerStrategy = clientConfig.getRouterStrategy();
+        if (RpcConstants.RANDOM_ROUTER_TYPE.equals(routerStrategy)) {
+            IROUTER = new RandomRouterImpl();
+        } else if (RpcConstants.ROTATE_ROUTER_TYPE.equals(routerStrategy)) {
+            IROUTER = new RotateRouterImpl();
+        }
+    }
+
     public RpcReference initClient() {
         EventLoopGroup clientGroup = new NioEventLoopGroup();
         bootstrap.group(clientGroup);
@@ -116,17 +129,18 @@ public class Client {
     }
 
     public void doConnectServer() {
-        for (String providerServiceName : SUBSCRIBE_SERVICE_LIST) {
-            List<String> providerIps = register.getProvider(providerServiceName);
+        for (Url providerUrl : SUBSCRIBE_SERVICE_LIST) {
+            List<String> providerIps = register.getProvider(providerUrl.getServiceName());
             for (String providerIp : providerIps) {
                 try {
-                    ConnectionHandler.connect(providerServiceName, providerIp);
+                    ConnectionHandler.connect(providerUrl.getServiceName(), providerIp);
                 } catch (InterruptedException e) {
                     log.error("doConnectServer connect fail", e);
                 }
             }
             Url url = new Url();
-            url.setServiceName(providerServiceName);
+            url.addParameter("servicePath", providerUrl.getServiceName() + "/provider");
+            url.addParameter("providerIps", JsonUtil.toString(providerIps));
             register.doAfterSubscribe(url);
         }
     }
@@ -157,6 +171,7 @@ public class Client {
     public static void main(String[] args) {
         Client client = new Client();
         RpcReference rpcReference = client.initClient();
+        client.initClientConfig();
         DataService dataService = rpcReference.get(DataService.class);
         client.doSubscribeService(DataService.class);
         ConnectionHandler.setBootstrap(client.getBootstrap());
